@@ -1,14 +1,14 @@
 runserver:
-	python main/manage.py runserver 0.0.0.0:8080
+	python manage.py runserver 0.0.0.0:8080
 
 runserver_gunicorn:
-	python main/manage.py collectstatic --noinput && \
+	python manage.py collectstatic --noinput && \
 	export PYTHONPATH=main:$$PYTHONPATH; \
  	gunicorn -b :8080 entrypoint:app --timeout 600 --workers=5 --threads=2
 
 migrate:
-	python main/manage.py makemigrations && \
- 	python main/manage.py migrate --run-syncdb
+	python manage.py makemigrations && \
+ 	python manage.py migrate --run-syncdb
 
 install_hooks:
 	pip install -r requirements.txt; \
@@ -22,7 +22,8 @@ style:
 
 types:
 	mypy --namespace-packages \
-		 -p "config" \
+		 -p "common" \
+		 -p "movies" \
 		 --disable-error-code=no-redef \
 		 --config-file setup.cfg && \
  	cd ../

@@ -4,7 +4,9 @@ from pathlib import Path
 
 load_dotenv()
 
-BASE_DIR = Path(__file__).resolve().parent.parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+DEBUG = True
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 
@@ -17,6 +19,7 @@ LOGIN_REDIRECT_URL = "/login/"
 # Application definition
 INSTALLED_APPS = [
     "jet",
+    "mptt",
     "django_mptt_admin",
     "django.contrib.admin",
     "django.contrib.auth",
@@ -25,6 +28,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "import_export",
+    "common",
+    "movies",
 ]
 
 MIDDLEWARE = [
@@ -60,7 +65,7 @@ TEMPLATES = [
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": str(BASE_DIR.parent / "db.sqlite3"),
+        "NAME": str(BASE_DIR / "db.sqlite3"),
     }
 }
 
