@@ -135,7 +135,10 @@ class Cast(StrichkaBaseModel):
         help_text="IMDB ID of cast member",
     )
     full_name = models.CharField(
-        verbose_name="Cast member name", max_length=150, help_text="Cast member name"
+        verbose_name="Cast member name",
+        unique=True,
+        max_length=150,
+        help_text="Cast member name",
     )
     description = models.TextField(
         null=True, blank=True, help_text="Info about cast member"
@@ -144,13 +147,15 @@ class Cast(StrichkaBaseModel):
         verbose_name="Birthday date", null=True, blank=True, help_text="Birthday date"
     )
     place_of_birth = models.CharField(
-        verbose_name="Place of birth", max_length=150, help_text="Place of birth"
+        verbose_name="Place of birth",
+        null=True,
+        blank=True,
+        max_length=150,
+        help_text="Place of birth",
     )
     photo = models.URLField(
         verbose_name="Cast member photo", max_length=220, help_text="Cast member photo"
     )
-
-    categories = models.ManyToManyField(Category)
 
     comments = GenericRelation(Comment)
     ratings = GenericRelation(Rating)
@@ -238,10 +243,10 @@ class Movie(StrichkaBaseModel):
     def __str__(self) -> str:
         return self.title
 
-    def genres(self) -> models.QuerySet:
+    def genres(self) -> list[str]:
         movie = Movie.objects.get(pk=self.id)
         genres = movie.categories.filter(parent__slug="genres")
-        return genres
+        return [str(genre) for genre in genres]
 
     def get_absolute_url(self) -> str:
         movie = Movie.objects.get(pk=self.id)

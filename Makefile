@@ -1,3 +1,9 @@
+user:
+	python manage.py createsuperuser --username admin --email 'admin@email.com'
+
+shell:
+	python manage.py shell
+
 runserver:
 	python manage.py runserver 0.0.0.0:8080
 

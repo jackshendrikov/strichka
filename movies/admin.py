@@ -79,9 +79,9 @@ class MovieAdmin(
         "total_seasons",
     ) + StrichkaBaseModelAdmin.list_display
     list_filter = ("year", "country", "age_mark", "is_movie")
-    list_editable = ("title", "poster", "imdb_link", "keywords", "country", "is_movie")
+    list_editable = ("title", "keywords", "country", "is_movie")
     search_fields = ("imdb_id", "title", "year", "country")
-    ordering = ["release", "imdb_votes", "imdb_rate"]
+    ordering = ["-release", "-imdb_votes", "-imdb_rate"]
 
 
 @admin.register(StreamingPlatform)
