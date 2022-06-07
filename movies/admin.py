@@ -58,6 +58,8 @@ class MovieAdmin(
 
     preserve_inputs_fields = {"country", "age_mark", "is_movie"}
 
+    filter_horizontal = ("actors", "directors", "writers", "categories")
+
     list_display = (
         "imdb_id",
         "title",
@@ -65,6 +67,9 @@ class MovieAdmin(
         "imdb_rate",
         "imdb_votes",
         "plot",
+        "get_actors",
+        "get_directors",
+        "get_writers",
         "poster",
         "genres",
         "imdb_link",
@@ -82,6 +87,21 @@ class MovieAdmin(
     list_editable = ("title", "keywords", "country", "is_movie")
     search_fields = ("imdb_id", "title", "year", "country")
     ordering = ["-release", "-imdb_votes", "-imdb_rate"]
+
+    def get_actors(self, obj: Movie) -> str:
+        return ",".join([m.full_name for m in obj.actors.all()])
+
+    get_actors.short_description = "Actors"
+
+    def get_directors(self, obj: Movie) -> str:
+        return ",".join([m.full_name for m in obj.directors.all()])
+
+    get_directors.short_description = "Directors"
+
+    def get_writers(self, obj: Movie) -> str:
+        return ",".join([m.full_name for m in obj.writers.all()])
+
+    get_writers.short_description = "Writers"
 
 
 @admin.register(StreamingPlatform)

@@ -28,6 +28,10 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "import_export",
+    "drf_spectacular",
+    "rest_framework",
+    "django_filters",
+    "django_extensions",
     "common",
     "movies",
 ]
@@ -61,6 +65,16 @@ TEMPLATES = [
         },
     }
 ]
+
+TEMPLATE_LOADERS = (
+    (
+        "django.template.loaders.cached.Loader",
+        (
+            "django.template.loaders.filesystem.Loader",
+            "django.template.loaders.app_directories.Loader",
+        ),
+    ),
+)
 
 DATABASES = {
     "default": {
@@ -104,3 +118,19 @@ JET_SIDE_MENU_COMPACT = True
 JET_DEFAULT_THEME = "green"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework.authentication.BasicAuthentication",
+    ),
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
+    "PAGE_SIZE": 100,
+}
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Strichka API",
+    "DESCRIPTION": "Stricka Movie Finder API",
+    "VERSION": "1.0.0",
+}

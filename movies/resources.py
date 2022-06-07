@@ -1,5 +1,5 @@
 from import_export import fields, resources
-from import_export.widgets import ForeignKeyWidget
+from import_export.widgets import ForeignKeyWidget, ManyToManyWidget
 
 from movies.models import Cast, Category, Collection, Movie, StreamingPlatform
 
@@ -7,7 +7,8 @@ from movies.models import Cast, Category, Collection, Movie, StreamingPlatform
 class CategoryResource(resources.ModelResource):
     class Meta:
         model = Category
-        fields = ("slug", "name", "created_at", "updated_at")
+        fields = ("name", "slug", "created_at", "updated_at")
+        import_id_fields = fields
         export_order = fields
 
 
@@ -15,18 +16,34 @@ class CastResource(resources.ModelResource):
     class Meta:
         model = Cast
         fields = (
+            "imdb_id",
             "full_name",
             "description",
             "birthday",
+            "place_of_birth",
             "photo",
-            "movies_num",
             "created_at",
             "updated_at",
         )
+        use_bulk = True
+        import_id_fields = fields
         export_order = fields
 
 
 class MovieResource(resources.ModelResource):
+    actors = fields.Field(
+        attribute="actors",
+        widget=ManyToManyWidget(Cast, field="full_name", separator=","),
+    )
+    writers = fields.Field(
+        attribute="writers",
+        widget=ManyToManyWidget(Cast, field="full_name", separator=","),
+    )
+    directors = fields.Field(
+        attribute="directors",
+        widget=ManyToManyWidget(Cast, field="full_name", separator=","),
+    )
+
     class Meta:
         model = Movie
         fields = (
@@ -37,7 +54,9 @@ class MovieResource(resources.ModelResource):
             "imdb_votes",
             "plot",
             "poster",
-            "genres",
+            "actors",
+            "writers",
+            "directors",
             "imdb_link",
             "runtime",
             "release",
@@ -51,6 +70,8 @@ class MovieResource(resources.ModelResource):
             "created_at",
             "updated_at",
         )
+        use_bulk = True
+        import_id_fields = fields
         export_order = fields
 
 
@@ -73,7 +94,6 @@ class StreamingPlatformResource(resources.ModelResource):
             "updated_at",
         )
         use_bulk = True
-        skip_diff = True
         import_id_fields = fields
         export_order = fields
 

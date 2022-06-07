@@ -13,7 +13,7 @@ class VoteManager(models.Manager):
         return self.get_queryset().filter(vote__lt=0)
 
     def sum_rating(self) -> int:
-        return self.vote.aggregate(Sum("vote")).get("vote__sum") or 0
+        return self.vote.aggregate(Sum("vote")).get("vote__sum") or 0  # type: ignore
 
 
 class MovieManager(models.Manager):

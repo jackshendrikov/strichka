@@ -5,6 +5,7 @@ from django.db import models
 from django.urls import reverse
 from mptt.models import MPTTModel, TreeForeignKey
 
+from common.forms import validate_form_with_schema
 from common.models.base import StrichkaBaseModel
 from movies.services.model_manager import MovieManager, VoteManager
 
@@ -37,6 +38,15 @@ class Category(StrichkaBaseModel, MPTTModel):
 
     def get_absolute_url(self) -> str:
         return reverse("movies_genre_list", kwargs={"slug": self.slug})
+
+    def clean(self) -> None:
+        """
+        Validate form inputs.
+        """
+        from movies.schema import CategorySchema
+        from movies.serializers import CategorySerializer
+
+        validate_form_with_schema(CategorySchema, CategorySerializer, self)
 
 
 class Rating(StrichkaBaseModel):
@@ -89,9 +99,6 @@ class Vote(StrichkaBaseModel):
         verbose_name_plural = "Votes"
         unique_together = ("user", "content_type", "object_id")
 
-    def __str__(self) -> str:
-        return f"User: {self.user}, vote: {self.vote}"
-
 
 class Comment(StrichkaBaseModel, MPTTModel):
     """
@@ -114,12 +121,12 @@ class Comment(StrichkaBaseModel, MPTTModel):
         verbose_name="Published time", auto_now=True, help_text="Comment published time"
     )
 
-    def __str__(self) -> str:
-        return self.text
-
     class Meta:
         verbose_name = "Comment"
         verbose_name_plural = "Comments"
+
+    def __str__(self) -> str:
+        return self.text
 
 
 class Cast(StrichkaBaseModel):
@@ -171,6 +178,15 @@ class Cast(StrichkaBaseModel):
     def get_absolute_url(self) -> str:
         return reverse("cast", kwargs={"pk": self.id})
 
+    def clean(self) -> None:
+        """
+        Validate form inputs.
+        """
+        from movies.schema import CastSchema
+        from movies.serializers import CastSerializer
+
+        validate_form_with_schema(CastSchema, CastSerializer, self)
+
 
 class Movie(StrichkaBaseModel):
     """
@@ -188,11 +204,9 @@ class Movie(StrichkaBaseModel):
         max_length=128, db_index=True, unique=True, help_text="Movie IMDB ID"
     )
     imdb_link = models.URLField(max_length=220, help_text="Movie IMDB link")
-    imdb_rate = models.FloatField(
-        verbose_name="IMDB Rate", null=True, blank=True, help_text="IMDB Rate"
-    )
+    imdb_rate = models.FloatField(verbose_name="IMDB Rate", help_text="IMDB Rate")
     imdb_votes = models.PositiveIntegerField(
-        verbose_name="IMDB Votes", null=True, blank=True, help_text="IMDB Votes"
+        verbose_name="IMDB Votes", help_text="IMDB Votes"
     )
 
     runtime = models.TimeField(
@@ -202,9 +216,7 @@ class Movie(StrichkaBaseModel):
         verbose_name="Release date", null=True, blank=True, help_text="Release date"
     )
     keywords = models.TextField(null=True, blank=True, help_text="Movie keywords")
-    country = models.CharField(
-        max_length=50, null=True, blank=True, help_text="Countries that made the movie"
-    )
+    country = models.CharField(max_length=50, help_text="Countries that made the movie")
     box_office = models.BigIntegerField(
         verbose_name="Movie fees in the world",
         null=True,
@@ -212,11 +224,7 @@ class Movie(StrichkaBaseModel):
         help_text="Movie fees in the world",
     )
     age_mark = models.CharField(
-        verbose_name="Age mark",
-        max_length=16,
-        null=True,
-        blank=True,
-        help_text="Movie age rate",
+        verbose_name="Age mark", max_length=16, help_text="Movie age rate"
     )
     awards = models.TextField(null=True, blank=True, help_text="Movie awards")
 
@@ -225,9 +233,9 @@ class Movie(StrichkaBaseModel):
         verbose_name="Total seasons of series", null=True, blank=True
     )
 
-    director = models.ManyToManyField(Cast, related_name="movie_director")
-    writer = models.ManyToManyField(Cast, related_name="movie_writer")
-    actors = models.ManyToManyField(Cast, related_name="movie_actor")
+    directors = models.ManyToManyField(Cast, related_name="movie_directors")
+    writers = models.ManyToManyField(Cast, related_name="movie_writers")
+    actors = models.ManyToManyField(Cast, related_name="movie_actors")
 
     categories = models.ManyToManyField(Category)
     comments = GenericRelation(Comment)
@@ -241,7 +249,7 @@ class Movie(StrichkaBaseModel):
         verbose_name_plural = "Movies"
 
     def __str__(self) -> str:
-        return self.title
+        return self.imdb_id
 
     def genres(self) -> list[str]:
         movie = Movie.objects.get(pk=self.id)
@@ -254,6 +262,15 @@ class Movie(StrichkaBaseModel):
             return reverse("movie_detail", kwargs={"pk": self.id})
         elif movie.categories.filter(name="series").exists():
             return reverse("series_detail", kwargs={"pk": self.id})
+
+    def clean(self) -> None:
+        """
+        Validate form inputs.
+        """
+        from movies.schema import MovieSchema
+        from movies.serializers import MovieSerializer
+
+        validate_form_with_schema(MovieSchema, MovieSerializer, self)
 
 
 class StreamingPlatform(StrichkaBaseModel):
@@ -286,6 +303,17 @@ class StreamingPlatform(StrichkaBaseModel):
     def __str__(self) -> str:
         return self.service
 
+    def clean(self) -> None:
+        """
+        Validate form inputs.
+        """
+        from movies.schema import StreamingPlatformSchema
+        from movies.serializers import StreamingPlatformSerializer
+
+        validate_form_with_schema(
+            StreamingPlatformSchema, StreamingPlatformSerializer, self
+        )
+
 
 class Collection(StrichkaBaseModel):
     """
@@ -313,3 +341,12 @@ class Collection(StrichkaBaseModel):
 
     def get_absolute_url(self) -> str:
         return reverse("movies_collection", kwargs={"pk": self.id})
+
+    def clean(self) -> None:
+        """
+        Validate form inputs.
+        """
+        from movies.schema import CollectionSchema
+        from movies.serializers import CollectionSerializer
+
+        validate_form_with_schema(CollectionSchema, CollectionSerializer, self)
