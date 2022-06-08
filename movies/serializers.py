@@ -1,7 +1,7 @@
 from typing import Any
 
 from django.db.models import QuerySet
-from rest_framework.fields import CharField, DateField, TimeField
+from rest_framework.fields import CharField, TimeField
 from rest_framework.serializers import ListSerializer, ModelSerializer
 
 from movies.models import Cast, Category, Collection, Movie, StreamingPlatform
