@@ -30,7 +30,6 @@ class Category(StrichkaBaseModel, MPTTModel):
         order_insertion_by = ["name"]
 
     class Meta:
-        verbose_name = "Category"
         verbose_name_plural = "Categories"
 
     def __str__(self) -> str:
@@ -64,7 +63,6 @@ class Rating(StrichkaBaseModel):
     object_id = models.PositiveIntegerField()
 
     class Meta:
-        verbose_name = "Rating"
         verbose_name_plural = "Ratings"
         unique_together = ("user", "content_type", "object_id")
 
@@ -95,7 +93,6 @@ class Vote(StrichkaBaseModel):
     objects = VoteManager()
 
     class Meta:
-        verbose_name = "Vote"
         verbose_name_plural = "Votes"
         unique_together = ("user", "content_type", "object_id")
 
@@ -122,7 +119,6 @@ class Comment(StrichkaBaseModel, MPTTModel):
     )
 
     class Meta:
-        verbose_name = "Comment"
         verbose_name_plural = "Comments"
 
     def __str__(self) -> str:
@@ -168,10 +164,6 @@ class Cast(StrichkaBaseModel):
     ratings = GenericRelation(Rating)
     votes = GenericRelation(Vote, related_query_name="cast")
 
-    class Meta:
-        verbose_name = "Cast"
-        verbose_name_plural = "Cast"
-
     def __str__(self) -> str:
         return self.full_name
 
@@ -186,6 +178,30 @@ class Cast(StrichkaBaseModel):
         from movies.serializers import CastSerializer
 
         validate_form_with_schema(CastSchema, CastSerializer, self)
+
+
+class Country(StrichkaBaseModel):
+    """
+    Model to store countries.
+    """
+
+    name = models.CharField(max_length=50, unique=True)
+    code = models.CharField(max_length=5, unique=True)
+
+    class Meta:
+        verbose_name_plural = "countries"
+
+    def __str__(self) -> str:
+        return self.name
+
+    def clean(self) -> None:
+        """
+        Validate form inputs.
+        """
+        from movies.schema import CountrySchema
+        from movies.serializers import CountrySerializer
+
+        validate_form_with_schema(CountrySchema, CountrySerializer, self)
 
 
 class Movie(StrichkaBaseModel):
@@ -216,7 +232,6 @@ class Movie(StrichkaBaseModel):
         verbose_name="Release date", null=True, blank=True, help_text="Release date"
     )
     keywords = models.TextField(null=True, blank=True, help_text="Movie keywords")
-    country = models.CharField(max_length=50, help_text="Countries that made the movie")
     box_office = models.BigIntegerField(
         verbose_name="Movie fees in the world",
         null=True,
@@ -237,6 +252,7 @@ class Movie(StrichkaBaseModel):
     writers = models.ManyToManyField(Cast, related_name="movie_writers")
     actors = models.ManyToManyField(Cast, related_name="movie_actors")
 
+    country = models.ManyToManyField(Country)
     categories = models.ManyToManyField(Category)
     comments = GenericRelation(Comment)
     ratings = GenericRelation(Rating)
@@ -245,7 +261,6 @@ class Movie(StrichkaBaseModel):
     objects = MovieManager()
 
     class Meta:
-        verbose_name = "Movie"
         verbose_name_plural = "Movies"
 
     def __str__(self) -> str:
@@ -333,7 +348,6 @@ class Collection(StrichkaBaseModel):
     is_active = models.BooleanField(default=False)
 
     class Meta:
-        verbose_name = "Collection"
         verbose_name_plural = "Collections"
 
     def __str__(self) -> str:

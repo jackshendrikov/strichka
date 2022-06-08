@@ -7,8 +7,7 @@ class MovieFilter(FilterSet):
     year = NumberFilter(field_name="year", lookup_expr="iexact")
     categories = CharFilter(field_name="categories__slug", lookup_expr="iexact")
     genres = CharFilter(field_name="categories__slug", lookup_expr="iexact")
-
-    country = CharFilter(field_name="country", lookup_expr="contains")
+    country = CharFilter(field_name="country__name", lookup_expr="iexact")
 
     sort_by = OrderingFilter(
         fields={

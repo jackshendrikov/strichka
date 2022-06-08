@@ -17,6 +17,7 @@ from movies.models import (
     Category,
     Collection,
     Comment,
+    Country,
     Movie,
     StreamingPlatform,
     Vote,
@@ -37,6 +38,7 @@ class GetMovieDetail(Service):
         movie = self.cleaned_data["movie"]
 
         genres = self._get_genres(movie)
+        countries = self._get_countries(movie)
         actors = self._get_actors(movie)
         directors = self._get_directors(movie)
         writers = self._get_writers(movie)
@@ -58,7 +60,7 @@ class GetMovieDetail(Service):
             "runtime": movie.runtime,
             "release": movie.release,
             "keywords": movie.keywords,
-            "country": movie.country,
+            "country": countries,
             "box_office": movie.box_office,
             "age_mark": movie.age_mark,
             "awards": movie.awards,
@@ -80,6 +82,10 @@ class GetMovieDetail(Service):
     @staticmethod
     def _get_genres(movie: Movie) -> str:
         return ", ".join(movie.genres())
+
+    @staticmethod
+    def _get_countries(movie: Movie) -> str:
+        return ", ".join([c.name for c in movie.country.all()])
 
     @staticmethod
     def _get_actors(movie: Movie) -> str:
@@ -177,13 +183,8 @@ class DataFilters:
         return list(years)
 
     @staticmethod
-    def get_countries() -> list[str]:
-        countries = (
-            Movie.objects.exclude(country__exact="")
-            .order_by("country")
-            .values_list("country", flat=True)
-            .distinct()
-        )
+    def get_countries() -> list[dict[str, str]]:
+        countries = Country.objects.order_by("name").values("name", "code").distinct()
 
         return list(countries)
 
@@ -241,7 +242,7 @@ def get_popular_movies(limit: int = None) -> QuerySet:
     Get popular movies according to IMDB.
     """
     popular_movies = Movie.objects.filter(
-        categories__slug="movies",
+        is_movie=True,
         release__range=(datetime.today() + relativedelta(years=-1), datetime.today()),
         imdb_rate__gte=5,
     ).order_by("-imdb_votes", "-imdb_rate")
@@ -257,7 +258,7 @@ def get_popular_series(limit: int = None) -> QuerySet:
     Get popular series according to IMDB.
     """
     popular_series = Movie.objects.filter(
-        categories__slug="series",
+        is_movie=False,
         release__range=(datetime.today() + relativedelta(years=-1), datetime.today()),
         imdb_rate__gte=5,
     ).order_by("-imdb_votes", "-imdb_rate")
@@ -268,17 +269,17 @@ def get_popular_series(limit: int = None) -> QuerySet:
     return popular_series
 
 
-def get_movies_now_in_cinema() -> QuerySet:
+def get_cinema_movies() -> QuerySet:
     """
     Get movies currently in cinema.
     """
     return Movie.objects.filter(
-        categories__slug="movies",
+        is_movie=True,
         release__range=(datetime.today() + relativedelta(months=-1), datetime.today()),
     ).order_by("-imdb_votes", "-imdb_rate")
 
 
-def get_movies_and_series_recent_premieres() -> QuerySet:
+def get_recent_premieres() -> QuerySet:
     """
     Get recent movies and series premieres.
     """
@@ -325,36 +326,30 @@ def get_new_movies_and_series(limit: int = None) -> QuerySet:
     return new_movies
 
 
-def get_movies_list_by_genre(slug: str, category_type: str) -> QuerySet:
+def get_movies_list_by_genre(slug: str) -> QuerySet:
     """
     Get all movies and series of a specific genre.
     """
 
-    return (
-        Movie.objects.filter(categories__slug=slug)
-        .filter(categories__slug=category_type)
-        .distinct()
-    )
+    return Movie.objects.filter(categories__slug=slug, is_movie=True).distinct()
 
 
-def get_movies_list_by_years(year: iter, category_type: str) -> QuerySet:
+def get_movies_list_by_years(year: list[int]) -> QuerySet:
     """
     Get all movies and series from specific year range.
     """
 
     return Movie.objects.filter(
-        year__range=(year[0], year[-1]), categories__slug=category_type
+        year__range=(year[0], year[-1]), is_movie=True
     ).distinct()
 
 
-def get_movies_list_by_country(country: str, category_type: str) -> QuerySet:
+def get_movies_list_by_country(country: str) -> QuerySet:
     """
     Get all movies and series from specific country.
     """
 
-    return Movie.objects.filter(
-        country__icontains=country, categories__slug=category_type
-    ).distinct()
+    return Movie.objects.filter(country__name__exact=country, is_movie=True).distinct()
 
 
 def get_movie_of_month() -> QuerySet:

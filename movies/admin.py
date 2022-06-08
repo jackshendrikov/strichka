@@ -10,6 +10,7 @@ from movies.models import (
     Category,
     Collection,
     Comment,
+    Country,
     Movie,
     Rating,
     StreamingPlatform,
@@ -19,6 +20,7 @@ from movies.resources import (
     CastResource,
     CategoryResource,
     CollectionResource,
+    CountryResource,
     MovieResource,
     StreamingPlatformResource,
 )
@@ -49,6 +51,16 @@ class CastAdmin(CustomExportMixin, StrichkaBaseModelAdmin):
     ordering = ("-created_at",)
 
 
+@admin.register(Country)
+class CountryAdmin(CustomExportMixin, StrichkaBaseModelAdmin):
+    resource_class = CountryResource
+
+    list_display = ("name", "code") + StrichkaBaseModelAdmin.list_display
+    list_editable = ("code",)
+    search_fields = ("name", "code")
+    ordering = ("-created_at",)
+
+
 @admin.register(Movie)
 class MovieAdmin(
     PreservePreviousFormInputsMixin, CustomImportExportMixin, StrichkaBaseModelAdmin
@@ -58,7 +70,7 @@ class MovieAdmin(
 
     preserve_inputs_fields = {"country", "age_mark", "is_movie"}
 
-    filter_horizontal = ("actors", "directors", "writers", "categories")
+    filter_horizontal = ("country", "actors", "directors", "writers", "categories")
 
     list_display = (
         "imdb_id",
@@ -66,7 +78,9 @@ class MovieAdmin(
         "year",
         "imdb_rate",
         "imdb_votes",
+        "release",
         "plot",
+        "get_countries",
         "get_actors",
         "get_directors",
         "get_writers",
@@ -74,9 +88,7 @@ class MovieAdmin(
         "genres",
         "imdb_link",
         "runtime",
-        "release",
         "keywords",
-        "country",
         "box_office",
         "age_mark",
         "awards",
@@ -84,9 +96,14 @@ class MovieAdmin(
         "total_seasons",
     ) + StrichkaBaseModelAdmin.list_display
     list_filter = ("year", "country", "age_mark", "is_movie")
-    list_editable = ("title", "keywords", "country", "is_movie")
+    list_editable = ("title", "keywords", "is_movie")
     search_fields = ("imdb_id", "title", "year", "country")
     ordering = ["-release", "-imdb_votes", "-imdb_rate"]
+
+    def get_countries(self, obj: Movie) -> str:
+        return ",".join([m.name for m in obj.country.all()])
+
+    get_countries.short_description = "Countries"
 
     def get_actors(self, obj: Movie) -> str:
         return ",".join([m.full_name for m in obj.actors.all()])

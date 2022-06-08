@@ -4,7 +4,7 @@ from django.db.models import QuerySet
 from rest_framework.fields import CharField, TimeField
 from rest_framework.serializers import ListSerializer, ModelSerializer
 
-from movies.models import Cast, Category, Collection, Movie, StreamingPlatform
+from movies.models import Cast, Category, Collection, Country, Movie, StreamingPlatform
 
 
 class FilterCategoryListSerializer(ListSerializer):
@@ -31,6 +31,12 @@ class CastSerializer(ModelSerializer):
             "place_of_birth",
             "photo",
         )
+
+
+class CountrySerializer(ModelSerializer):
+    class Meta:
+        model = Country
+        fields = ("name", "code")
 
 
 class MovieSerializer(ModelSerializer):

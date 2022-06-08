@@ -1,7 +1,7 @@
 from import_export import fields, resources
 from import_export.widgets import ForeignKeyWidget, ManyToManyWidget
 
-from movies.models import Cast, Category, Collection, Movie, StreamingPlatform
+from movies.models import Cast, Category, Collection, Country, Movie, StreamingPlatform
 
 
 class CategoryResource(resources.ModelResource):
@@ -30,6 +30,13 @@ class CastResource(resources.ModelResource):
         export_order = fields
 
 
+class CountryResource(resources.ModelResource):
+    class Meta:
+        model = Country
+        fields = ("name", "code", "created_at", "updated_at")
+        export_order = fields
+
+
 class MovieResource(resources.ModelResource):
     actors = fields.Field(
         attribute="actors",
@@ -42,6 +49,10 @@ class MovieResource(resources.ModelResource):
     directors = fields.Field(
         attribute="directors",
         widget=ManyToManyWidget(Cast, field="full_name", separator=","),
+    )
+    countries = fields.Field(
+        attribute="countries",
+        widget=ManyToManyWidget(Cast, field="name", separator=","),
     )
 
     class Meta:
@@ -61,7 +72,7 @@ class MovieResource(resources.ModelResource):
             "runtime",
             "release",
             "keywords",
-            "country",
+            "countries",
             "box_office",
             "age_mark",
             "awards",

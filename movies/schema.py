@@ -4,7 +4,7 @@ import re
 from datetime import date, timedelta
 from pydantic import BaseModel, HttpUrl, validator
 
-from movies.models import Cast, Category, Collection, Movie
+from movies.models import Cast, Category, Collection, Country, Movie
 
 
 class CategorySchema(BaseModel):
@@ -50,6 +50,27 @@ class CastSchema(BaseModel):
         return name
 
 
+class CountrySchema(BaseModel):
+    """
+    Country schema.
+    """
+
+    name: str
+    code: str
+
+    @validator("name")
+    def country_exist(cls, name: str) -> str:
+        if Country.objects.filter(name=name.lower()).exists():
+            raise ValueError(f"Country: `{name}` already exist.")
+        return name
+
+    @validator("code")
+    def code_exist(cls, code: str) -> str:
+        if Country.objects.filter(code=code).exists():
+            raise ValueError(f"Country code: `{code}` already exist.")
+        return code
+
+
 class MovieSchema(BaseModel):
     """
     Movie schema.
@@ -70,7 +91,7 @@ class MovieSchema(BaseModel):
     runtime: Optional[timedelta]
     release: Optional[date]
     keywords: Optional[str]
-    country: str
+    country: list[str]
     box_office: Optional[int]
     age_mark: str
     awards: Optional[str]
