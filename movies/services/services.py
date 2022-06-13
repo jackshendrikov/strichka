@@ -72,7 +72,7 @@ class GetMovieDetail(Service):
             "writers": writers,
             "comments": comments,
             "platforms": platforms,
-            "user_rating": movie.ratings.value,
+            # "user_rating": movie.ratings.value,
             "likes_count": likes_count,
             "dislikes_count": dislikes_count,
         }
@@ -88,31 +88,25 @@ class GetMovieDetail(Service):
         return ", ".join([c.name for c in movie.country.all()])
 
     @staticmethod
-    def _get_actors(movie: Movie) -> str:
-        return ", ".join(
-            [
-                f'<a href="{q.get_absolute_url()}"><span itemprop="actor">{q.full_name}</span></a>'
-                for q in movie.actors.all()
-            ]
-        )
+    def _get_actors(movie: Movie) -> list[str]:
+        return [
+            f'<a href="{q.get_absolute_url()}"><span itemprop="actor">{q.full_name}</span></a>'
+            for q in movie.actors.all()
+        ]
 
     @staticmethod
-    def _get_directors(movie: Movie) -> str:
-        return ", ".join(
-            [
-                f'<a href="{q.get_absolute_url()}"><span itemprop="director">{q.full_name}</span></a>'
-                for q in movie.directors.all()
-            ]
-        )
+    def _get_directors(movie: Movie) -> list[str]:
+        return [
+            f'<a href="{q.get_absolute_url()}"><span itemprop="director">{q.full_name}</span></a>'
+            for q in movie.directors.all()
+        ]
 
     @staticmethod
-    def _get_writers(movie: Movie) -> str:
-        return ", ".join(
-            [
-                f'<a href="{q.get_absolute_url()}"><span itemprop="writer">{q.full_name}</span></a>'
-                for q in movie.writers.all()
-            ]
-        )
+    def _get_writers(movie: Movie) -> list[str]:
+        return [
+            f'<a href="{q.get_absolute_url()}"><span itemprop="writer">{q.full_name}</span></a>'
+            for q in movie.writers.all()
+        ]
 
     @staticmethod
     def _get_stream_platforms(movie: Movie) -> QuerySet:
@@ -269,42 +263,73 @@ def get_popular_series(limit: int = None) -> QuerySet:
     return popular_series
 
 
-def get_cinema_movies() -> QuerySet:
+def get_cinema_movies(limit: int = None) -> QuerySet:
     """
     Get movies currently in cinema.
     """
-    return Movie.objects.filter(
+    cinema_movies = Movie.objects.filter(
         is_movie=True,
         release__range=(datetime.today() + relativedelta(months=-1), datetime.today()),
     ).order_by("-imdb_votes", "-imdb_rate")
 
+    if limit:
+        return cinema_movies[:limit]
 
-def get_recent_premieres() -> QuerySet:
+    return cinema_movies
+
+
+def get_recent_premieres(limit: int = None) -> QuerySet:
     """
     Get recent movies and series premieres.
     """
-    return (
+    new_releases = (
         Movie.objects.filter(
             release__range=(
                 datetime.today() + relativedelta(months=-3),
                 datetime.today(),
             )
         )
-        .order_by("-release")
+        .order_by("-imdb_votes", "-imdb_rate", "-release")
         .distinct()
     )
 
+    if limit:
+        return new_releases[:limit]
 
-def get_top_classics() -> QuerySet:
+    return new_releases
+
+
+def get_top_classics(limit: int = None) -> QuerySet:
     """
     Get top classic movies and series list according to IMDB.
     """
-    return (
+    best_movies = (
         Movie.objects.exclude(release__gt=datetime.today() + relativedelta(months=-3))
         .exclude(release__isnull=True)
         .order_by("-imdb_votes", "-imdb_rate")
         .distinct()
     )
+
+    if limit:
+        return best_movies[:limit]
+
+    return best_movies
+
+
+def get_top_fantasy(limit: int = None) -> QuerySet:
+    """
+    Get top fantasy movies and series list according to IMDB.
+    """
+    best_fantasy = (
+        Movie.objects.filter(categories__name="Fantasy")
+        .order_by("-imdb_votes", "-imdb_rate")
+        .distinct()
+    )
+
+    if limit:
+        return best_fantasy[:limit]
+
+    return best_fantasy
 
 
 def get_new_movies_and_series(limit: int = None) -> QuerySet:
@@ -318,7 +343,7 @@ def get_new_movies_and_series(limit: int = None) -> QuerySet:
         ),
         imdb_rate__gte=5,
         release__isnull=False,
-    ).order_by("-release")
+    ).order_by("-imdb_votes", "-imdb_rate", "-release")
 
     if limit:
         return new_movies[:limit]

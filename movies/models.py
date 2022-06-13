@@ -273,10 +273,9 @@ class Movie(StrichkaBaseModel):
 
     def get_absolute_url(self) -> str:
         movie = Movie.objects.get(pk=self.id)
-        if movie.categories.filter(name="movies").exists():
+        if movie.is_movie:
             return reverse("movie_detail", kwargs={"pk": self.id})
-        elif movie.categories.filter(name="series").exists():
-            return reverse("series_detail", kwargs={"pk": self.id})
+        return reverse("series_detail", kwargs={"pk": self.id})
 
     def clean(self) -> None:
         """

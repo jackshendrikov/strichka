@@ -16,6 +16,7 @@ api_router.registry.extend(core_router.registry)
 
 
 urlpatterns = [
+    path("", include("movies.urls")),
     path("api/", include(api_router.urls)),
     path("jet/", include("jet.urls", "jet")),
     path("admin/", admin.site.urls),

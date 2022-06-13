@@ -1,0 +1,53 @@
+{% extends 'admin/change_list.html' %}
+{% load i18n admin_list %}
+
+{% block extrastyle %}
+    {{ block.super }}
+    <style>
+        #tree.block-style ul.jqtree-tree .jqtree-element {
+            background-color: #def1ee;
+            color: #0f0f0f;
+            margin-bottom: 10px;
+            padding: 10px 15px;
+            border-radius: 10px;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+            font-family: initial;
+            font-size: 16px;
+            font-weight: bolder;
+            line-height: 1;
+            cursor: grab;
+        }
+
+        #tree.block-style ul.jqtree-tree li.jqtree-selected > .jqtree-element {
+            background: #a8dad2;
+            text-shadow: none;
+        }
+
+        #tree.block-style ul.jqtree-tree li.jqtree-selected > .jqtree-element .jqtree-title {
+            color: #0f0f0f;
+        }
+
+        ul.jqtree-tree .jqtree-toggler {
+            border-bottom: none;
+            color: #625c5c;
+            text-decoration: none;
+            vertical-align: middle;
+            cursor: pointer;
+        }
+
+        ul.jqtree-tree .jqtree-toggler:hover {
+            color: #625c5c;
+        }
+
+        ul.jqtree-tree .jqtree-title {
+            color: #0f0f0f;
+            vertical-align: middle;
+            margin-left: 1.5em;
+        }
+
+        #tree.block-style ul.jqtree-tree li.jqtree-selected > .jqtree-element .edit {
+            color: #5799d1;
+        }
+    </style>
+    <script type="text/javascript" src="{{ jsi18n_url }}"></script>
+{% endblock %}

@@ -2,11 +2,12 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from rest_framework.viewsets import ModelViewSet
 
-from movies.models import Cast, Category, Collection, Movie, StreamingPlatform
+from movies.models import Cast, Category, Collection, Country, Movie, StreamingPlatform
 from movies.serializers import (
     CastSerializer,
     CategorySerializer,
     CollectionSerializer,
+    CountrySerializer,
     MovieSerializer,
     StreamingPlatformSerializer,
 )
@@ -23,6 +24,14 @@ class CastViewSet(ModelViewSet):
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     filterset_fields = ["place_of_birth", "birthday"]
     search_fields = ["=imdb_id", "full_name"]
+
+
+class CountryViewSet(ModelViewSet):
+    queryset = Country.objects.all()
+    serializer_class = CountrySerializer
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    filterset_fields = ["name"]
+    search_fields = ["name", "code"]
 
 
 class MovieViewSet(ModelViewSet):

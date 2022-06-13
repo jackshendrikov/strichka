@@ -2,6 +2,7 @@ from typing import Any
 
 from django.db.models import QuerySet
 from rest_framework.fields import CharField, TimeField
+from rest_framework.relations import PrimaryKeyRelatedField
 from rest_framework.serializers import ListSerializer, ModelSerializer
 
 from movies.models import Cast, Category, Collection, Country, Movie, StreamingPlatform
@@ -54,12 +55,10 @@ class MovieSerializer(ModelSerializer):
             "imdb_votes",
             "plot",
             "poster",
-            "categories",
             "imdb_link",
             "runtime",
             "release",
             "keywords",
-            "country",
             "box_office",
             "age_mark",
             "awards",
