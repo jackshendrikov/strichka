@@ -168,7 +168,8 @@ class Cast(StrichkaBaseModel):
         return self.full_name
 
     def get_absolute_url(self) -> str:
-        return reverse("cast", kwargs={"pk": self.id})
+        # return reverse("cast", kwargs={"pk": self.id})
+        return ""
 
     def clean(self) -> None:
         """
@@ -242,6 +243,9 @@ class Movie(StrichkaBaseModel):
         verbose_name="Age mark", max_length=16, help_text="Movie age rate"
     )
     awards = models.TextField(null=True, blank=True, help_text="Movie awards")
+    trailer_id = models.CharField(
+        max_length=20, unique=True, null=True, blank=True, help_text="Movie trailer ID"
+    )
 
     is_movie = models.BooleanField(default=True, help_text="Movie type (Movie/Series)")
     total_seasons = models.PositiveSmallIntegerField(
@@ -276,6 +280,9 @@ class Movie(StrichkaBaseModel):
         if movie.is_movie:
             return reverse("movie_detail", kwargs={"pk": self.id})
         return reverse("series_detail", kwargs={"pk": self.id})
+
+    def keywords_as_list(self):
+        return self.keywords.split(",")
 
     def clean(self) -> None:
         """
@@ -316,6 +323,12 @@ class StreamingPlatform(StrichkaBaseModel):
 
     def __str__(self) -> str:
         return self.service
+
+    def video_format_as_list(self):
+        return self.video_format.split(",")
+
+    def purchase_type_as_list(self):
+        return self.purchase_type.split(",")
 
     def clean(self) -> None:
         """

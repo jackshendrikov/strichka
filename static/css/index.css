@@ -757,7 +757,7 @@
  .card__category a:hover {
      opacity: 1;
 }
- .card__rate {
+ .card__rate, .card__vote {
      font-size: 16px;
      font-weight: 500;
      color: #fff;
@@ -768,11 +768,14 @@
      align-items: center;
      margin-top: 2px;
 }
- .card__rate i {
+ .card__vote {
+     margin-left: 15px;
+}
+ .card__rate i, .card__vote i {
      text-shadow: 0 0 6px rgba(255,88,96,0.5);
      margin-right: 5px;
 }
- .card__rate i:before {
+ .card__rate i:before, .card__vote i:before {
      background-image: -webkit-linear-gradient(0deg, #ff55a5 0%, #ff5860 100%);
      -webkit-background-clip: text;
      -webkit-text-fill-color: transparent;
@@ -789,7 +792,7 @@
 }
  .card--details .card__cover img {
      width: 100%;
-     max-width: 270px;
+     max-width: 300px;
 }
  .card--details .card__cover:before {
      display: none;
@@ -847,6 +850,7 @@
 }
  .card--details .card__meta span {
      color: rgba(255,255,255,0.7);
+     font-weight: bold;
      margin-right: 7px;
 }
  .card--details .card__meta li {
@@ -856,7 +860,7 @@
      align-items: flex-start;
      flex-wrap: wrap;
      width: 100%;
-     font-family: 'Open Sans', sans-serif;
+     font-family: 'Poppins', sans-serif;
 }
  .card--details .card__meta li:last-child {
      margin-bottom: 0;

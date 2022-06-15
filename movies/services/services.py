@@ -17,7 +17,6 @@ from movies.models import (
     Category,
     Collection,
     Comment,
-    Country,
     Movie,
     StreamingPlatform,
     Vote,
@@ -46,6 +45,7 @@ class GetMovieDetail(Service):
         comments = movie.comments.all()
         likes_count = movie.votes.likes().count()
         dislikes_count = movie.votes.dislikes().count()
+        movies_to_discover = get_new_movies_and_series(limit=6)
 
         context = {
             "movie_id": movie.id,
@@ -59,9 +59,10 @@ class GetMovieDetail(Service):
             "imdb_votes": movie.imdb_votes,
             "runtime": movie.runtime,
             "release": movie.release,
-            "keywords": movie.keywords,
+            "keywords": movie.keywords_as_list(),
             "country": countries,
             "box_office": movie.box_office,
+            "trailer_id": movie.trailer_id,
             "age_mark": movie.age_mark,
             "awards": movie.awards,
             "is_movie": movie.is_movie,
@@ -72,41 +73,32 @@ class GetMovieDetail(Service):
             "writers": writers,
             "comments": comments,
             "platforms": platforms,
-            # "user_rating": movie.ratings.value,
             "likes_count": likes_count,
             "dislikes_count": dislikes_count,
+            "movies_to_discover": movies_to_discover,
         }
 
         return context
 
     @staticmethod
-    def _get_genres(movie: Movie) -> str:
-        return ", ".join(movie.genres())
+    def _get_genres(movie: Movie) -> list[str]:
+        return movie.genres()
 
     @staticmethod
-    def _get_countries(movie: Movie) -> str:
-        return ", ".join([c.name for c in movie.country.all()])
+    def _get_countries(movie: Movie) -> QuerySet:
+        return movie.country.all()
 
     @staticmethod
-    def _get_actors(movie: Movie) -> list[str]:
-        return [
-            f'<a href="{q.get_absolute_url()}"><span itemprop="actor">{q.full_name}</span></a>'
-            for q in movie.actors.all()
-        ]
+    def _get_actors(movie: Movie) -> QuerySet:
+        return movie.actors.all()
 
     @staticmethod
-    def _get_directors(movie: Movie) -> list[str]:
-        return [
-            f'<a href="{q.get_absolute_url()}"><span itemprop="director">{q.full_name}</span></a>'
-            for q in movie.directors.all()
-        ]
+    def _get_directors(movie: Movie) -> QuerySet:
+        return movie.directors.all()
 
     @staticmethod
-    def _get_writers(movie: Movie) -> list[str]:
-        return [
-            f'<a href="{q.get_absolute_url()}"><span itemprop="writer">{q.full_name}</span></a>'
-            for q in movie.writers.all()
-        ]
+    def _get_writers(movie: Movie) -> QuerySet:
+        return movie.writers.all()
 
     @staticmethod
     def _get_stream_platforms(movie: Movie) -> QuerySet:
@@ -174,20 +166,28 @@ class DataFilters:
             .distinct()
         )
 
-        return list(years)
+        years = sorted(years)
+
+        return [years[0], years[-1]]
 
     @staticmethod
     def get_countries() -> list[dict[str, str]]:
-        countries = Country.objects.order_by("name").values("name", "code").distinct()
+        countries = (
+            Movie.objects.exclude(country__name__exact=None)
+            .values("country__name", "country__code")
+            .annotate(country_count=Count("country__name"))
+            .order_by("-country_count")
+            .distinct()
+        )
 
         return list(countries)
 
     @staticmethod
     def get_genres() -> list[dict[str, str]]:
         genres = (
-            Category.objects.filter(parent__slug="genres")
-            .order_by("name")
-            .values("name", "slug")
+            Movie.objects.values("categories__name", "categories__slug")
+            .annotate(genres_count=Count("categories__name"))
+            .order_by("-genres_count")
             .distinct()
         )
 
@@ -304,7 +304,7 @@ def get_top_classics(limit: int = None) -> QuerySet:
     Get top classic movies and series list according to IMDB.
     """
     best_movies = (
-        Movie.objects.exclude(release__gt=datetime.today() + relativedelta(months=-3))
+        Movie.objects.exclude(release__gt=datetime.today() + relativedelta(years=-20))
         .exclude(release__isnull=True)
         .order_by("-imdb_votes", "-imdb_rate")
         .distinct()

@@ -60,7 +60,7 @@ class FilteredListView(FilterView):
 
     page_title = ""
     filterset_class = MovieFilter
-    paginate_by = 32
+    paginate_by = 18
     template_name = "movies/movie_list.html"
 
     def get_context_data(self, **kwargs: Any) -> dict:

@@ -50,19 +50,18 @@
                         <a href="" class="header__logo"><img src="img/logo.svg" alt=""></a>
                         <ul class="header__nav">
                             <li class="header__nav-item">
-                                <a class="dropdown-toggle header__nav-link" href="" role="button" id="dropdownMenuHome" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Home</a>
-                                <ul class="dropdown-menu header__dropdown-menu" aria-labelledby="dropdownMenuHome">
-                                    <li><a href="">Home slideshow bg</a></li>
-                                    <li><a href="">Home static bg</a></li>
-                                </ul>
+                                <a href="{% url 'index' %}" class="header__nav-link">Home</a>
                             </li>
                             <li class="header__nav-item">
                                 <a class="dropdown-toggle header__nav-link" href="" role="button" id="dropdownMenuCatalog" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Catalog</a>
                                 <ul class="dropdown-menu header__dropdown-menu" aria-labelledby="dropdownMenuCatalog">
-                                    <li><a href="">Catalog Grid</a></li>
-                                    <li><a href="">Catalog List</a></li>
-                                    <li><a href="">Details Movie</a></li>
-                                    <li><a href="">Details TV Series</a></li>
+                                    <li><a href="{% url 'popular-movies' %}">Popular Movies</a></li>
+                                    <li><a href="{% url 'popular-series' %}">Popular Series</a></li>
+                                    <li><a href="{% url 'imdb-top' %}">IMDb TOP</a></li>
+                                    <li><a href="{% url 'classic-movies' %}">Classic Movies</a></li>
+                                    <li><a href="{% url 'recent-premieres' %}">Recent Premieres</a></li>
+                                    <li><a href="{% url 'new-movies-series' %}">New Releases</a></li>
+                                    <li><a href="{% url 'movies-month' %}">Movies of Month</a></li>
                                 </ul>
                             </li>
                             <li class="header__nav-item">
@@ -137,6 +136,10 @@
 
 <!-- jquery main JS -->
 <script src="{% static 'js/libs/jquery.min.js' %}"></script>
+<!-- jquery more lines JS -->
+<script src="{% static 'js/libs/jquery.morelines.min.js' %}"></script>
+<!-- jquery mouse wheel JS -->
+<script src="{% static 'js/libs/jquery.mousewheel.min.js' %}"></script>
 <!-- Bootstrap JS -->
 <script src="{% static 'js/libs/bootstrap.bundle.min.js' %}"></script>
 <!-- owl carousel JS -->
