@@ -21,7 +21,7 @@
                     <h2 class="section__title">{{ page_title }}</h2>
 
                     <ul class="breadcrumb">
-                        <li class="breadcrumb__item"><a href="#">Home</a></li>
+                        <li class="breadcrumb__item"><a href="{% url 'index' %}">Home</a></li>
                         <li class="breadcrumb__item breadcrumb__item--active">{{ page_title }}</li>
                     </ul>
                 </div>
@@ -136,8 +136,8 @@
                     <div class="card__content">
                         <h3 class="card__title"><a href="{{ movie.get_absolute_url }}">{{ movie.title }}</a></h3>
                         <span class="card__category">
-                            {% for genre in movie.genres %}
-                            <a href="#">{{ genre }}</a>
+                            {% for genre in movie.categories|genres %}
+                            <a href="{{ genre.get_absolute_url }}">{{ genre.name }}</a>
                             {% endfor %}
                         </span>
                         <span class="card__rate"><i class="icon ion-ios-star"></i>{{ movie.imdb_rate }}</span>

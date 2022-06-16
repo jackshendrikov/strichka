@@ -1,0 +1,256 @@
+{% extends 'movies/base.html' %}
+{% load app_tags %}
+{% load static %}
+{% load humanize %}
+{% block title %}{{ full_name }}{% endblock %}
+
+{% block extrahead %}
+<link rel="stylesheet" href="{% static 'css/index.css' %}">
+<link rel="stylesheet" href="{% static 'css/detail.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="section details">
+    <div class="details__bg" data-bg="{% static 'img/section/movie_back.jpg' %}"></div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-10">
+                <div class="card card--details card--series">
+                    <div class="row">
+                        <div class="col-12 col-sm-5 col-md-5 col-lg-4 col-xl-4">
+                            <div class="card__cover">
+                                <img src="{{ photo }}" alt="{{ full_name }}">
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-sm-7 col-md-7 col-lg-8 col-xl-8">
+                            <div class="card__content">
+                                <div class="card__wrap">
+                                    <h1 class="details__title">{{ full_name }}</h1>
+                                </div>
+
+                                <ul class="card__meta">
+                                    <li><span>Birthday:</span> {{ birthday|date:"d F Y" }}</li>
+                                    <li><span>Place of Birth:</span> {{ place_of_birth }}</li>
+                                </ul>
+
+                                <div class="card__description card__description--details" style="color: #9da1a8;">
+                                    {{ description }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section section--bg" data-bg="{% static 'img/section/section.jpg' %}">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h2 class="section__title">Known For</h2>
+            </div>
+
+            {% for movie in known_for %}
+            <div class="col-6 col-sm-4 col-lg-3 col-xl-2">
+                <div class="card">
+                    <div class="card__cover">
+                        <img src="{{ movie.poster }}" alt="{{ movie.title }}">
+                        <a href="{{ movie.get_absolute_url }}" class="card__play">
+                            <i class="icon ion-ios-play"></i>
+                        </a>
+                    </div>
+                    <div class="card__content">
+                        <h3 class="card__title"><a href="{{ movie.get_absolute_url }}">{{ movie.title }}</a></h3>
+                        <span class="card__category">
+                            {% for genre in movie.categories|genres %}
+                            <a href="{{ genre.get_absolute_url }}">{{ genre.name }}</a>
+                            {% endfor %}
+                        </span>
+                        <span class="card__rate"><i class="icon ion-ios-star"></i>{{ movie.imdb_rate }}</span>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{% if movies_actors %}
+<section class="section section--bg" data-bg="{% static 'img/section/actor.jpg' %}">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h2 class="section__title">Cast Member</h2>
+            </div>
+
+            {% for movie in movies_actors %}
+            <div class="col-6 col-sm-4 col-lg-3 col-xl-2">
+                <div class="card">
+                    <div class="card__cover">
+                        <img src="{{ movie.poster }}" alt="{{ movie.title }}">
+                        <a href="{{ movie.get_absolute_url }}" class="card__play">
+                            <i class="icon ion-ios-play"></i>
+                        </a>
+                    </div>
+                    <div class="card__content">
+                        <h3 class="card__title"><a href="{{ movie.get_absolute_url }}">{{ movie.title }}</a></h3>
+                        <span class="card__category">
+                            {% for genre in movie.categories|genres %}
+                            <a href="{{ genre.get_absolute_url }}">{{ genre.name }}</a>
+                            {% endfor %}
+                        </span>
+                        <span class="card__rate"><i class="icon ion-ios-star"></i>{{ movie.imdb_rate }}</span>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+{% if movies_directors %}
+<section class="section section--bg" data-bg="{% static 'img/section/director.jpg' %}">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h2 class="section__title">Director</h2>
+            </div>
+
+            {% for movie in movies_directors %}
+            <div class="col-6 col-sm-4 col-lg-3 col-xl-2">
+                <div class="card">
+                    <div class="card__cover">
+                        <img src="{{ movie.poster }}" alt="{{ movie.title }}">
+                        <a href="{{ movie.get_absolute_url }}" class="card__play">
+                            <i class="icon ion-ios-play"></i>
+                        </a>
+                    </div>
+                    <div class="card__content">
+                        <h3 class="card__title"><a href="{{ movie.get_absolute_url }}">{{ movie.title }}</a></h3>
+                        <span class="card__category">
+                            {% for genre in movie.categories|genres %}
+                            <a href="{{ genre.get_absolute_url }}">{{ genre.name }}</a>
+                            {% endfor %}
+                        </span>
+                        <span class="card__rate"><i class="icon ion-ios-star"></i>{{ movie.imdb_rate }}</span>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+{% if movie_writers %}
+<section class="section section--bg" data-bg="{% static 'img/section/writer.jpg' %}">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h2 class="section__title">Writer</h2>
+            </div>
+
+            {% for movie in movie_writers %}
+            <div class="col-6 col-sm-4 col-lg-3 col-xl-2">
+                <div class="card">
+                    <div class="card__cover">
+                        <img src="{{ movie.poster }}" alt="{{ movie.title }}">
+                        <a href="{{ movie.get_absolute_url }}" class="card__play">
+                            <i class="icon ion-ios-play"></i>
+                        </a>
+                    </div>
+                    <div class="card__content">
+                        <h3 class="card__title"><a href="{{ movie.get_absolute_url }}">{{ movie.title }}</a></h3>
+                        <span class="card__category">
+                            {% for genre in movie.categories|genres %}
+                            <a href="{{ genre.get_absolute_url }}">{{ genre.name }}</a>
+                            {% endfor %}
+                        </span>
+                        <span class="card__rate"><i class="icon ion-ios-star"></i>{{ movie.imdb_rate }}</span>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<section class="content">
+    <div class="content__head">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h2 class="content__title">Comments</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                {% load mptt_tags %}
+                <div class="comments">
+                    <ul class="comments__list">
+                        {% recursetree comments %}
+                        <li class="comments__item">
+                            <div class="comments__autor">
+                                <img class="comments__avatar" src="{{ node.user|gravatar:60}}" alt="{{ node.user.username }}">
+                                <span class="comments__name">{{ node.user.username }}</span>
+                                <span class="comments__time">{{ node.commented_on }}</span>
+                            </div>
+                            <p class="comments__text">{{ node.text }}</p>
+                            <div class="comments__actions">
+                                <div class="comments__rate">
+                                    <button data-id="{{ node.id }}" type="button" data-action="like" data-url="{% url 'comment_like' node.id %}" data-csrf_token="{{ csrf_token }}">
+                                        <i class="icon ion-md-thumbs-up"></i>
+                                        <span id="like{{ node.id }}">{{ node.votes.likes.count }}</span>
+                                    </button>
+
+                                    <button data-id="{{ node.id }}" type="button" data-action="dislike" data-url="{% url 'comment_dislike' node.id %}" data-csrf_token="{{ csrf_token }}">
+                                        <span id="dislike{{ node.id }}">{{ node.votes.dislikes.count }}</span>
+                                        <i class="icon ion-md-thumbs-down"></i>
+                                    </button>
+                                </div>
+
+                                <a href="#form-comment" onclick="addComment('{{ node.user.username }}', '{{ node.id }}')"><i class="icon ion-ios-share-alt"></i>Reply</a>
+                            </div>
+                        </li>
+
+                        {% if not node.is_leaf_node %}
+                            <div class="comments__item--answer">{{ children }}</div>
+                        {% endif %}
+                        {% endrecursetree %}
+                    </ul>
+
+                    <form action="" method="post" class="form" id="form-comment">
+                        {% csrf_token %}
+                        <input type="hidden" name="parent" value="" id="comment-parent">
+                        <textarea required id="contact-comment" name="text" class="form__textarea" placeholder="Add comment"></textarea>
+                        <button type="submit" class="form__btn">Send</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/detail.js' %}"></script>
+<script src="{% static 'js/votes.js' %}"></script>
+<script type="text/javascript">
+    document.getElementById("form-comment").action = "{% url 'cast_comment' member_id %}";
+
+    function addComment(name, id) {
+        document.getElementById("comment-parent").value = id;
+        document.getElementById("contact-comment").innerText = `${name}, `
+    }
+</script>
+{% endblock extra_js %}

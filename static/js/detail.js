@@ -27,15 +27,4 @@ $(document).ready(function() {
         buttontxtless: "",
         animationspeed: 400
     });
-
-
-    function initializePlayer() {
-        if ($('#player').length) {
-            const player = new Plyr('#player');
-        } else {
-            return false;
-        }
-        return false;
-    }
-    $(window).on('load', initializePlayer());
 });

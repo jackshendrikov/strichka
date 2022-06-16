@@ -1,4 +1,24 @@
 /*============================== Details ==============================*/
+  .section--bg:before {
+     content: '';
+     position: absolute;
+     top: 0;
+     left: 0;
+     right: 0;
+     height: 2px;
+     display: block;
+     background-image: -moz-linear-gradient(90deg, #ff55a5 0%, #7758ff 100%);
+     background-image: -webkit-linear-gradient(90deg, #ff55a5 0%, #7758ff 100%);
+     background-image: -ms-linear-gradient(90deg, #ff55a5 0%, #7758ff 100%);
+     background-image: linear-gradient(90deg, #ff55a5 0%, #7758ff 100%);
+     -webkit-box-shadow: 0 0 20px 0 rgb(94, 88, 255);
+     box-shadow: 0 0 20px 0 rgb(94, 88, 255);
+}
+
+ .content__title {
+     margin: 20px 0 20px;
+ }
+
  .details {
      position: relative;
      margin-top: 70px;
@@ -12,7 +32,7 @@
      left: 0;
      height: 400px;
      z-index: 1;
-     opacity: 0.07;
+     opacity: 0.3;
 }
  .details:before {
      content: '';
@@ -85,6 +105,10 @@
      .details__title {
          font-size: 30px;
     }
+
+     .content__title {
+         margin: 25px 0 25px;
+    }
 }
  @media (min-width: 768px) {
      .details {
@@ -101,6 +125,9 @@
     }
      .details__devices {
          margin-top: 0;
+    }
+     .content__title {
+         margin: 25px 0 25px;
     }
 }
  @media (min-width: 992px) {
@@ -125,16 +152,15 @@
      line-height: 30px;
      font-size: 14px;
 }
- .keyword-tags span {
-     font-weight: 500;
-}
- .keyword-tags a {
+ .keyword-tag {
      background-color: #31385a;
      color: #abb7c4;
      padding: 2px 5px;
      -webkit-border-radius: 2px;
      -moz-border-radius: 2px;
      border-radius: 2px;
+     font-weight: 300;
+     cursor: default;
 }
 /*============================== Comments ==============================*/
  .comments {
@@ -207,8 +233,11 @@
      margin-bottom: 30px;
      display: block;
 }
- .comments__item--answer, .comments__item--quote {
+ .comments__item--answer {
      margin-left: 25px;
+}
+ .comments__item--answer-level-2 {
+     margin-left: 50px;
 }
  .comments__actions {
      display: flex;
@@ -301,8 +330,12 @@
      opacity: 1;
 }
  @media (min-width: 768px) {
-     .comments__item--answer, .comments__item--quote {
+     .comments__item--answer {
          margin-left: 55px;
+    }
+
+     .comments__item--answer-level-2 {
+        margin-left: 80px;
     }
 }
  @media (min-width: 992px) {

@@ -168,8 +168,7 @@ class Cast(StrichkaBaseModel):
         return self.full_name
 
     def get_absolute_url(self) -> str:
-        # return reverse("cast", kwargs={"pk": self.id})
-        return ""
+        return reverse("cast", kwargs={"pk": self.id})
 
     def clean(self) -> None:
         """
@@ -194,6 +193,9 @@ class Country(StrichkaBaseModel):
 
     def __str__(self) -> str:
         return self.name
+
+    def get_absolute_url(self) -> str:
+        return reverse("movies_country_list", kwargs={"name": self.name})
 
     def clean(self) -> None:
         """

@@ -1,12 +1,15 @@
 from django.contrib.auth.decorators import login_required
 from django.urls import include, path
 
-from movies.models import Comment, Movie, Vote
+from movies.models import Cast, Comment, Movie, Vote
 from movies.views import (
+    CastMemberDetailsView,
     ClassicMoviesView,
     CommentView,
     MovieDetailsView,
     MoviesBaseView,
+    MoviesByCountryView,
+    MoviesByGenreView,
     MoviesByImdbRatingView,
     MoviesMonthView,
     NewMoviesSeriesView,
@@ -24,7 +27,12 @@ comment_urlpatterns = [
         "movie/<int:pk>",
         login_required(CommentView.as_view(model=Movie)),
         name="movie_comment",
-    )
+    ),
+    path(
+        "cast/<int:pk>",
+        login_required(CommentView.as_view(model=Cast)),
+        name="cast_comment",
+    ),
 ]
 
 vote_urlpatterns = [
@@ -48,12 +56,35 @@ vote_urlpatterns = [
         login_required(VoteView.as_view(model=Movie, vote_type=Vote.DISLIKE)),
         name="movie_dislike",
     ),
+    path(
+        "cast/<int:pk>/like",
+        login_required(VoteView.as_view(model=Cast, vote_type=Vote.LIKE)),
+        name="cast_like",
+    ),
+    path(
+        "cast/<int:pk>/dislike",
+        login_required(VoteView.as_view(model=Cast, vote_type=Vote.DISLIKE)),
+        name="cast_dislike",
+    ),
 ]
 
 filter_urlpatterns = [
     path("countries/", get_filter_countries, name="get_countries"),
     path("years/", get_filter_year, name="get_years"),
     path("genres/", get_filter_genres, name="get_genres"),
+]
+
+category_urlpatterns = [
+    path(
+        "movie/genre/<slug:slug>/",
+        MoviesByGenreView.as_view(),
+        name="movies_genre_list",
+    ),
+    path(
+        "movie/country/<str:name>/",
+        MoviesByCountryView.as_view(),
+        name="movies_country_list",
+    ),
 ]
 
 catalogs_urlpatterns = [
@@ -70,8 +101,10 @@ urlpatterns = [
     path("", MoviesBaseView.as_view(), name="index"),
     path("movie/<int:pk>", MovieDetailsView.as_view(), name="movie_detail"),
     path("series/<int:pk>", MovieDetailsView.as_view(), name="series_detail"),
+    path("cast/<int:pk>", CastMemberDetailsView.as_view(), name="cast"),
     # ajax vote
     path("", include(vote_urlpatterns)),
+    path("", include(category_urlpatterns)),
     path("comment/", include(comment_urlpatterns)),
     path("filter/", include(filter_urlpatterns)),
     path("catalog/", include(catalogs_urlpatterns)),

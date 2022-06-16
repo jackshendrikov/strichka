@@ -13,6 +13,11 @@ def gravatar(user: User, size: int = 35) -> str:
     return url.format(email_hash, size)
 
 
+@register.filter(name="genres")
+def genres(queryset):
+    return queryset.filter(parent__slug="genres")
+
+
 @register.simple_tag
 def url_replace(request, field, value):
     dict_ = request.GET.copy()

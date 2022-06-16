@@ -50,7 +50,7 @@ class CastMemberDetailsView(BaseView):
     def get(self, request: HttpRequest, pk: int) -> HttpResponse:
         cast_member = get_object_or_404(Cast, pk=pk)
         context = services.GetCastDetail.execute({"member": cast_member.id})
-        return render(request, "movies/cast_member.html", context)
+        return render(request, "movies/cast_detail.html", context)
 
 
 class FilteredListView(FilterView):
@@ -96,8 +96,9 @@ class MoviesByCountryView(FilteredListView):
     page_title = "Movies by Country"
 
     def get_queryset(self) -> QuerySet:
+        self.page_title = f"{self.page_title} ({self.kwargs['name']})"
         try:
-            queryset = services.get_movies_list_by_country(self.kwargs["country"])
+            queryset = services.get_movies_list_by_country(self.kwargs["name"])
         except ValueError:
             raise Http404()
 
@@ -112,6 +113,7 @@ class MoviesByGenreView(FilteredListView):
     page_title = "Movies by Genre"
 
     def get_queryset(self) -> QuerySet:
+        self.page_title = f"{self.page_title} ({self.kwargs['slug'].title()})"
         try:
             queryset = services.get_movies_list_by_genre(self.kwargs["slug"])
         except ValueError:

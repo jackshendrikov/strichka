@@ -9,12 +9,12 @@
 <link rel="stylesheet" href="{% static 'css/libs/plyr.css' %}">
 
 <link rel="stylesheet" href="{% static 'css/index.css' %}">
-<link rel="stylesheet" href="{% static 'css/movie_detail.css' %}">
+<link rel="stylesheet" href="{% static 'css/detail.css' %}">
 {% endblock %}
 
 {% block content %}
 <section class="section details">
-    <div class="details__bg" data-bg="{% static 'img/section/main.jpg' %}"></div>
+    <div class="details__bg" data-bg="{% static 'img/section/movie_back.jpg' %}"></div>
 
     <div class="container">
         <div class="row">
@@ -39,7 +39,9 @@
 
                                     <ul class="card__list">
                                         <li>{% if is_movie %}Movie{% else %}Series{% endif %}</li>
+                                        {% if age_mark %}
                                         <li>{{ age_mark }}</li>
+                                        {% endif %}
                                     </ul>
                                 </div>
 
@@ -47,7 +49,7 @@
                                     <li>
                                         <span>Genre:</span>
                                         {% for genre in genres %}
-                                        <a href="">{{ genre }}</a>
+                                        <a href="{{ genre.get_absolute_url }}">{{ genre.name }}</a>
                                         {% endfor %}
                                     </li>
                                     <li><span>Release Date:</span> {{ release|date:"d F Y" }}</li>
@@ -56,8 +58,8 @@
                                     {% endif %}
                                     <li>
                                         <span>Country:</span>
-                                        {% for country_name in country %}
-                                        <a href="">{{ country_name }}</a>
+                                        {% for country in countries %}
+                                        <a href="{{ country.get_absolute_url }}">{{ country.name }}</a>
                                         {% endfor %}
                                     </li>
                                     {% if box_office %}
@@ -73,7 +75,7 @@
                                     <li>
                                         <span>Director:</span>
                                         {% for director in directors %}
-                                        <a href="">{{ director.full_name }}</a>
+                                        <a href="{{ director.get_absolute_url }}">{{ director.full_name }}</a>
                                         {% endfor %}
                                     </li>
                                     {% endif %}
@@ -81,14 +83,14 @@
                                     <li>
                                         <span>Writers:</span>
                                         {% for writer in writers %}
-                                        <a href="">{{ writer.full_name }}</a>
+                                        <a href="{{ writer.get_absolute_url }}">{{ writer.full_name }}</a>
                                         {% endfor %}
                                     </li>
                                     {% endif %}
                                     <li>
                                         <span>Cast:</span>
                                         {% for actor in actors %}
-                                        <a href="">{{ actor.full_name }}</a>
+                                        <a href="{{ actor.get_absolute_url }}">{{ actor.full_name }}</a>
                                         {% endfor %}
                                     </li>
                                 </ul>
@@ -102,12 +104,14 @@
                 </div>
             </div>
 
+            {% if keywords|length > 1 %}
             <div class="col-12 keyword-tags">
                 <span>Keywords: </span>
                 {% for keyword in keywords %}
-                <a href="">{{ keyword }}</a>
+                <span class="keyword-tag">{{ keyword }}</span>
                 {% endfor %}
             </div>
+            {% endif %}
 
             <div class="col-12 col-xl-6">
                 <div id="player" data-plyr-provider="youtube" data-plyr-embed-id="{{ trailer_id }}"></div>
@@ -210,7 +214,7 @@
                                 </li>
 
                                 {% if not node.is_leaf_node %}
-                                    <div class="comments__item--answer">{{ children }}</div>
+                                    <div class="{% if node.level == 1 %}comments__item--answer{% elif node.level == 2 %}comments__item--answer-level-2{% endif %}">{{ children }}</div>
                                 {% endif %}
                                 {% endrecursetree %}
                             </ul>
@@ -244,8 +248,8 @@
                             <div class="card__content">
                                 <h3 class="card__title"><a href="{{ movie.get_absolute_url }}#">{{ movie.title }}</a></h3>
                                 <span class="card__category">
-                                    {% for genre in movie.genres %}
-                                    <a href="#">{{ genre }}</a>
+                                    {% for genre in movie.categories|genres %}
+                                    <a href="{{ genre.get_absolute_url }}">{{ genre.name }}</a>
                                     {% endfor %}
                                 </span>
                                 <span class="card__rate"><i class="icon ion-ios-star"></i>{{ movie.imdb_rate }}</span>
@@ -266,7 +270,7 @@
 <!-- jquery custom scrollbar -->
 <script src="{% static 'js/libs/jquery.mCustomScrollbar.min.js' %}"></script>
 
-<script src="{% static 'js/movie_detail.js' %}"></script>
+<script src="{% static 'js/detail.js' %}"></script>
 <script src="{% static 'js/votes.js' %}"></script>
 <script type="text/javascript">
     document.getElementById("form-comment").action = "{% url 'movie_comment' movie_id %}";
@@ -275,5 +279,15 @@
         document.getElementById("comment-parent").value = id;
         document.getElementById("contact-comment").innerText = `${name}, `
     }
+
+     function initializePlayer() {
+        if ($('#player').length) {
+            const player = new Plyr('#player');
+        } else {
+            return false;
+        }
+        return false;
+    }
+    $(window).on('load', initializePlayer());
 </script>
 {% endblock extra_js %}

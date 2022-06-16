@@ -60,7 +60,7 @@ class GetMovieDetail(Service):
             "runtime": movie.runtime,
             "release": movie.release,
             "keywords": movie.keywords_as_list(),
-            "country": countries,
+            "countries": countries,
             "box_office": movie.box_office,
             "trailer_id": movie.trailer_id,
             "age_mark": movie.age_mark,
@@ -81,8 +81,8 @@ class GetMovieDetail(Service):
         return context
 
     @staticmethod
-    def _get_genres(movie: Movie) -> list[str]:
-        return movie.genres()
+    def _get_genres(movie: Movie) -> QuerySet:
+        return movie.categories.filter(parent__slug="genres")
 
     @staticmethod
     def _get_countries(movie: Movie) -> QuerySet:
@@ -115,12 +115,25 @@ class GetCastDetail(Service):
     def process(self) -> dict:
         member = self.cleaned_data["member"]
 
-        movies_actors = member.movie_actors.all()
-        movies_directors = member.movie_directors.all()
-        movie_writers = member.movie_writers.all()
         comments = member.comments.all()
         likes_count = member.votes.likes().count()
         dislikes_count = member.votes.dislikes().count()
+
+        role_movies = {
+            "actor": member.movie_actors,
+            "director": member.movie_directors,
+            "writer": member.movie_writers,
+        }
+
+        role_counter = {
+            "actor": member.movie_actors.count(),
+            "director": member.movie_directors.count(),
+            "writer": member.movie_writers.count(),
+        }
+
+        known_for = role_movies[max(role_counter, key=role_counter.get)].order_by(
+            "-imdb_votes", "-imdb_rate"
+        )[:6]
 
         context = {
             "member_id": member.id,
@@ -129,10 +142,11 @@ class GetCastDetail(Service):
             "description": member.description,
             "birthday": member.birthday,
             "place_of_birth": member.place_of_birth,
-            "photo": member.image.photo,
-            "movies_actors": movies_actors,
-            "movies_directors": movies_directors,
-            "movie_writers": movie_writers,
+            "photo": member.photo,
+            "movies_actors": role_movies["actor"].all(),
+            "movies_directors": role_movies["director"].all(),
+            "movie_writers": role_movies["writer"].all(),
+            "known_for": known_for,
             "comments": comments,
             "likes_count": likes_count,
             "dislikes_count": dislikes_count,
