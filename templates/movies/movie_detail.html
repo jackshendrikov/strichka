@@ -62,6 +62,10 @@
                                         <a href="{{ country.get_absolute_url }}">{{ country.name }}</a>
                                         {% endfor %}
                                     </li>
+                                    <li>
+                                        <span>Year:</span>
+                                        <a href="{% url 'movies_years_list' year %}">{{ year }}</a>
+                                    </li>
                                     {% if box_office %}
                                     <li><span>Box Office:</span> ${{ box_office|intcomma }}</li>
                                     {% endif %}

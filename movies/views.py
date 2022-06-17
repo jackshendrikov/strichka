@@ -26,7 +26,6 @@ class MoviesBaseView(BaseView):
             "popular_movies": services.get_popular_movies(limit=18),
             "popular_series": services.get_popular_series(limit=18),
             "cinema_movies": services.get_cinema_movies(limit=6),
-            "collections": services.get_collections(),
         }
         return render(request, "movies/index.html", context)
 
@@ -53,6 +52,51 @@ class CastMemberDetailsView(BaseView):
         return render(request, "movies/cast_detail.html", context)
 
 
+class CollectionsView(BaseView):
+    """
+    Detailed information about collections.
+    """
+
+    def get(self, request: HttpRequest) -> HttpResponse:
+        context = {"collections": services.get_collections()}
+        return render(request, "movies/collection.html", context)
+
+
+class RandomMovieView(BaseView):
+    """
+    Detailed information about random movie.
+    """
+
+    def get(self, request: HttpRequest) -> HttpResponse:
+        movie = services.ger_random_movie()
+        context = services.GetMovieDetail.execute({"movie": movie.id})
+        return render(request, "movies/movie_detail.html", context)
+
+
+class MoviesOfCollectionView(FilterView):
+    """
+    Displaying a list of movies of a certain collection.
+    """
+
+    filterset_class = MovieFilter
+    paginate_by = 32
+    template_name = "movies/movie_list.html"
+
+    def get_collection(self):
+        return get_object_or_404(Collection, pk=self.kwargs["pk"])
+
+    def get_queryset(self) -> QuerySet:
+        collection = self.get_collection()
+        queryset = services.get_movies_of_collection(collection=collection)
+        return queryset
+
+    def get_context_data(self, **kwargs: Any) -> dict:
+        context = super().get_context_data(**kwargs)
+        collection = self.get_collection()
+        context["page_title"] = f"{collection.name} Collection"
+        return context
+
+
 class FilteredListView(FilterView):
     """
     Base view for specific movie collection pages.
@@ -77,11 +121,9 @@ class MoviesByYearView(FilteredListView):
     page_title = "Movies by Year"
 
     def get_queryset(self) -> QuerySet:
-        year = self.kwargs["year"].split("-")
-        if (len(year[0]) and len(year[-1])) != 4:
-            raise Http404()
+        self.page_title = f"{self.page_title} ({self.kwargs['year']})"
         try:
-            queryset = services.get_movies_list_by_years(year)
+            queryset = services.get_movies_list_by_years(self.kwargs["year"])
         except ValueError:
             raise Http404()
 
@@ -263,27 +305,3 @@ class VoteView(View):
                 user=request.user, vote_type=self.vote_type, obj=obj
             )
             return JsonResponse(context)
-
-
-class MoviesOfCollectionView(FilterView):
-    """
-    Displaying a list of movies of a certain collection.
-    """
-
-    filterset_class = MovieFilter
-    paginate_by = 32
-    template_name = "movies/collection.html"
-
-    def get_collection(self):
-        return get_object_or_404(Collection, pk=self.kwargs["pk"])
-
-    def get_queryset(self) -> QuerySet:
-        collection = self.get_collection()
-        queryset = services.get_movies_of_collection(collection=collection)
-        return queryset
-
-    def get_context_data(self, **kwargs: Any) -> dict:
-        context = super().get_context_data(**kwargs)
-        collection = self.get_collection()
-        context["name_collection"] = collection.name
-        return context

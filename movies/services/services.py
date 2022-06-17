@@ -9,6 +9,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.db.models import Count, QuerySet, Sum
 from django.db.transaction import atomic
 from django.forms import ModelChoiceField
+from random import choice
 from service_objects.services import Service
 
 from movies.forms import CommentForm
@@ -370,17 +371,15 @@ def get_movies_list_by_genre(slug: str) -> QuerySet:
     Get all movies and series of a specific genre.
     """
 
-    return Movie.objects.filter(categories__slug=slug, is_movie=True).distinct()
+    return Movie.objects.filter(categories__slug=slug).distinct()
 
 
-def get_movies_list_by_years(year: list[int]) -> QuerySet:
+def get_movies_list_by_years(year: int) -> QuerySet:
     """
     Get all movies and series from specific year range.
     """
 
-    return Movie.objects.filter(
-        year__range=(year[0], year[-1]), is_movie=True
-    ).distinct()
+    return Movie.objects.filter(year=year).distinct()
 
 
 def get_movies_list_by_country(country: str) -> QuerySet:
@@ -388,7 +387,13 @@ def get_movies_list_by_country(country: str) -> QuerySet:
     Get all movies and series from specific country.
     """
 
-    return Movie.objects.filter(country__name__exact=country, is_movie=True).distinct()
+    return Movie.objects.filter(country__name__exact=country).distinct()
+
+
+def ger_random_movie() -> Movie:
+    pks = Movie.objects.values_list("pk", flat=True)
+    random_pk = choice(pks)  # noqa: S311
+    return Movie.objects.get(pk=random_pk)
 
 
 def get_movie_of_month() -> QuerySet:

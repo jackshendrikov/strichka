@@ -76,8 +76,6 @@ class StreamingPlatformSerializer(ModelSerializer):
 
 
 class CollectionSerializer(ModelSerializer):
-    movies = CastSerializer(many=True, read_only=True)
-
     class Meta:
         model = Collection
-        fields = ("name", "movies", "is_active")
+        fields = ("name", "background", "movies", "is_active")

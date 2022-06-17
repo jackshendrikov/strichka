@@ -5,16 +5,20 @@ from movies.models import Cast, Comment, Movie, Vote
 from movies.views import (
     CastMemberDetailsView,
     ClassicMoviesView,
+    CollectionsView,
     CommentView,
     MovieDetailsView,
     MoviesBaseView,
     MoviesByCountryView,
     MoviesByGenreView,
     MoviesByImdbRatingView,
+    MoviesByYearView,
     MoviesMonthView,
+    MoviesOfCollectionView,
     NewMoviesSeriesView,
     PopularMoviesView,
     PopularSeriesView,
+    RandomMovieView,
     RecentPremieresView,
     VoteView,
     get_filter_countries,
@@ -85,6 +89,9 @@ category_urlpatterns = [
         MoviesByCountryView.as_view(),
         name="movies_country_list",
     ),
+    path(
+        "movie/year/<str:year>/", MoviesByYearView.as_view(), name="movies_years_list"
+    ),
 ]
 
 catalogs_urlpatterns = [
@@ -99,8 +106,15 @@ catalogs_urlpatterns = [
 
 urlpatterns = [
     path("", MoviesBaseView.as_view(), name="index"),
+    path("collections/", CollectionsView.as_view(), name="collections"),
+    path("random/", RandomMovieView.as_view(), name="random_movie"),
     path("movie/<int:pk>", MovieDetailsView.as_view(), name="movie_detail"),
     path("series/<int:pk>", MovieDetailsView.as_view(), name="series_detail"),
+    path(
+        "collection/<int:pk>",
+        MoviesOfCollectionView.as_view(),
+        name="movies_collection",
+    ),
     path("cast/<int:pk>", CastMemberDetailsView.as_view(), name="cast"),
     # ajax vote
     path("", include(vote_urlpatterns)),

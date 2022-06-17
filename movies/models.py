@@ -359,6 +359,13 @@ class Collection(StrichkaBaseModel):
         related_query_name="collection",
         help_text="Movies in collection",
     )
+    background = models.URLField(
+        verbose_name="Collection photo",
+        max_length=220,
+        null=True,
+        blank=True,
+        help_text="Collection photo",
+    )
     is_active = models.BooleanField(default=False)
 
     class Meta:
