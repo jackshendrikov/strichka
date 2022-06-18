@@ -75,8 +75,11 @@
                             <li class="dropdown header__nav-item">
                                 <a class="dropdown-toggle header__nav-link header__nav-link--more" href="" role="button" id="dropdownMenuMore" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="icon ion-ios-more"></i></a>
                                 <ul class="dropdown-menu header__dropdown-menu" aria-labelledby="dropdownMenuMore">
-                                    <li><a href="">Sign In</a></li>
-                                    <li><a href="">Sign Up</a></li>
+                                    {% if user.is_authenticated %}
+                                    <li><a href="{% url 'logout' %}">Log Out</a></li>
+                                    {% else %}
+                                    <li><a href="{% url 'login' %}">Log In</a></li>
+                                    {% endif %}
                                 </ul>
                             </li>
                         </ul>
@@ -86,10 +89,17 @@
                                 <i class="icon ion-ios-search"></i>
                             </button>
 
-                            <a href="signin.html" class="header__sign-in">
+                            {% if user.is_authenticated %}
+                            <a href="{% url 'logout' %}" class="header__sign-in">
                                 <i class="icon ion-ios-log-in"></i>
-                                <span>sign in</span>
+                                <span>log out</span>
                             </a>
+                            {% else %}
+                            <a href="{% url 'login' %}" class="header__sign-in">
+                                <i class="icon ion-ios-log-in"></i>
+                                <span>log in</span>
+                            </a>
+                            {% endif %}
                         </div>
 
                         <button class="header__btn" type="button">

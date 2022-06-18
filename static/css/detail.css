@@ -1,5 +1,5 @@
 /*============================== Details ==============================*/
-  .section--bg:before {
+ .section--bg:before {
      content: '';
      position: absolute;
      top: 0;
@@ -14,11 +14,9 @@
      -webkit-box-shadow: 0 0 20px 0 rgb(94, 88, 255);
      box-shadow: 0 0 20px 0 rgb(94, 88, 255);
 }
-
  .content__title {
      margin: 20px 0 20px;
- }
-
+}
  .details {
      position: relative;
      margin-top: 70px;
@@ -101,11 +99,26 @@
      height: 70px;
      object-fit: cover;
 }
+ @media (max-width: 576px) {
+     .video-types {
+         display: none;
+     }
+     .purchase-types {
+         display: none;
+     }
+     .details__title,
+     .details .container .row {
+         display: flex;
+         justify-content: center;
+     }
+     .keyword-tags {
+         display: none;
+     }
+ }
  @media (min-width: 576px) {
      .details__title {
          font-size: 30px;
     }
-
      .content__title {
          margin: 25px 0 25px;
     }
@@ -333,9 +346,8 @@
      .comments__item--answer {
          margin-left: 55px;
     }
-
      .comments__item--answer-level-2 {
-        margin-left: 80px;
+         margin-left: 80px;
     }
 }
  @media (min-width: 992px) {
@@ -667,4 +679,215 @@
      background-image: -webkit-linear-gradient(180deg, #ff55a5 0%, #ff5860 100%);
      background-image: -ms-linear-gradient(180deg, #ff55a5 0%, #ff5860 100%);
      background-image: linear-gradient(180deg, #ff55a5 0%, #ff5860 100%);
+}
+/*================================ Like/Dislike ================================*/
+ .dislike-button {
+     --icon: #c22b3c;
+     --icon-hover: #9b2230;
+}
+ .like-button {
+     --icon: #0cb457;
+     --icon-hover: #099045;
+}
+ .dislike-button, .like-button {
+     --color: #f6f8ff;
+     --color-hover: #f6f8ff;
+     --color-active: #fff;
+     --icon-active: #fff;
+     --background: #404660;
+     --background-hover: #393e57;
+     --background-active: #275efe;
+     --shadow: rgba(0, 17, 119, 0.1);
+     display: block;
+     outline: none;
+     cursor: pointer;
+     position: relative;
+     border: 0;
+     background: none;
+     padding: 8px 20px 8px 24px;
+     border-radius: 9px;
+     line-height: 27px;
+     font-family: inherit;
+     font-weight: 600;
+     font-size: 14px;
+     color: var(--color);
+     -webkit-appearance: none;
+     -webkit-tap-highlight-color: transparent;
+     transition: color 0.2s linear;
+}
+ .dislike-button:hover, .like-button:hover {
+     --icon: var(--icon-hover);
+     --color: var(--color-hover);
+     --background: var(--background-hover);
+}
+ .dislike-button:active, .like-button:active {
+     --scale: 0.95;
+}
+ .dislike-button:not(.liked):hover , .like-button:not(.liked):hover {
+     --hand-rotate: 8deg;
+     --hand-thumb-1: -12deg;
+     --hand-thumb-2: 36deg;
+}
+ .dislike-button.liked, .like-button.liked {
+     --span-x: 2px;
+     --span-d-o: 1;
+     --span-d-x: 0;
+     --icon: var(--icon-active);
+     --color: var(--color-active);
+     --background: var(--background-active);
+     --hand-name: hand;
+}
+ .dislike-button:after, .like-button:after {
+     content: "";
+     min-width: 103px;
+     position: absolute;
+     left: 0;
+     top: 0;
+     right: 0;
+     bottom: 0;
+     border-radius: inherit;
+     transition: background 0.2s linear, transform 0.2s, box-shadow 0.2s linear;
+     transform: scale(var(--scale, 1)) translateZ(0);
+     background: var(--background);
+     box-shadow: 0 4px 8px var(--shadow), 0 8px 20px var(--shadow);
+}
+ .dislike-button .emitter, .like-button .emitter {
+     position: absolute;
+     left: 50%;
+     top: 50%;
+     transform: translateZ(-4px);
+}
+ .dislike-button .emitter div, .like-button .emitter div {
+     width: 6px;
+     height: 6px;
+     margin: -3px 0 0 -3px;
+     border-radius: 2px;
+     position: absolute;
+     left: 0;
+     top: 0;
+     transform-style: preserve-3d;
+}
+ .like-button .hand {
+     width: 11px;
+     height: 11px;
+     border-radius: 2px 0 0 0;
+     background: var(--icon);
+     margin: 10px 8px 0 0;
+     transform-origin: -5px -1px;
+     transition: transform 0.25s, background 0.2s linear;
+     transform: rotate(var(--hand-rotate, 0deg)) translateZ(0);
+     -webkit-animation: var(--hand-name, none) 0.5s linear;
+     animation: var(--hand-name, none) 0.5s linear;
+}
+ .dislike-button .hand {
+     width: 11px;
+     height: 11px;
+     border-radius: 2px 0 0 0;
+     background: var(--icon);
+     margin: 15px 8px 0 0;
+     transform-origin: 5px 1px;
+     transition: transform 0.25s, background 0.2s linear;
+     transform: rotate(180deg) scaleX(-1);
+     -webkit-animation: var(--hand-name, none) 0.5s linear;
+     animation: var(--hand-name, none) 0.5s linear;
+}
+ .dislike-button .hand:before, .button .hand:after, .like-button .hand:before, .button .hand:after {
+     content: "";
+     background: var(--icon);
+     position: absolute;
+     transition: background 0.2s linear, box-shadow 0.2s linear;
+}
+ .dislike-button .hand:before, .like-button .hand:before {
+     left: -5px;
+     bottom: 0;
+     height: 12px;
+     width: 4px;
+     border-radius: 1px 1px 0 1px;
+}
+ .dislike-button .hand:after, .like-button .hand:after {
+     right: -3px;
+     top: 0;
+     width: 4px;
+     height: 4px;
+     border-radius: 0 2px 2px 0;
+     background: var(--icon);
+     box-shadow: -0.5px 4px 0 var(--icon), -1px 8px 0 var(--icon), -1.5px 12px 0 var(--icon);
+     transform: scaleY(0.6825);
+     transform-origin: 0 0;
+}
+ .dislike-button .hand .thumb, .like-button .hand .thumb {
+     background: var(--icon);
+     width: 10px;
+     height: 4px;
+     border-radius: 2px;
+     transform-origin: 2px 2px;
+     position: absolute;
+     left: 0;
+     top: 0;
+     transition: transform 0.25s, background 0.2s linear;
+     transform: scale(0.85) translateY(-0.5px) rotate(var(--hand-thumb-1, -45deg)) translateZ(0);
+}
+ .dislike-button .hand .thumb:before, .like-button .hand .thumb:before {
+     content: "";
+     height: 4px;
+     width: 7px;
+     border-radius: 2px;
+     transform-origin: 2px 2px;
+     background: var(--icon);
+     position: absolute;
+     left: 7px;
+     top: 0;
+     transition: transform 0.25s, background 0.2s linear;
+     transform: rotate(var(--hand-thumb-2, -45deg)) translateZ(0);
+}
+ .dislike-button .hand, .like-button .hand, .dislike-button span, .like-button span {
+     z-index: 1;
+     position: relative;
+     display: inline-block;
+     vertical-align: top;
+}
+ .dislike-button .number, .like-button .number {
+     position: relative;
+     transform: translateZ(0);
+     padding-left: 10px;
+}
+ .dislike-button .number:before, .like-button .number:before {
+     content: "";
+     position: absolute;
+     left: 0;
+     top: 1px;
+     bottom: 1px;
+     width: 1px;
+     background-color: #dcdfee;
+}
+ .dislike-button .hand span, .like-button .hand span, .dislike-button span .hidden-like, .like-button span .hidden-like {
+     opacity: var(--span-d-o, 0);
+     transition: transform 0.25s, opacity 0.2s linear;
+     transform: translateX(var(--span-d-x, 4px)) translateZ(0);
+}
+ .dislike-button > span, .like-button > span {
+     transition: transform 0.25s;
+     transform: translateX(var(--span-x, 4px)) translateZ(0);
+}
+ @-webkit-keyframes hand {
+     30% {
+         transform: rotate(-14deg) translateZ(0);
+    }
+     65% {
+         transform: rotate(7deg) translateZ(0);
+    }
+     100% {
+         transform: rotate(0deg) translateZ(0);
+    }
+}
+ @keyframes hand {
+     30% {
+         transform: rotate(-14deg) translateZ(0);
+    }
+     65% {
+         transform: rotate(7deg) translateZ(0);
+    }
+     100% {
+         transform: rotate(0deg) translateZ(0);
+    }
 }

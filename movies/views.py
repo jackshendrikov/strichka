@@ -12,6 +12,18 @@ from movies.services import services
 from movies.services.filters import MovieFilter
 
 
+def error_403(request, exception=None):
+    return render(request, "errors/403.html")
+
+
+def error_404(request, exception):
+    return render(request, "errors/404.html", {})
+
+
+def error_500(request, exception=None):
+    return render(request, "errors/500.html", {})
+
+
 class MoviesBaseView(BaseView):
     """
     The main page of the "Search Movies" site, only the most important is displayed.

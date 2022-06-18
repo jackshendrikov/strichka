@@ -1,0 +1,81 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	 <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Strichka">
+    <meta name="author" content="JackShen">
+
+    <meta property="og:site_name" content="{% block meta_sitename %}Strichka{% endblock %}">
+    <meta property="og:image:alt" content="Strichka Login" />
+    <meta property="og:image:width" content="{% block meta_image_width %}1200{% endblock %}" />
+    <meta property="og:image:height" content="{% block meta_image_height %}600{% endblock %}" />
+    <meta property="og:title" content="{% block meta_title %}Strichka{% endblock %}" />
+    <meta property="og:type" content="website" />
+
+    <title>Strichka Login</title>
+    <link rel="icon" href="{% static 'ico/logo.ico' %}" type="image/x-icon">
+
+    <!-- Main core CSS -->
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="{% static 'libs/normalize.min.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <!-- ionicons -->
+    <link rel="stylesheet" type="text/css"  href="{% static 'css/libs/ionicons.min.css' %}">
+
+    <!-- Main style CSS -->
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/registration.css' %}" media="all"/>
+</head>
+<body class="body">
+	<div class="sign section--bg" data-bg="{% static 'img/section/section.jpg' %}">
+		<div class="container">
+			<div class="row">
+				<div class="col-12">
+					<div class="sign__content">
+						<form action="{% url 'register' %}" class="sign__form">
+                            {% csrf_token %}
+							<a href="{% url 'index' %}" class="sign__logo">
+								<img src="{% static 'img/logo.png' %}" alt="">
+							</a>
+
+							<div class="sign__group">
+								<input type="text" name="username" class="sign__input" placeholder="Name">
+							</div>
+
+							<div class="sign__group">
+								<input type="text" name="email" class="sign__input" placeholder="Email">
+							</div>
+
+							<div class="sign__group">
+								<input type="password" name="password" class="sign__input" placeholder="Password">
+							</div>
+
+                            <input type="hidden" name="next" value="{{ next }}" />
+							<button class="sign__btn" type="submit">Sign up</button>
+
+							<span class="sign__text">Already have an account? <a href="{% url 'login' %}">Sign in!</a></span>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+<!-- jquery main JS -->
+<script src="{% static 'js/libs/jquery.min.js' %}"></script>
+<script type="text/javascript">
+    $('.section--bg').each(function() {
+        if ($(this).attr("data-bg")) {
+            $(this).css({
+                'background': 'url(' + $(this).data('bg') + ')',
+                'background-position': 'center center',
+                'background-repeat': 'no-repeat',
+                'background-size': 'cover'
+            });
+        }
+    });
+</script>
+</body>
+</html>

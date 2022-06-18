@@ -117,6 +117,24 @@
             </div>
             {% endif %}
 
+            <div class="col-12" style="display: flex; justify-content: center; margin-bottom: 20px;">
+                <button data-id="{{ movie_id }}" data-action="like" data-csrf_token="{{ csrf_token }}" data-url="{% url 'movie_like' movie_id %}" class="like-button">
+                    <div class="emitter"></div>
+                    <div class="hand">
+                        <div class="thumb"></div>
+                    </div>
+                    <span>Like<span class="hidden-like">d</span> <span id="like{{ movie_id }}" class="number">{{ likes_count }}</span></span>
+                </button>
+
+                <button data-id="{{ movie_id }}" data-action="dislike" data-csrf_token="{{ csrf_token }}" data-url="{% url 'movie_dislike' movie_id %}" class="dislike-button" style="margin-left: 10px;">
+                    <div class="emitter"></div>
+                    <div class="hand">
+                        <div class="thumb"></div>
+                    </div>
+                    <span>Dislike<span class="hidden-like">d</span> <span id="dislike{{ movie_id }}" class="number">{{ dislikes_count }}</span></span>
+                </button>
+            </div>
+
             <div class="col-12 col-xl-6">
                 <div id="player" data-plyr-provider="youtube" data-plyr-embed-id="{{ trailer_id }}"></div>
             </div>
@@ -137,8 +155,8 @@
                                     <thead>
                                         <tr>
                                             <th>Service</th>
-                                            <th>Video Types</th>
-                                            <th>Purchase Types</th>
+                                            <th class="video-types">Video Types</th>
+                                            <th class="purchase-types">Purchase Types</th>
                                         </tr>
                                     </thead>
 
@@ -146,14 +164,14 @@
                                         {% for platform in platforms %}
                                         <tr>
                                             <th><a href="{{ platform.url }}" class="service-name"><img class="service-icon" src="{% static 'img/services/'|add:platform.service|add:'.ico' %}" alt="{{ platform.service }} Icon">{{ platform.service }}</a></th>
-                                            <td>
+                                            <td class="video-types">
                                                 <ul class="card__list" style="margin-left: 0;">
                                                     {% for video_format in platform.video_format_as_list %}
                                                     <li>{{ video_format }}</li>
                                                     {% endfor %}
                                                 </ul>
                                             </td>
-                                            <td>
+                                            <td class="purchase-types">
                                                 <ul class="card__list" style="margin-left: 0;">
                                                     {% for video_format in platform.purchase_type_as_list %}
                                                     <li>{{ video_format }}</li>

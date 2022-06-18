@@ -14,9 +14,14 @@ admin.site.site_header = "Strichka Admin"
 api_router = routers.DefaultRouter()
 api_router.registry.extend(core_router.registry)
 
+handler403 = "movies.views.error_403"
+handler404 = "movies.views.error_404"
+handler500 = "movies.views.error_500"
+
 
 urlpatterns = [
     path("", include("movies.urls")),
+    path("accounts/", include("django.contrib.auth.urls")),
     path("api/", include(api_router.urls)),
     path("jet/", include("jet.urls", "jet")),
     path("admin/", admin.site.urls),

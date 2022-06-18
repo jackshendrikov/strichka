@@ -1,0 +1,26 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+    <meta charset="UTF-8">
+    <title>Internal Server Error - 500</title>
+    <link rel="icon" href="{% static 'ico/logo.ico' %}" type="image/x-icon">
+    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Dosis:400,300,500,800'>
+    <link rel="stylesheet" href="{% static 'css/error.css' %}">
+</head>
+
+<body>
+<div class="container"></div>
+
+<script src="{% static 'js/libs/jquery.min.js' %}"></script>
+<script src="{% static 'js/libs/TweenMax.min.js' %}"></script>
+<script src="{% static 'js/error.js' %}"></script>
+<script>
+  $container.append($('<div class="main-text">\n' +
+          '  <h1 class="neon" style="padding: 30px 0">500</h1>\n' +
+          '  <h1 style="padding: 0 0 20px 0">Ooooops!<br/>Internal Server Error. That is, something went terribly wrong.</h1>\n' +
+          '  <a class="home-link" href="#" onclick="window.history.go(-1); return false;">Go back.</a>\n' +
+          '</div>'));
+</script>
+</body>
+</html>
