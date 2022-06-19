@@ -24,3 +24,11 @@ class MovieFilter(FilterSet):
     class Meta:
         model = Movie
         fields = ["country", "imdb_rate", "year", "genres", "sort_by"]
+
+
+class SearchFilter(FilterSet):
+    title = CharFilter(lookup_expr="icontains")
+
+    class Meta:
+        model = Movie
+        fields = ["title"]

@@ -9,7 +9,7 @@ from django_filters.views import FilterView
 from common.views import BaseView
 from movies.models import Cast, Collection, Movie
 from movies.services import services
-from movies.services.filters import MovieFilter
+from movies.services.filters import MovieFilter, SearchFilter
 
 
 def error_403(request, exception=None):
@@ -106,6 +106,32 @@ class MoviesOfCollectionView(FilterView):
         context = super().get_context_data(**kwargs)
         collection = self.get_collection()
         context["page_title"] = f"{collection.name} Collection"
+        return context
+
+
+class SearchMovieView(FilterView):
+    """
+    Search movie view.
+    """
+
+    page_title = "Search Result"
+    filterset_class = SearchFilter
+    paginate_by = 32
+    template_name = "movies/movie_list.html"
+
+    def get_queryset(self) -> QuerySet:
+        search_request = self.request.GET
+
+        if search_request:
+            if ("q" in search_request) and search_request["q"].strip():
+                try:
+                    return services.search_movie(title=search_request["q"].strip())
+                except ValueError:
+                    raise Http404()
+
+    def get_context_data(self, **kwargs: Any) -> dict:
+        context = super().get_context_data(**kwargs)
+        context["page_title"] = self.page_title
         return context
 
 

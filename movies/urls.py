@@ -20,6 +20,7 @@ from movies.views import (
     PopularSeriesView,
     RandomMovieView,
     RecentPremieresView,
+    SearchMovieView,
     VoteView,
     get_filter_countries,
     get_filter_genres,
@@ -106,6 +107,7 @@ catalogs_urlpatterns = [
 
 urlpatterns = [
     path("", MoviesBaseView.as_view(), name="index"),
+    path("search/", SearchMovieView.as_view(), name="movie_search"),
     path("collections/", CollectionsView.as_view(), name="collections"),
     path("random/", RandomMovieView.as_view(), name="random_movie"),
     path("movie/<int:pk>", MovieDetailsView.as_view(), name="movie_detail"),

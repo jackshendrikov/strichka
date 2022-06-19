@@ -4,8 +4,17 @@ user:
 shell:
 	python manage.py shell
 
+shell_prod:
+	python manage.py shell --settings=config.settings.production
+
 runserver:
 	python manage.py runserver 0.0.0.0:8080
+
+runserver_dev:
+	python main/manage.py runserver 0.0.0.0:8080 --settings=config.settings.development
+
+runserver_prod:
+	python main/manage.py runserver 0.0.0.0:8080 --settings=config.settings.production
 
 runserver_gunicorn:
 	python manage.py collectstatic --noinput && \
@@ -15,6 +24,9 @@ runserver_gunicorn:
 migrate:
 	python manage.py makemigrations && \
  	python manage.py migrate --run-syncdb
+
+migrate_prod:
+	python manage.py migrate --settings=config.settings.production
 
 install_hooks:
 	pip install -r requirements.txt; \

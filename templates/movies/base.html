@@ -113,13 +113,13 @@
         </div>
     </div>
 
-    <form action="#" class="header__search">
+    <form action="{% url 'movie_search' %}" method="GET" class="header__search">
         <div class="container">
             <div class="row">
                 <div class="col-12">
                     <div class="header__search-content">
-                        <input type="text" placeholder="Search for a movie, TV Series that you are looking for">
-                        <button type="button">search</button>
+                        <input type="text" name="q" value="" id="q" placeholder="Search for a movie, TV Series that you are looking for">
+                        <button type="submit">search</button>
                     </div>
                 </div>
             </div>

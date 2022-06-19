@@ -464,3 +464,15 @@ def add_vote(obj: Union[Movie, Cast, Comment], vote_type: int, user: User) -> di
     }
 
     return context
+
+
+def search_movie(title: str) -> QuerySet:
+    """
+    Get all movies and series by specific query.
+    """
+
+    return (
+        Movie.objects.filter(title__icontains=title)
+        .order_by("-imdb_votes", "-imdb_rate")
+        .distinct()
+    )
