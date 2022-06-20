@@ -1,6 +1,10 @@
 $(document).ready(function() {
     "use strict";
 
+    $([document.documentElement, document.body]).animate({
+        scrollTop: $(".index-slider-area-slider").offset().top
+    }, 2000);
+
     let heroSlider = $('.index-slider-area-slider');
     heroSlider.owlCarousel({
         dots: true,

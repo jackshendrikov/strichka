@@ -165,56 +165,48 @@
          padding: 0 0 45px;
     }
 }
-
 /*=============================== Card ================================*/
-.card__container {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  grid-gap: 2rem;
-  margin: 2rem;
+ .card__container {
+     display: grid;
+     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+     grid-gap: 2rem;
+     margin: 2rem;
 }
-
-.card {
-  height: 180px;
-  position: relative;
-  overflow: hidden;
-  border-radius: 8px;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
-  display: grid;
-  grid-template-rows: 1fr 1fr;
-  transition: 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+ .card {
+     height: 180px;
+     position: relative;
+     overflow: hidden;
+     border-radius: 8px;
+     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
+     display: grid;
+     grid-template-rows: 1fr 1fr;
+     transition: 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
-
-.card a {
-  color: white;
-  font-size: 24px;
-  margin: 20px 0 0 20px;
-
+ .card a {
+     color: white;
+     font-size: 24px;
+     margin: 20px 0 0 20px;
 }
-
-.card p {
-  color: white;
-  font-weight: 400;
-  font-size: 16px;
-  align-self: end;
-  margin: 0 0 20px 20px;
-  letter-spacing: 0.5px;
+ .card p {
+     color: white;
+     font-weight: 400;
+     font-size: 16px;
+     align-self: end;
+     margin: 0 0 20px 20px;
+     letter-spacing: 0.5px;
 }
-
-.card img {
-  position: absolute;
-  top: 0;
-  height: 110%;
-  width: 100%;
-  z-index: -1;
-  transition: 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+ .card img {
+     position: absolute;
+     top: 0;
+     height: 110%;
+     width: 100%;
+     z-index: -1;
+     transition: 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
-
-.card:hover {
-  transform: scale(1.035, 1.035);
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+ .card:hover {
+     transform: scale(1.035, 1.035);
+     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
 }
-
-.card:hover img {
-  transform: translateY(-10px);
+ .card:hover img {
+     transform: translateY(-10px);
 }

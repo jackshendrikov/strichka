@@ -41,13 +41,20 @@
 </head>
 
 <body>
+<div class="spinner">
+  <div class="inner one"></div>
+  <div class="inner two"></div>
+  <div class="inner three"></div>
+</div>
+
+<div id="app">
 <header class="header">
     <div class="header__wrap">
         <div class="container">
             <div class="row">
                 <div class="col-12">
                     <div class="header__content">
-                        <a href="{% url 'index' %}" class="header__logo"><img src="{% static 'img/logo.png' %}" alt=""></a>
+                        <a href="{% url 'index' %}" class="header__logo"><img src="{% static 'img/logo.png' %}" alt="Logo"></a>
                         <ul class="header__nav">
                             <li class="header__nav-item">
                                 <a href="{% url 'index' %}" class="header__nav-link">Home</a>
@@ -142,6 +149,7 @@
     </div>
 </footer>
 <!-- end footer -->
+</div>
 
 <!-- jquery main JS -->
 <script src="{% static 'js/libs/jquery.min.js' %}"></script>

@@ -102,19 +102,18 @@
  @media (max-width: 576px) {
      .video-types {
          display: none;
-     }
+    }
      .purchase-types {
          display: none;
-     }
-     .details__title,
-     .details .container .row {
+    }
+     .details__title, .details .container .row {
          display: flex;
          justify-content: center;
-     }
+    }
      .keyword-tags {
          display: none;
-     }
- }
+    }
+}
  @media (min-width: 576px) {
      .details__title {
          font-size: 30px;

@@ -97,7 +97,7 @@ class MovieAdmin(
     ) + StrichkaBaseModelAdmin.list_display
     list_filter = ("year", "country", "age_mark", "is_movie")
     list_editable = ("title", "keywords", "is_movie")
-    search_fields = ("imdb_id", "title", "year", "country")
+    search_fields = ("imdb_id", "title", "year", "country__name")
     ordering = ["-release", "-imdb_votes", "-imdb_rate"]
 
     def get_countries(self, obj: Movie) -> str:
@@ -138,7 +138,7 @@ class StreamingPlatformAdmin(
     ) + StrichkaBaseModelAdmin.list_display
     list_filter = ("service", "video_format", "purchase_type")
     list_editable = ("url", "video_format", "purchase_type")
-    search_fields = ("service", "movie")
+    search_fields = ("service", "movie__title")
     ordering = ("-service",)
 
 

@@ -1,5 +1,8 @@
-$(document).ready(function() {
+$(window).on("load", function(){
     "use strict";
+
+    $('.spinner').hide();
+    $('#app').css("display", "block");
 
     $('.header__btn').on('click', function() {
         $(this).toggleClass('header__btn--active');
