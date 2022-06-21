@@ -18,13 +18,13 @@ $(document).ready(function() {
         theme: "custom-bar"
     });
 
-    $('.card__description--details').moreLines({
-        linecount: 6,
-        baseclass: 'b-description',
-        basejsclass: 'js-description',
-        classspecific: '_readmore',
-        buttontxtmore: "",
-        buttontxtless: "",
-        animationspeed: 400
-    });
+    // $('.card__description--details').moreLines({
+    //     linecount: 6,
+    //     baseclass: 'b-description',
+    //     basejsclass: 'js-description',
+    //     classspecific: '_readmore',
+    //     buttontxtmore: "",
+    //     buttontxtless: "",
+    //     animationspeed: 400
+    // });
 });
