@@ -270,7 +270,7 @@ class Movie(StrichkaBaseModel):
         verbose_name_plural = "Movies"
 
     def __str__(self) -> str:
-        return self.imdb_id
+        return f"{self.title} ({self.year})"
 
     def genres(self) -> list[str]:
         movie = Movie.objects.get(pk=self.id)
