@@ -1,3 +1,5 @@
+#app { display: unset; }
+.spinner { display: none; }
 /*============================== Section ==============================*/
  .section__title--center {
      text-align: center;

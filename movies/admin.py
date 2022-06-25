@@ -70,7 +70,7 @@ class MovieAdmin(
 
     preserve_inputs_fields = {"country", "age_mark", "is_movie"}
 
-    filter_horizontal = ("country", "actors", "directors", "writers", "categories")
+    raw_id_fields = ("country", "actors", "directors", "writers", "categories")
 
     list_display = (
         "imdb_id",
@@ -147,6 +147,7 @@ class CollectionAdmin(CustomExportMixin, StrichkaBaseModelAdmin):
     resource_class = CollectionResource
 
     list_display = ("name", "is_active") + StrichkaBaseModelAdmin.list_display
+    raw_id_fields = ("movies",)
     search_fields = ("name",)
     ordering = ("-created_at",)
 
