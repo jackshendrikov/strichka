@@ -11,14 +11,13 @@ runserver:
 	python manage.py runserver 0.0.0.0:8080
 
 runserver_dev:
-	python main/manage.py runserver 0.0.0.0:8080 --settings=config.settings.development
+	python manage.py runserver 0.0.0.0:8080 --settings=config.settings.development
 
 runserver_prod:
-	python main/manage.py runserver 0.0.0.0:8080 --settings=config.settings.production
+	python manage.py runserver 0.0.0.0:8080 --settings=config.settings.production
 
 runserver_gunicorn:
 	python manage.py collectstatic --noinput && \
-	export PYTHONPATH=main:$$PYTHONPATH; \
  	gunicorn -b :8080 entrypoint:app --timeout 600 --workers=5 --threads=2
 
 migrate:
