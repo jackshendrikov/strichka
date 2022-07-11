@@ -35,18 +35,22 @@
                             {% for actor in movie.actors.all %}
                             <div class="single-slide-cast">
                                 <a href="{{ actor.get_absolute_url }}">
-                                        <img src="{{ actor.photo }}" alt="{{ actor.full_name }}" />
-                                    </a>
+                                    <img src="{{ actor.photo }}" alt="{{ actor.full_name }}" />
+                                </a>
                             </div>
                             {% endfor %}
                             {% for director in movie.directors.all %}
                             <div class="single-slide-cast">
-                                <img src="{{ director.photo }}" alt="{{ director.full_name }}" />
+                                <a href="{{ director.get_absolute_url }}">
+                                    <img src="{{ director.photo }}" alt="{{ director.full_name }}" />
+                                </a>
                             </div>
                             {% endfor %}
                             {% for writer in movie.writers.all %}
                             <div class="single-slide-cast">
-                                <img src="{{ writer.photo }}" alt="{{ writer.full_name }}" />
+                                <a href="{{ writer.get_absolute_url }}">
+                                    <img src="{{ writer.photo }}" alt="{{ writer.full_name }}" />
+                                </a>
                             </div>
                             {% endfor %}
                         </div>

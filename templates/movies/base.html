@@ -47,6 +47,34 @@
   <div class="inner three"></div>
 </div>
 
+{% if user.is_authenticated %}
+<input type="checkbox" id="modal" />
+<label for="modal" class="modal-bg"></label>
+<div class="modal-content">
+    <label for="modal" class="close">
+        <i class="icon ion-md-close"></i>
+	</label>
+
+    <img class="round" src="{{ user|gravatar:128 }}" alt="user" />
+
+    <header>
+		<h2>{{ user.username|truncatechars:15 }}</h2>
+	</header>
+	<footer>
+        {% if user.is_superuser %}
+        <a href="{% url "admin:index" %}" class="modal-btn btn-acc">
+            <i class="icon ion-ios-bowtie" ></i>
+            Admin Panel
+        </a>
+        {% endif %}
+        <a href="{% url 'account_logout' %}" class="modal-btn btn-acc">
+            <i class="icon ion-ios-log-out" ></i>
+            Sign Out
+        </a>
+	</footer>
+</div>
+{% endif %}
+
 <div id="app">
 <header class="header">
     <div class="header__wrap">
@@ -83,9 +111,10 @@
                                 <a class="dropdown-toggle header__nav-link header__nav-link--more" href="" role="button" id="dropdownMenuMore" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="icon ion-ios-more"></i></a>
                                 <ul class="dropdown-menu header__dropdown-menu" aria-labelledby="dropdownMenuMore">
                                     {% if user.is_authenticated %}
-                                    <li><a href="{% url 'logout' %}">Log Out</a></li>
+                                    <li><a href="{% url 'account_logout' %}">Log Out</a></li>
                                     {% else %}
-                                    <li><a href="{% url 'login' %}">Log In</a></li>
+                                    <li><a href="{% url 'account_login'%}">Log In</a></li>
+                                    <li><a href="{% url 'account_signup' %}">Sign Up</a></li>
                                     {% endif %}
                                 </ul>
                             </li>
@@ -97,12 +126,15 @@
                             </button>
 
                             {% if user.is_authenticated %}
-                            <a href="{% url 'logout' %}" class="header__sign-in">
+                            <a href="{% url 'account_logout' %}" class="header__sign-in">
                                 <i class="icon ion-ios-log-in"></i>
                                 <span>log out</span>
                             </a>
+                            <label for="modal" class="header-profile" style="cursor: pointer; margin-bottom: 0;">
+                                <img class="profile-img" src="{{ user|gravatar:60 }}" alt="avatar"/>
+                            </label>
                             {% else %}
-                            <a href="{% url 'login' %}" class="header__sign-in">
+                            <a href="{% url 'account_login' %}" class="header__sign-in">
                                 <i class="icon ion-ios-log-in"></i>
                                 <span>log in</span>
                             </a>
@@ -133,6 +165,14 @@
         </div>
     </form>
 </header>
+
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
 
 {% block content %}{% endblock %}
 

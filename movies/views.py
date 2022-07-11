@@ -12,15 +12,15 @@ from movies.services import services
 from movies.services.filters import MovieFilter, SearchFilter
 
 
-def error_403(request, exception=None):
+def error_403(request: HttpRequest, exception=None) -> HttpResponse:
     return render(request, "errors/403.html")
 
 
-def error_404(request, exception):
+def error_404(request: HttpRequest, exception) -> HttpResponse:
     return render(request, "errors/404.html", {})
 
 
-def error_500(request, exception=None):
+def error_500(request: HttpRequest, exception=None) -> HttpResponse:
     return render(request, "errors/500.html", {})
 
 

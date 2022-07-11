@@ -118,6 +118,7 @@
             {% endif %}
 
             <div class="col-12" style="display: flex; justify-content: center; margin-bottom: 20px;">
+                {% if user.is_authenticated %}
                 <button data-id="{{ movie_id }}" data-action="like" data-csrf_token="{{ csrf_token }}" data-url="{% url 'movie_like' movie_id %}" class="like-button">
                     <div class="emitter"></div>
                     <div class="hand">
@@ -133,6 +134,23 @@
                     </div>
                     <span>Dislike<span class="hidden-like">d</span> <span id="dislike{{ movie_id }}" class="number">{{ dislikes_count }}</span></span>
                 </button>
+                {% else %}
+                <button class="like-button">
+                    <div class="emitter"></div>
+                    <div class="hand">
+                        <div class="thumb"></div>
+                    </div>
+                    <span>Like<span class="hidden-like">d</span> <span id="like{{ movie_id }}" class="number">{{ likes_count }}</span></span>
+                </button>
+
+                <button class="dislike-button" style="margin-left: 10px;">
+                    <div class="emitter"></div>
+                    <div class="hand">
+                        <div class="thumb"></div>
+                    </div>
+                    <span>Dislike<span class="hidden-like">d</span> <span id="dislike{{ movie_id }}" class="number">{{ dislikes_count }}</span></span>
+                </button>
+                {% endif %}
             </div>
 
             <div class="col-12 col-xl-6">
@@ -220,6 +238,7 @@
                                     <p class="comments__text">{{ node.text }}</p>
                                     <div class="comments__actions">
                                         <div class="comments__rate">
+                                            {% if user.is_authenticated %}
                                             <button data-id="{{ node.id }}" type="button" data-action="like" data-url="{% url 'comment_like' node.id %}" data-csrf_token="{{ csrf_token }}">
                                                 <i class="icon ion-md-thumbs-up"></i>
                                                 <span id="like{{ node.id }}">{{ node.votes.likes.count }}</span>
@@ -229,9 +248,21 @@
                                                 <span id="dislike{{ node.id }}">{{ node.votes.dislikes.count }}</span>
                                                 <i class="icon ion-md-thumbs-down"></i>
                                             </button>
-                                        </div>
+                                            {% else %}
+                                            <button type="button">
+                                                <i class="icon ion-md-thumbs-up"></i>
+                                                <span id="like{{ node.id }}">{{ node.votes.likes.count }}</span>
+                                            </button>
 
+                                            <button type="button">
+                                                <span id="dislike{{ node.id }}">{{ node.votes.dislikes.count }}</span>
+                                                <i class="icon ion-md-thumbs-down"></i>
+                                            </button>
+                                            {% endif %}
+                                        </div>
+                                        {% if user.is_authenticated %}
                                         <a href="#form-comment" onclick="addComment('{{ node.user.username }}', '{{ node.id }}')"><i class="icon ion-ios-share-alt"></i>Reply</a>
+                                        {% endif %}
                                     </div>
                                 </li>
 
@@ -240,13 +271,14 @@
                                 {% endif %}
                                 {% endrecursetree %}
                             </ul>
-
+                            {% if user.is_authenticated %}
                             <form action="" method="post" class="form" id="form-comment">
                                 {% csrf_token %}
                                 <input type="hidden" name="parent" value="" id="comment-parent">
                                 <textarea required id="contact-comment" name="text" class="form__textarea" placeholder="Add comment"></textarea>
                                 <button type="submit" class="form__btn">Send</button>
                             </form>
+                            {% endif %}
                         </div>
                     </div>
                 </div>

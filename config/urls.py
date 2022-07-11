@@ -21,7 +21,7 @@ handler500 = "movies.views.error_500"
 
 urlpatterns = [
     path("", include("movies.urls")),
-    path("accounts/", include("django.contrib.auth.urls")),
+    path("accounts/", include("accounts.urls")),
     path("api/", include(api_router.urls)),
     path("jet/", include("jet.urls", "jet")),
     path("admin/", admin.site.urls),

@@ -209,6 +209,7 @@
                             <p class="comments__text">{{ node.text }}</p>
                             <div class="comments__actions">
                                 <div class="comments__rate">
+                                    {% if user.is_authenticated %}
                                     <button data-id="{{ node.id }}" type="button" data-action="like" data-url="{% url 'comment_like' node.id %}" data-csrf_token="{{ csrf_token }}">
                                         <i class="icon ion-md-thumbs-up"></i>
                                         <span id="like{{ node.id }}">{{ node.votes.likes.count }}</span>
@@ -218,9 +219,22 @@
                                         <span id="dislike{{ node.id }}">{{ node.votes.dislikes.count }}</span>
                                         <i class="icon ion-md-thumbs-down"></i>
                                     </button>
+                                    {% else %}
+                                    <button type="button">
+                                        <i class="icon ion-md-thumbs-up"></i>
+                                        <span id="like{{ node.id }}">{{ node.votes.likes.count }}</span>
+                                    </button>
+
+                                    <button type="button">
+                                        <span id="dislike{{ node.id }}">{{ node.votes.dislikes.count }}</span>
+                                        <i class="icon ion-md-thumbs-down"></i>
+                                    </button>
+                                    {% endif %}
                                 </div>
 
+                                {% if user.is_authenticated %}
                                 <a href="#form-comment" onclick="addComment('{{ node.user.username }}', '{{ node.id }}')"><i class="icon ion-ios-share-alt"></i>Reply</a>
+                                {% endif %}
                             </div>
                         </li>
 
@@ -229,13 +243,14 @@
                         {% endif %}
                         {% endrecursetree %}
                     </ul>
-
+                    {% if user.is_authenticated %}
                     <form action="" method="post" class="form" id="form-comment">
                         {% csrf_token %}
                         <input type="hidden" name="parent" value="" id="comment-parent">
                         <textarea required id="contact-comment" name="text" class="form__textarea" placeholder="Add comment"></textarea>
                         <button type="submit" class="form__btn">Send</button>
                     </form>
+                    {% endif %}
                 </div>
             </div>
         </div>

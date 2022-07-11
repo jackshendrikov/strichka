@@ -1,3 +1,6 @@
+h1, h3 {
+     color: white;
+}
 /*============================== Sign ==============================*/
  .sign {
      display: block;
@@ -10,6 +13,7 @@
      align-items: center;
      width: 100%;
      min-height: 100vh;
+     font-size: 16px;
      padding: 40px 0;
 }
  .sign__form {
@@ -38,8 +42,11 @@
      -webkit-box-shadow: 0 0 20px 0 rgba(255,88,96,0.5);
      box-shadow: 0 0 20px 0 rgba(255,88,96,0.5);
 }
+ .sign__form + .sign__form {
+     margin: 0 30px;
+}
  .sign__logo {
-     margin-bottom: 40px;
+     margin-bottom: 10px;
 }
  .sign__logo a {
      max-width: 100%;
@@ -139,6 +146,14 @@
      background: transparent;
      color: rgba(255,255,255,0.5);
 }
+ a.sign__btn {
+     -webkit-appearance: button;
+     -moz-appearance: button;
+     appearance: button;
+     text-decoration: none;
+     -webkit-box-shadow: unset;
+     box-shadow: unset;
+}
  .sign__btn {
      display: flex;
      justify-content: center;
@@ -159,11 +174,44 @@
      text-transform: uppercase;
      font-weight: 500;
      letter-spacing: 1px;
-     margin: 20px auto 0;
+     margin: 0 auto 0;
 }
  .sign__btn:hover {
      opacity: 1;
      color: #fff;
+}
+ .sign__btn + .danger {
+     background-image: -moz-linear-gradient(90deg, #ff5555 0%, #bb0202 100%);
+     background-image: -webkit-linear-gradient(90deg, #ff5555 0%, #bb0202 100%);
+     background-image: -ms-linear-gradient(90deg, #ff5555 0%, #bb0202 100%);
+     background-image: linear-gradient(90deg, #ff5555 0%, #bb0202 100%);
+     -webkit-box-shadow: 0 0 20px 0 rgba(119, 2, 4, 0.5);
+     box-shadow: 0 0 20px 0 rgba(119, 2, 4, 0.5);
+}
+ .sign__btn + .info {
+     background-image: -moz-linear-gradient(90deg, #558bff 0%, #023dbb 100%);
+     background-image: -webkit-linear-gradient(90deg, #558bff 0%, #023dbb 100%);
+     background-image: -ms-linear-gradient(90deg, #558bff 0%, #023dbb 100%);
+     background-image: linear-gradient(90deg, #558bff 0%, #023dbb 100%);
+     -webkit-box-shadow: 0 0 20px 0 rgba(2, 49, 119, 0.5);
+     box-shadow: 0 0 20px 0 rgba(2, 49, 119, 0.5);
+}
+ .sign__btn + .primary {
+     background-image: -moz-linear-gradient(90deg, #8055ff 0%, #6202bb 100%);
+     background-image: -webkit-linear-gradient(90deg, #8055ff 0%, #6202bb 100%);
+     background-image: -ms-linear-gradient(90deg, #8055ff 0%, #6202bb 100%);
+     background-image: linear-gradient(90deg, #8055ff 0%, #6202bb 100%);
+     -webkit-box-shadow: 0 0 20px 0 rgba(62, 2, 119, 0.5);
+     box-shadow: 0 0 20px 0 rgba(62, 2, 119, 0.5);
+}
+ .inline__group {
+     display: inline-flex;
+     width: fit-content;
+     width: -webkit-fill-available;
+}
+ .inline__group .sign__btn {
+     padding: 0 20px;
+     margin: 0 10px;
 }
  .sign__text {
      margin-top: 20px;
@@ -192,6 +240,61 @@
          padding: 50px 60px;
     }
      .sign__logo {
-         margin-bottom: 50px;
+         margin-bottom: 20px;
     }
+}
+ .btn {
+     width: auto;
+     display: inline-block;
+     padding: 0 18px 0 6px;
+     border: 0 none;
+     border-radius: 5px;
+     text-decoration: none;
+     transition: all 250ms linear;
+}
+ .btn:hover {
+     text-decoration: none;
+}
+ .btn-social-login {
+     margin-top: 18px;
+     color: white;
+     height: 50px;
+     line-height: 46px;
+     position: relative;
+     text-align: left;
+}
+ .btn-social-login .icon {
+     margin-right: 12px;
+     font-size: 24px;
+     line-height: 24px;
+     width: 42px;
+     height: 24px;
+     text-align: center;
+     display: inline-block;
+     position: relative;
+     top: 4px;
+}
+ .btn-social-login .icon:before {
+     display: inline-block;
+     width: 40px;
+}
+ .btn-social-login .icon :after {
+     content:"";
+}
+ .btn-github {
+     background-color: #333;
+     border: 1px solid #1a1a1a;
+}
+ .btn-github .icon {
+     border-right: 1px solid #1a1a1a;
+}
+ .btn-github .icon:after {
+     border-right: 1px solid #4d4d4d;
+}
+ .btn-github:hover {
+     background-color: #464646;
+     color: white;
+}
+ .alert {
+     margin-top: 20px;
 }

@@ -10,12 +10,11 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 
-LOGIN_REDIRECT_URL = "/"
-LOGOUT_REDIRECT_URL = "/"
-
-
 # Application definition
 INSTALLED_APPS = [
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
     "jet",
     "mptt",
     "django_mptt_admin",
@@ -98,6 +97,11 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_DIRS = [BASE_DIR / "static"]
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
+]
+
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
@@ -106,6 +110,8 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
+
+SITE_ID = 1
 
 # Disable check for deleting many objects.
 DATA_UPLOAD_MAX_NUMBER_FIELDS = None
@@ -135,3 +141,30 @@ SPECTACULAR_SETTINGS = {
     "DESCRIPTION": "Stricka Movie Finder API",
     "VERSION": "1.0.0",
 }
+
+# All-Auth Registration Settings
+ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+ACCOUNT_AUTHENTICATION_METHOD = "username_email"
+ACCOUNT_LOGIN_ATTEMPTS_LIMIT = 5
+ACCOUNT_LOGIN_ATTEMPTS_TIMEOUT = 86400  # 1 day
+ACCOUNT_LOGOUT_REDIRECT_URL = "/"
+LOGIN_REDIRECT_URL = "/"
+ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = True
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_USERNAME_MIN_LENGTH = 5
+ACCOUNT_USERNAME_REQUIRED = True
+ACCOUNT_USERNAME_VALIDATORS = None
+
+# Email Settings
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_SUBJECT_PREFIX = "[Strichka Service] "
+EMAIL_HOST = "smtp.sendgrid.net"
+EMAIL_PORT = 587
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+SERVER_EMAIL = os.getenv("EMAIL_HOST")
+DEFAULT_FROM_EMAIL = os.getenv("EMAIL_HOST")

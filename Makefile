@@ -40,6 +40,7 @@ style:
 
 types:
 	mypy --namespace-packages \
+		 -p "accounts" \
 		 -p "common" \
 		 -p "movies" \
 		 --disable-error-code=no-redef \
