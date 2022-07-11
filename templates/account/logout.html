@@ -1,4 +1,5 @@
 {% extends "account/base.html" %}
+{% load static %}
 {% block title %}Sign Out{% endblock %}
 
 {% block content %}
@@ -17,7 +18,7 @@
 
         <div class="inline__group">
             <button class="sign__btn" type="submit">Sign Out</button>
-            <a class="sign__btn danger" id="custom_logout_no" href="/account/profile/">No</a>
+            <button class="sign__btn danger" id="custom_logout_no" onclick="window.history.go(-1); return false;">No</button>
         </div>
     </form>
 </div>
