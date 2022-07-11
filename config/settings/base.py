@@ -112,7 +112,7 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
-SITE_ID = 1
+SITE_ID = os.getenv("SITE_ID")
 
 # Disable check for deleting many objects.
 DATA_UPLOAD_MAX_NUMBER_FIELDS = None
