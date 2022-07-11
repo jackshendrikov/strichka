@@ -12,11 +12,6 @@ ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 
 # Application definition
 INSTALLED_APPS = [
-    "allauth",
-    "allauth.account",
-    "allauth.socialaccount",
-    "jet",
-    "mptt",
     "django_mptt_admin",
     "django.contrib.admin",
     "django.contrib.auth",
@@ -24,7 +19,13 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.contrib.sites",
     "django.contrib.humanize",
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
+    "jet",
+    "mptt",
     "import_export",
     "drf_spectacular",
     "rest_framework",
