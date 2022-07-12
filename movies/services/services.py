@@ -9,6 +9,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.db.models import Count, QuerySet, Sum
 from django.db.transaction import atomic
 from django.forms import ModelChoiceField
+from django.shortcuts import get_object_or_404
 from random import choice
 from service_objects.services import Service
 
@@ -475,6 +476,17 @@ def add_vote(obj: Union[Movie, Cast, Comment], vote_type: int, user: User) -> di
     }
 
     return context
+
+
+def add_favorite_movie(movie_id: int, user_id: int) -> None:
+    """Add movies in User favorite list."""
+
+    movie = get_object_or_404(Movie, pk=movie_id)
+    user = get_object_or_404(User, pk=user_id)
+    if user.profile.favorites.filter(pk=movie.id).exists():
+        user.profile.favorites.remove(movie)
+    else:
+        user.profile.favorites.add(movie)
 
 
 def search_movie(title: str) -> QuerySet:

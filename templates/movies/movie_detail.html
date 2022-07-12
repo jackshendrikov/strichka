@@ -118,8 +118,7 @@
             {% endif %}
 
             <div class="col-12" style="display: flex; justify-content: center; margin-bottom: 20px;">
-                {% if user.is_authenticated %}
-                <button data-id="{{ movie_id }}" data-action="like" data-csrf_token="{{ csrf_token }}" data-url="{% url 'movie_like' movie_id %}" class="like-button">
+                <button data-id="{{ movie_id }}" data-action="like" {% if user.is_authenticated %}data-csrf_token="{{ csrf_token }}" data-url="{% url 'movie_like' movie_id %}"{% endif %} class="like-button">
                     <div class="emitter"></div>
                     <div class="hand">
                         <div class="thumb"></div>
@@ -127,30 +126,26 @@
                     <span>Like<span class="hidden-like">d</span> <span id="like{{ movie_id }}" class="number">{{ likes_count }}</span></span>
                 </button>
 
-                <button data-id="{{ movie_id }}" data-action="dislike" data-csrf_token="{{ csrf_token }}" data-url="{% url 'movie_dislike' movie_id %}" class="dislike-button" style="margin-left: 10px;">
-                    <div class="emitter"></div>
-                    <div class="hand">
-                        <div class="thumb"></div>
-                    </div>
-                    <span>Dislike<span class="hidden-like">d</span> <span id="dislike{{ movie_id }}" class="number">{{ dislikes_count }}</span></span>
-                </button>
-                {% else %}
-                <button class="like-button">
-                    <div class="emitter"></div>
-                    <div class="hand">
-                        <div class="thumb"></div>
-                    </div>
-                    <span>Like<span class="hidden-like">d</span> <span id="like{{ movie_id }}" class="number">{{ likes_count }}</span></span>
+                <button id="favorite" {% if user.is_authenticated %}data-csrf_token="{{ csrf_token }}" data-url="{% url 'movie_favorite' movie_id %}"{% endif %} class="fav-button" style="margin: 0 10px;">
+                    <svg width="515.99" height="480.73" version="1.1" viewBox="0 0 515.99347 480.73038" xmlns="http://www.w3.org/2000/svg"  xmlns:xlink="http://www.w3.org/1999/xlink">
+                        <defs>
+                            <path class="heart" id="b" d="m372.59 17.99c-48.54 0-92.99 26.12-118 67.99-24.79-42.41-67.41-68-115.18-68-72.86 0-131.09 59.68-138.55 141.94-0.59 3.63-3.02 22.76 4.35 53.94 10.61 44.98 35.13 85.89 70.89 118.29 11.89 10.79 71.34 64.75 178.37 161.87 108.86-97.12 169.34-151.07 181.43-161.86 35.76-32.41 60.28-73.31 70.89-118.3 7.37-31.17 4.94-50.3 4.36-53.93-7.47-82.26-65.69-141.94-138.56-141.94z"></path>
+                            <path class="shine" id="a" d="m59.07 176.3c0 5.44 4.4 9.84 9.85 9.84 5.44 0 9.84-4.4 9.84-9.84 0-43.44 35.34-78.78 78.78-78.78 5.44 0 9.84-4.4 9.84-9.84 0-5.45-4.41-9.85-9.84-9.85-54.3 0-98.47 44.17-98.47 98.47z"></path>
+                        </defs>
+                        <g transform="translate(1.9963 -15.98)">
+                            <use width="100%" height="100%" xlink:href="#b"></use>
+                            <use width="100%" height="100%" xlink:href="#a"></use>
+                        </g>
+                    </svg>
                 </button>
 
-                <button class="dislike-button" style="margin-left: 10px;">
+                <button data-id="{{ movie_id }}" {% if user.is_authenticated %}data-action="dislike" data-csrf_token="{{ csrf_token }}" data-url="{% url 'movie_dislike' movie_id %}"{% endif %} class="dislike-button">
                     <div class="emitter"></div>
                     <div class="hand">
                         <div class="thumb"></div>
                     </div>
                     <span>Dislike<span class="hidden-like">d</span> <span id="dislike{{ movie_id }}" class="number">{{ dislikes_count }}</span></span>
                 </button>
-                {% endif %}
             </div>
 
             <div class="col-12 col-xl-6">
@@ -238,27 +233,15 @@
                                     <p class="comments__text">{{ node.text }}</p>
                                     <div class="comments__actions">
                                         <div class="comments__rate">
-                                            {% if user.is_authenticated %}
-                                            <button data-id="{{ node.id }}" type="button" data-action="like" data-url="{% url 'comment_like' node.id %}" data-csrf_token="{{ csrf_token }}">
+                                            <button class="comment-like" data-id="{{ node.id }}" type="button" data-action="like" {% if user.is_authenticated %}data-url="{% url 'comment_like' node.id %}" data-csrf_token="{{ csrf_token }}"{% endif %}>
                                                 <i class="icon ion-md-thumbs-up"></i>
                                                 <span id="like{{ node.id }}">{{ node.votes.likes.count }}</span>
                                             </button>
 
-                                            <button data-id="{{ node.id }}" type="button" data-action="dislike" data-url="{% url 'comment_dislike' node.id %}" data-csrf_token="{{ csrf_token }}">
+                                            <button class="comment-dislike" data-id="{{ node.id }}" type="button" data-action="dislike" {% if user.is_authenticated %}data-url="{% url 'comment_dislike' node.id %}" data-csrf_token="{{ csrf_token }}"{% endif %}>
                                                 <span id="dislike{{ node.id }}">{{ node.votes.dislikes.count }}</span>
                                                 <i class="icon ion-md-thumbs-down"></i>
                                             </button>
-                                            {% else %}
-                                            <button type="button">
-                                                <i class="icon ion-md-thumbs-up"></i>
-                                                <span id="like{{ node.id }}">{{ node.votes.likes.count }}</span>
-                                            </button>
-
-                                            <button type="button">
-                                                <span id="dislike{{ node.id }}">{{ node.votes.dislikes.count }}</span>
-                                                <i class="icon ion-md-thumbs-down"></i>
-                                            </button>
-                                            {% endif %}
                                         </div>
                                         {% if user.is_authenticated %}
                                         <a href="#form-comment" onclick="addComment('{{ node.user.username }}', '{{ node.id }}')"><i class="icon ion-ios-share-alt"></i>Reply</a>
@@ -325,14 +308,25 @@
 <script src="{% static 'js/libs/jquery.mCustomScrollbar.min.js' %}"></script>
 
 <script src="{% static 'js/detail.js' %}"></script>
+{% if user.is_authenticated %}
 <script src="{% static 'js/votes.js' %}"></script>
+<script src="{% static 'js/favorite.js' %}"></script>
+{% endif %}
 <script type="text/javascript">
+    {% if user.is_authenticated %}
     document.getElementById("form-comment").action = "{% url 'movie_comment' movie_id %}";
 
     function addComment(name, id) {
         document.getElementById("comment-parent").value = id;
         document.getElementById("contact-comment").innerText = `${name}, `
     }
+
+    $("#favorite").toggleClass("liked");
+    {% else %}
+    $(".like-button, .fav-button, .dislike-button, .comment-like, .comment-dislike").click(function() {
+        window.open("{% url 'account_login' %}", "_self");
+    });
+    {% endif %}
 
      function initializePlayer() {
         if ($('#player').length) {

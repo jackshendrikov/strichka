@@ -1,6 +1,9 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.models import User
 from django_mptt_admin.admin import DjangoMpttAdmin
 
+from accounts.models import Profile
 from common.admin.base import StrichkaBaseModelAdmin
 from common.mixins.export import CustomExportMixin
 from common.mixins.export_import import CustomImportExportMixin
@@ -24,6 +27,28 @@ from movies.resources import (
     MovieResource,
     StreamingPlatformResource,
 )
+
+
+class ProfileInline(admin.StackedInline):
+    model = Profile
+    can_delete = False
+    verbose_name_plural = "Profile"
+    fk_name = "user"
+
+
+class CustomUserAdmin(UserAdmin):
+    inlines = (ProfileInline,)
+    list_display = ("username", "email", "first_name", "last_name", "is_staff")
+    list_select_related = ("profile",)
+
+    def get_inline_instances(self, request, obj=None):
+        if not obj:
+            return []
+        return super().get_inline_instances(request, obj)
+
+
+admin.site.unregister(User)
+admin.site.register(User, CustomUserAdmin)
 
 
 @admin.register(Category)

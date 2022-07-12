@@ -85,6 +85,17 @@ class RandomMovieView(BaseView):
         return render(request, "movies/movie_detail.html", context)
 
 
+class AddFavoriteMovieView(View):
+    """
+    Add movie in User favorite list
+    """
+
+    def post(self, request: HttpRequest, pk: int) -> HttpResponse:
+        if request.is_ajax():
+            services.add_favorite_movie(movie_id=pk, user_id=request.user.id)
+            return HttpResponse("success")
+
+
 class MoviesOfCollectionView(FilterView):
     """
     Displaying a list of movies of a certain collection.

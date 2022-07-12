@@ -3,6 +3,7 @@ from django.urls import include, path
 
 from movies.models import Cast, Comment, Movie, Vote
 from movies.views import (
+    AddFavoriteMovieView,
     CastMemberDetailsView,
     ClassicMoviesView,
     CollectionsView,
@@ -111,6 +112,7 @@ urlpatterns = [
     path("", MoviesBaseView.as_view(), name="index"),
     path("search/", SearchMovieView.as_view(), name="movie_search"),
     path("collections/", CollectionsView.as_view(), name="collections"),
+    path("favorite/<int:pk>", AddFavoriteMovieView.as_view(), name="movie_favorite"),
     path("random/", RandomMovieView.as_view(), name="random_movie"),
     path("movie/<int:pk>", MovieDetailsView.as_view(), name="movie_detail"),
     path("series/<int:pk>", MovieDetailsView.as_view(), name="series_detail"),

@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     "django_filters",
     "django_extensions",
     "service_objects",
+    "accounts",
     "common",
     "movies",
 ]
@@ -112,7 +113,7 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
-SITE_ID = os.getenv("SITE_ID")
+SITE_ID = int(os.getenv("SITE_ID"))
 
 # Disable check for deleting many objects.
 DATA_UPLOAD_MAX_NUMBER_FIELDS = None

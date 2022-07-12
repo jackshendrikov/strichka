@@ -890,3 +890,92 @@
          transform: rotate(0deg) translateZ(0);
     }
 }
+ .fav-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: none;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    color: #ff3d60;
+    cursor: pointer;
+    transition: all 0.5s ease;
+}
+.fav-button:focus {
+    outline: none;
+}
+.fav-button:hover {
+    box-shadow: 0 0 5px 1px rgba(255, 255, 255, 0.4);
+}
+.fav-button.liked {
+    border-color: #ff8299;
+    -webkit-animation: shadow-grow 2s;
+          animation: shadow-grow 2s;
+}
+.fav-button.liked svg {
+    -webkit-animation: heart-grow 0.7s;
+          animation: heart-grow 0.7s;
+}
+.fav-button.liked .heart {
+    fill: #ff8299;
+}
+.fav-button svg {
+    width: 20px;
+    height: auto;
+}
+.fav-button svg .heart {
+    fill: rgba(255, 255, 255, 0.5);
+}
+.fav-button svg .shine {
+    fill: #ffffff;
+}
+
+@-webkit-keyframes shadow-grow {
+    0% {
+    box-shadow: 0 0;
+    }
+    50% {
+    box-shadow: 0 0 5px 20px rgba(255, 255, 255, 0);
+    }
+    100% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+    }
+}
+
+@keyframes shadow-grow {
+    0% {
+    box-shadow: 0 0;
+    }
+    50% {
+    box-shadow: 0 0 5px 20px rgba(255, 255, 255, 0);
+    }
+    100% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+    }
+}
+@-webkit-keyframes heart-grow {
+    0% {
+    transform: scale(3);
+    opacity: 0;
+    }
+    50% {
+    opacity: 1;
+    }
+    100% {
+    transform: scale(1);
+    }
+}
+@keyframes heart-grow {
+    0% {
+    transform: scale(3);
+    opacity: 0;
+    }
+    50% {
+    opacity: 1;
+    }
+    100% {
+    transform: scale(1);
+    }
+}

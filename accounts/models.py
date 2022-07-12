@@ -9,16 +9,13 @@ from movies.models import Movie
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     favorites = models.ManyToManyField(
-        Movie,
-        verbose_name="Favorite movies",
-        blank=True,
-        related_query_name="favorites",
+        Movie, verbose_name="Favorite movies", blank=True, related_name="user_favorites"
     )
     watchlist = models.ManyToManyField(
         Movie,
         verbose_name="Watchlist movies",
         blank=True,
-        related_query_name="watchlist",
+        related_name="user_watchlist",
     )
 
     def __str__(self):
