@@ -62,12 +62,12 @@
 	</header>
 	<footer>
         {% if user.is_superuser %}
-        <a href="{% url "admin:index" %}" class="modal-btn btn-acc">
+        <a href="{% url "admin:index" %}" class="button btn-acc">
             <i class="icon ion-ios-bowtie" ></i>
             Admin Panel
         </a>
         {% endif %}
-        <a href="{% url 'account_logout' %}" class="modal-btn btn-acc">
+        <a href="{% url 'account_logout' %}" class="button btn-acc">
             <i class="icon ion-ios-log-out" ></i>
             Sign Out
         </a>

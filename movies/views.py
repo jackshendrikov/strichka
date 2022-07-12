@@ -309,6 +309,17 @@ def get_filter_genres(request: HttpRequest) -> JsonResponse:
         return JsonResponse(data, status=200)
 
 
+def get_filter_platforms(request: HttpRequest) -> JsonResponse:
+    """
+    Get all the platforms from the DB.
+    """
+
+    if request.method == "GET" and request.is_ajax():
+        platforms = services.DataFilters.get_platforms()
+        data = {"platforms": platforms}
+        return JsonResponse(data, status=200)
+
+
 class CommentView(View):
     """
     Adding comments to movies and series

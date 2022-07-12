@@ -24,6 +24,7 @@ from movies.views import (
     VoteView,
     get_filter_countries,
     get_filter_genres,
+    get_filter_platforms,
     get_filter_year,
 )
 
@@ -77,6 +78,7 @@ filter_urlpatterns = [
     path("countries/", get_filter_countries, name="get_countries"),
     path("years/", get_filter_year, name="get_years"),
     path("genres/", get_filter_genres, name="get_genres"),
+    path("platforms/", get_filter_platforms, name="get_platforms"),
 ]
 
 category_urlpatterns = [

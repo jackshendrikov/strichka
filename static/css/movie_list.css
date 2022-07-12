@@ -214,6 +214,7 @@
      color: rgba(255,255,255,0.5);
      font-weight: 300;
      letter-spacing: 0.2px;
+     margin-bottom: 0;
 }
  .filter__item-btn {
      display: inline-flex;
@@ -423,7 +424,7 @@
     }
      .filter__item {
          margin-bottom: 0;
-         margin-right: 50px;
+         margin-right: 30px;
     }
      .filter__item-menu {
          margin-top: 10px;
@@ -434,7 +435,7 @@
 }
  @media (min-width: 1200px) {
      .filter__item {
-         margin-right: 60px;
+         margin-right: 50px;
     }
 }
 /* range slider */

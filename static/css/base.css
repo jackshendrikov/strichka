@@ -883,14 +883,17 @@
      margin: 0;
 }
  .modal-content footer .button {
+     width: 100%;
      position: relative;
-     padding: 10px 10px;
-     border-radius: 3px;
-     font-size: 14px;
-     font-weight: 400;
+     display: inline-block;
+     padding: 0 18px 0 6px;
+     border-radius: 5px;
+     line-height: 40px;
      color: white;
-     text-transform: uppercase;
      overflow: hidden;
+     text-decoration: none;
+     text-align: left;
+     transition: color .1s ease;
 }
  .modal-content footer .button:before {
      position: absolute;
@@ -906,7 +909,25 @@
  .modal-content footer .button:hover:before {
      width: 100%;
 }
- #modal, #sentimento {
+ .modal-content footer .button .icon {
+     margin-right: 12px;
+     font-size: 24px;
+     line-height: 24px;
+     width: 42px;
+     height: 24px;
+     text-align: center;
+     display: inline-block;
+     position: relative;
+     top: 4px;
+}
+ .modal-content footer .button .icon:before {
+     display: inline-block;
+     width: 40px;
+}
+ .modal-content footer .button .icon:after {
+     content:"";
+}
+ #modal {
      display: none;
 }
  #modal:checked ~ .modal-bg {
@@ -925,43 +946,6 @@
      text-transform: none;
      font-weight: 600;
 }
- .modal-btn :hover {
-     text-decoration: none;
-}
- .modal-btn {
-     width: auto;
-     line-height: 40px;
-     color: white;
-     position: relative;
-     display: inline-block;
-     padding: 0 18px 0 6px;
-     border: 0 none;
-     border-radius: 5px;
-     text-decoration: none;
-     text-align: left;
-     transition: all 250ms linear;
-}
- .modal-btn .icon {
-     margin-right: 12px;
-     font-size: 24px;
-     line-height: 24px;
-     width: 42px;
-     height: 24px;
-     text-align: center;
-     display: inline-block;
-     position: relative;
-     top: 4px;
-}
- .modal-btn.icon:before {
-     display: inline-block;
-     width: 40px;
-}
- .modal-btn .icon :after {
-     content:"";
-}
- .modal-btn + .modal-btn {
-     margin-top: 10px;
-}
  .btn-acc {
      background: -moz-linear-gradient(90deg, #ed7cff 0%, #665ef1 100%);
      background: -webkit-linear-gradient(90deg, #ed7cff 0%, #665ef1 100%);
@@ -978,6 +962,9 @@
  .btn-acc:hover {
      background-color: #464646;
      color: white;
+}
+  .btn-acc + .btn-acc {
+     margin-top: 10px;
 }
  @media (max-width: 900px) {
      .modal-content footer {

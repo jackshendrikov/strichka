@@ -2,6 +2,7 @@ $(document).ready(function() {
     getGenres();
     getCountries();
     getYears();
+    getPlatforms();
 })
 
 function getGenres() {
@@ -84,6 +85,27 @@ function getYears() {
                 yearValues[handle].innerHTML = values[handle];
                 inputYearValues[handle].setAttribute("value", values[handle]);
             });
+        },
+        error: function(response) {
+            console.log(response)
+        },
+        async: false
+    });
+}
+
+function getPlatforms() {
+    let url = $("#platforms").attr("url");
+
+    $.ajax({
+        method: 'GET',
+        url: url,
+        data: {},
+        success: function(result) {
+            let platforms_option = "<li data-value=''>Any Platform</li>";
+            $.each(result["platforms"], function(a, b) {
+                platforms_option += `<li data-value='${b["service"]}'>${b["service"]}</li>`
+            });
+            $("#platforms").html(platforms_option)
         },
         error: function(response) {
             console.log(response)

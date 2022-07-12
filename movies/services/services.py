@@ -208,6 +208,17 @@ class DataFilters:
 
         return list(genres)
 
+    @staticmethod
+    def get_platforms() -> list[dict[str, str]]:
+        platforms = (
+            StreamingPlatform.objects.values("service")
+            .annotate(service_count=Count("service"))
+            .order_by("-service_count")
+            .distinct()
+        )
+
+        return list(platforms)
+
 
 def get_imdb_top() -> QuerySet:
     """
