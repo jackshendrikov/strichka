@@ -33,6 +33,7 @@ class MovieFilter(FilterSet):
             "movie"
         )
         platform_movies = Movie.objects.filter(id__in=platform_movies).distinct()
+        queryset = queryset.distinct()
         return platform_movies & queryset
 
 
