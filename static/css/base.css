@@ -976,3 +976,83 @@
          padding-left: 50px;
     }
 }
+/*============================== Watchlist ==============================*/
+.watchlist-btn {
+    margin: auto;
+    display: block;
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    top: 0;
+    border-bottom-right-radius: 10px;
+    z-index: 5;
+    background: -moz-linear-gradient(90deg, #c2c2c2 0%, #969696 100%);
+    background: -webkit-linear-gradient(90deg, #c2c2c2 0%, #969696 100%);
+    background: -ms-linear-gradient(90deg, #c2c2c2 0%, #969696 100%);
+    background: linear-gradient(90deg, #c2c2c2 0%, #969696 100%);
+    border: 1px solid rgba(128, 96, 121, 0.5);
+}
+.watchlist-btn.added {
+    background: -moz-linear-gradient(90deg, #51ad2b 0%, #00B712 100%);
+    background: -webkit-linear-gradient(90deg, #51ad2b 0%, #00B712 100%);
+    background: -ms-linear-gradient(90deg, #51ad2b 0%, #00B712 100%);
+    background: linear-gradient(90deg, #51ad2b 0%, #00B712 100%);
+    border: 1px solid rgba(139, 203, 142, 0.5);
+}
+.icn-btn {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: block;
+    padding: 2px 6px 3px;
+}
+.line {
+    display: block;
+    background: #ffffff;
+    width: 90%;
+    height: 3px;
+    position: absolute;
+    left: 5%;
+    -webkit-border-radius: 4px;
+     -moz-border-radius: 4px;
+          border-radius: 4px;
+    -webkit-transition: all 0.4s;
+       -moz-transition: all 0.4s;
+         -o-transition: all 0.4s;
+            transition: all 0.4s;
+}
+.watchlist-btn .line { width: 60%; left:20%; background-color: #FFFFFf; }
+.watchlist-btn .line-1 {
+    top: 50%;
+    margin-top: -2px;
+}
+.watchlist-btn .line-2 {
+    -webkit-transform: translateX(0) rotate(90deg);
+       -moz-transform: translateX(0) rotate(90deg);
+        -ms-transform: translateX(0) rotate(90deg);
+         -o-transform: translateX(0) rotate(90deg);
+            transform: translateX(0) rotate(90deg);
+
+    top: 50%;
+    margin-top: -2px;
+}
+.added .line { left: 5%; background-color: #fff; }
+.watchlist-btn.added .line-1 {
+    -webkit-transform: translateX(47%) rotate(45deg);
+       -moz-transform: translateX(47%) rotate(45deg);
+        -ms-transform: translateX(47%) rotate(45deg);
+         -o-transform: translateX(47%) rotate(45deg);
+            transform: translateX(47%) rotate(45deg);
+    top: 50%;
+    width: 30%;
+}
+.watchlist-btn.added .line-2 {
+    -webkit-transform: translateX(50%) rotate(-55deg);
+       -moz-transform: translateX(50%) rotate(-55deg);
+        -ms-transform: translateX(50%) rotate(-55deg);
+         -o-transform: translateX(50%) rotate(-55deg);
+            transform: translateX(50%) rotate(-55deg);
+    top: 41%;
+    width: 55%;
+}

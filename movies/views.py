@@ -96,6 +96,17 @@ class AddFavoriteMovieView(View):
             return HttpResponse("success")
 
 
+class AddWatchlistMovieView(View):
+    """
+    Add movie in User watchlist list
+    """
+
+    def post(self, request: HttpRequest, pk: int) -> HttpResponse:
+        if request.is_ajax():
+            services.add_watchlist_movie(movie_id=pk, user_id=request.user.id)
+            return HttpResponse("success")
+
+
 class MoviesOfCollectionView(FilterView):
     """
     Displaying a list of movies of a certain collection.

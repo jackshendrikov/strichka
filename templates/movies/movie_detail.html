@@ -3,40 +3,39 @@
 {% load static %}
 {% load humanize %}
 {% block title %}{{ title }} ({{ year }}){% endblock %}
-
 {% block extrahead %}
 <link rel="stylesheet" href="{% static 'css/libs/jquery.mCustomScrollbar.min.css' %}">
 <link rel="stylesheet" href="{% static 'css/libs/plyr.css' %}">
-
 <link rel="stylesheet" href="{% static 'css/index.css' %}">
 <link rel="stylesheet" href="{% static 'css/detail.css' %}">
 {% endblock %}
-
 {% block content %}
 <section class="section details">
     <div class="details__bg" data-bg="{% static 'img/section/movie_back.jpg' %}"></div>
-
     <div class="container">
         <div class="row">
             <div class="col-12">
                 <h1 class="details__title">{{ title }} ({{ year }})</h1>
             </div>
-
             <div class="col-10">
                 <div class="card card--details card--series">
                     <div class="row">
                         <div class="col-12 col-sm-5 col-md-5 col-lg-4 col-xl-4">
                             <div class="card__cover">
                                 <img src="{{ poster }}" alt="{{ title }}">
+                                <button id="watchlist" {% if user.is_authenticated %}data-csrf_token="{{ csrf_token }}" data-url="{% url 'movie_watchlist' movie_id %}"{% endif %} class="watchlist-btn">
+                                <div class="icn-btn">
+                                    <span class="line line-1"></span>
+                                    <span class="line line-2"></span>
+                                </div>
+                                </button>
                             </div>
                         </div>
-
                         <div class="col-12 col-sm-7 col-md-7 col-lg-8 col-xl-8">
                             <div class="card__content">
                                 <div class="card__wrap">
                                     <span class="card__rate"><i class="icon ion-ios-star"></i>{{ imdb_rate }}</span>
                                     <span class="card__vote"><i class="icon ion-md-checkbox-outline"></i>{{ imdb_votes|intcomma }}</span>
-
                                     <ul class="card__list">
                                         <li>{% if is_movie %}Movie{% else %}Series{% endif %}</li>
                                         {% if age_mark %}
@@ -44,7 +43,6 @@
                                         {% endif %}
                                     </ul>
                                 </div>
-
                                 <ul class="card__meta">
                                     <li>
                                         <span>Genre:</span>
@@ -98,7 +96,6 @@
                                         {% endfor %}
                                     </li>
                                 </ul>
-
                                 <div class="card__description card__description--details" style="color: #9da1a8;">
                                     {{ plot }}
                                 </div>
@@ -107,7 +104,6 @@
                     </div>
                 </div>
             </div>
-
             {% if keywords|length > 1 %}
             <div class="col-12 keyword-tags">
                 <span>Keywords: </span>
@@ -116,52 +112,46 @@
                 {% endfor %}
             </div>
             {% endif %}
-
             <div class="col-12" style="display: flex; justify-content: center; margin-bottom: 20px;">
                 <button data-id="{{ movie_id }}" data-action="like" {% if user.is_authenticated %}data-csrf_token="{{ csrf_token }}" data-url="{% url 'movie_like' movie_id %}"{% endif %} class="like-button">
-                    <div class="emitter"></div>
-                    <div class="hand">
-                        <div class="thumb"></div>
-                    </div>
-                    <span>Like<span class="hidden-like">d</span> <span id="like{{ movie_id }}" class="number">{{ likes_count }}</span></span>
+                <div class="emitter"></div>
+                <div class="hand">
+                    <div class="thumb"></div>
+                </div>
+                <span>Like<span class="hidden-like">d</span> <span id="like{{ movie_id }}" class="number">{{ likes_count }}</span></span>
                 </button>
-
                 <button id="favorite" {% if user.is_authenticated %}data-csrf_token="{{ csrf_token }}" data-url="{% url 'movie_favorite' movie_id %}"{% endif %} class="fav-button" style="margin: 0 10px;">
-                    <svg width="515.99" height="480.73" version="1.1" viewBox="0 0 515.99347 480.73038" xmlns="http://www.w3.org/2000/svg"  xmlns:xlink="http://www.w3.org/1999/xlink">
-                        <defs>
-                            <path class="heart" id="b" d="m372.59 17.99c-48.54 0-92.99 26.12-118 67.99-24.79-42.41-67.41-68-115.18-68-72.86 0-131.09 59.68-138.55 141.94-0.59 3.63-3.02 22.76 4.35 53.94 10.61 44.98 35.13 85.89 70.89 118.29 11.89 10.79 71.34 64.75 178.37 161.87 108.86-97.12 169.34-151.07 181.43-161.86 35.76-32.41 60.28-73.31 70.89-118.3 7.37-31.17 4.94-50.3 4.36-53.93-7.47-82.26-65.69-141.94-138.56-141.94z"></path>
-                            <path class="shine" id="a" d="m59.07 176.3c0 5.44 4.4 9.84 9.85 9.84 5.44 0 9.84-4.4 9.84-9.84 0-43.44 35.34-78.78 78.78-78.78 5.44 0 9.84-4.4 9.84-9.84 0-5.45-4.41-9.85-9.84-9.85-54.3 0-98.47 44.17-98.47 98.47z"></path>
-                        </defs>
-                        <g transform="translate(1.9963 -15.98)">
-                            <use width="100%" height="100%" xlink:href="#b"></use>
-                            <use width="100%" height="100%" xlink:href="#a"></use>
-                        </g>
-                    </svg>
+                <svg width="515.99" height="480.73" version="1.1" viewBox="0 0 515.99347 480.73038" xmlns="http://www.w3.org/2000/svg"  xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <defs>
+                        <path class="heart" id="b" d="m372.59 17.99c-48.54 0-92.99 26.12-118 67.99-24.79-42.41-67.41-68-115.18-68-72.86 0-131.09 59.68-138.55 141.94-0.59 3.63-3.02 22.76 4.35 53.94 10.61 44.98 35.13 85.89 70.89 118.29 11.89 10.79 71.34 64.75 178.37 161.87 108.86-97.12 169.34-151.07 181.43-161.86 35.76-32.41 60.28-73.31 70.89-118.3 7.37-31.17 4.94-50.3 4.36-53.93-7.47-82.26-65.69-141.94-138.56-141.94z"></path>
+                        <path class="shine" id="a" d="m59.07 176.3c0 5.44 4.4 9.84 9.85 9.84 5.44 0 9.84-4.4 9.84-9.84 0-43.44 35.34-78.78 78.78-78.78 5.44 0 9.84-4.4 9.84-9.84 0-5.45-4.41-9.85-9.84-9.85-54.3 0-98.47 44.17-98.47 98.47z"></path>
+                    </defs>
+                    <g transform="translate(1.9963 -15.98)">
+                        <use width="100%" height="100%" xlink:href="#b"></use>
+                        <use width="100%" height="100%" xlink:href="#a"></use>
+                    </g>
+                </svg>
                 </button>
-
                 <button data-id="{{ movie_id }}" {% if user.is_authenticated %}data-action="dislike" data-csrf_token="{{ csrf_token }}" data-url="{% url 'movie_dislike' movie_id %}"{% endif %} class="dislike-button">
-                    <div class="emitter"></div>
-                    <div class="hand">
-                        <div class="thumb"></div>
-                    </div>
-                    <span>Dislike<span class="hidden-like">d</span> <span id="dislike{{ movie_id }}" class="number">{{ dislikes_count }}</span></span>
+                <div class="emitter"></div>
+                <div class="hand">
+                    <div class="thumb"></div>
+                </div>
+                <span>Dislike<span class="hidden-like">d</span> <span id="dislike{{ movie_id }}" class="number">{{ dislikes_count }}</span></span>
                 </button>
             </div>
-
             <div class="col-12 col-xl-6">
                 <div id="player" data-plyr-provider="youtube" data-plyr-embed-id="{{ trailer_id }}"></div>
             </div>
-
             <div class="col-12 col-xl-6">
                 <div class="accordion" id="accordion">
                     <div class="accordion__card">
                         <div class="card-header" id="headingOne">
                             <button type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                <span>Available on platforms:</span>
-                                <span>{{ platforms|length }} streaming platforms in total.</span>
+                            <span>Available on platforms:</span>
+                            <span>{{ platforms|length }} streaming platforms in total.</span>
                             </button>
                         </div>
-
                         <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
                             <div class="card-body">
                                 <table class="accordion__list">
@@ -172,7 +162,6 @@
                                             <th class="purchase-types">Purchase Types</th>
                                         </tr>
                                     </thead>
-
                                     <tbody>
                                         {% for platform in platforms %}
                                         <tr>
@@ -203,7 +192,6 @@
         </div>
     </div>
 </section>
-
 <section class="content">
     <div class="content__head">
         <div class="container">
@@ -214,7 +202,6 @@
             </div>
         </div>
     </div>
-
     <div class="container">
         <div class="row">
             <div class="col-12 col-lg-8 col-xl-8">
@@ -234,13 +221,12 @@
                                     <div class="comments__actions">
                                         <div class="comments__rate">
                                             <button class="comment-like" data-id="{{ node.id }}" type="button" data-action="like" {% if user.is_authenticated %}data-url="{% url 'comment_like' node.id %}" data-csrf_token="{{ csrf_token }}"{% endif %}>
-                                                <i class="icon ion-md-thumbs-up"></i>
-                                                <span id="like{{ node.id }}">{{ node.votes.likes.count }}</span>
+                                            <i class="icon ion-md-thumbs-up"></i>
+                                            <span id="like{{ node.id }}">{{ node.votes.likes.count }}</span>
                                             </button>
-
                                             <button class="comment-dislike" data-id="{{ node.id }}" type="button" data-action="dislike" {% if user.is_authenticated %}data-url="{% url 'comment_dislike' node.id %}" data-csrf_token="{{ csrf_token }}"{% endif %}>
-                                                <span id="dislike{{ node.id }}">{{ node.votes.dislikes.count }}</span>
-                                                <i class="icon ion-md-thumbs-down"></i>
+                                            <span id="dislike{{ node.id }}">{{ node.votes.dislikes.count }}</span>
+                                            <i class="icon ion-md-thumbs-down"></i>
                                             </button>
                                         </div>
                                         {% if user.is_authenticated %}
@@ -248,9 +234,8 @@
                                         {% endif %}
                                     </div>
                                 </li>
-
                                 {% if not node.is_leaf_node %}
-                                    <div class="{% if node.level == 1 %}comments__item--answer{% elif node.level == 2 %}comments__item--answer-level-2{% endif %}">{{ children }}</div>
+                                <div class="{% if node.level == 1 %}comments__item--answer{% elif node.level == 2 %}comments__item--answer-level-2{% endif %}">{{ children }}</div>
                                 {% endif %}
                                 {% endrecursetree %}
                             </ul>
@@ -266,28 +251,26 @@
                     </div>
                 </div>
             </div>
-
             <div class="col-12 col-lg-4 col-xl-4">
                 <div class="row">
                     <div class="col-12">
                         <h2 class="section__title section__title--sidebar">You may also like...</h2>
                     </div>
-
                     {% for movie in movies_to_discover %}
                     <div class="col-6 col-sm-4 col-lg-6">
                         <div class="card">
                             <div class="card__cover">
                                 <img src="{{ movie.poster }}" alt="{{ movie.title }}">
                                 <a href="{{ movie.get_absolute_url }}" class="card__play">
-                                    <i class="icon ion-ios-play"></i>
+                                <i class="icon ion-ios-play"></i>
                                 </a>
                             </div>
                             <div class="card__content">
                                 <h3 class="card__title"><a href="{{ movie.get_absolute_url }}#">{{ movie.title }}</a></h3>
                                 <span class="card__category">
-                                    {% for genre in movie.categories|genres %}
-                                    <a href="{{ genre.get_absolute_url }}">{{ genre.name }}</a>
-                                    {% endfor %}
+                                {% for genre in movie.categories|genres %}
+                                <a href="{{ genre.get_absolute_url }}">{{ genre.name }}</a>
+                                {% endfor %}
                                 </span>
                                 <span class="card__rate"><i class="icon ion-ios-star"></i>{{ movie.imdb_rate }}</span>
                             </div>
@@ -300,17 +283,15 @@
     </div>
 </section>
 {% endblock %}
-
 {% block extra_js %}
 <!-- Plyr Player  -->
 <script src="{% static 'js/libs/plyr.min.js' %}"></script>
 <!-- jquery custom scrollbar -->
 <script src="{% static 'js/libs/jquery.mCustomScrollbar.min.js' %}"></script>
-
 <script src="{% static 'js/detail.js' %}"></script>
 {% if user.is_authenticated %}
 <script src="{% static 'js/votes.js' %}"></script>
-<script src="{% static 'js/favorite.js' %}"></script>
+<script src="{% static 'js/fav_watchlist.js' %}"></script>
 {% endif %}
 <script type="text/javascript">
     {% if user.is_authenticated %}
@@ -320,12 +301,22 @@
         document.getElementById("comment-parent").value = id;
         document.getElementById("contact-comment").innerText = `${name}, `
     }
-    {% is_favorite user movie_id as favorite_movie %}
+
+    $('#favorite, #watchlist').click(function() {
+        handleFavWatch($(this), "added");
+    });
+
+        {% is_favorite user movie_id as favorite_movie %}
         {% if favorite_movie %}
-    $("#favorite").toggleClass("liked");
+    $("#favorite").toggleClass("added");
+        {% endif %}
+
+        {% in_watchlist user movie_id as watchlist_movie %}
+        {% if watchlist_movie %}
+    $("#watchlist").toggleClass("added");
         {% endif %}
     {% else %}
-    $(".like-button, .fav-button, .dislike-button, .comment-like, .comment-dislike").click(function() {
+    $("#watchlist, #favorite, .like-button, .dislike-button, .comment-like, .comment-dislike").click(function() {
         window.open("{% url 'account_login' %}", "_self");
     });
     {% endif %}

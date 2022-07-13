@@ -489,6 +489,17 @@ def add_favorite_movie(movie_id: int, user_id: int) -> None:
         user.profile.favorites.add(movie)
 
 
+def add_watchlist_movie(movie_id: int, user_id: int) -> None:
+    """Add movies in User watchlist list."""
+
+    movie = get_object_or_404(Movie, pk=movie_id)
+    user = get_object_or_404(User, pk=user_id)
+    if user.profile.watchlist.filter(pk=movie.id).exists():
+        user.profile.watchlist.remove(movie)
+    else:
+        user.profile.watchlist.add(movie)
+
+
 def search_movie(title: str) -> QuerySet:
     """
     Get all movies and series by specific query.

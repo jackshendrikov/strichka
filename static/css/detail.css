@@ -909,16 +909,16 @@
 .fav-button:hover {
     box-shadow: 0 0 5px 1px rgba(255, 255, 255, 0.4);
 }
-.fav-button.liked {
+.fav-button.added {
     border-color: #ff8299;
     -webkit-animation: shadow-grow 2s;
           animation: shadow-grow 2s;
 }
-.fav-button.liked svg {
+.fav-button.added svg {
     -webkit-animation: heart-grow 0.7s;
           animation: heart-grow 0.7s;
 }
-.fav-button.liked .heart {
+.fav-button.added .heart {
     fill: #ff8299;
 }
 .fav-button svg {
@@ -978,4 +978,8 @@
     100% {
     transform: scale(1);
     }
+}
+.watchlist-btn {
+    width: 55px;
+    height: 55px;
 }

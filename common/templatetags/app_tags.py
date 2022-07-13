@@ -24,6 +24,11 @@ def is_favorite(user: User, movie_id: int) -> bool:
 
 
 @register.simple_tag
+def in_watchlist(user: User, movie_id: int) -> bool:
+    return user.profile.watchlist.filter(pk=movie_id).exists()
+
+
+@register.simple_tag
 def url_replace(request, field, value):
     dict_ = request.GET.copy()
     dict_[field] = value
