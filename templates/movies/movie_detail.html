@@ -320,8 +320,10 @@
         document.getElementById("comment-parent").value = id;
         document.getElementById("contact-comment").innerText = `${name}, `
     }
-
+    {% is_favorite user movie_id as favorite_movie %}
+        {% if favorite_movie %}
     $("#favorite").toggleClass("liked");
+        {% endif %}
     {% else %}
     $(".like-button, .fav-button, .dislike-button, .comment-like, .comment-dislike").click(function() {
         window.open("{% url 'account_login' %}", "_self");
