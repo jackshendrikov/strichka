@@ -63,6 +63,7 @@ class CategoryAdmin(CustomExportMixin, StrichkaBaseModelAdmin, DjangoMpttAdmin):
 @admin.register(Cast)
 class CastAdmin(CustomExportMixin, StrichkaBaseModelAdmin):
     resource_class = CastResource
+    list_per_page = 50
 
     list_display = (
         "imdb_id",
@@ -151,6 +152,7 @@ class StreamingPlatformAdmin(
     PreservePreviousFormInputsMixin, CustomExportMixin, StrichkaBaseModelAdmin
 ):
     resource_class = StreamingPlatformResource
+    list_per_page = 50
 
     preserve_inputs_fields = {"service", "video_format", "purchase_type"}
 

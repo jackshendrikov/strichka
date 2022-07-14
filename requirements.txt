@@ -1,6 +1,6 @@
 dj_database_url==0.5.0
-Django==3.2.12
-django-4-jet==1.0.8
+Django==4.0.6
+django-4-jet==1.0.9
 django-allauth==0.43.0
 django-extensions==3.1.5
 django-filter==22.1

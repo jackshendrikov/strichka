@@ -113,7 +113,7 @@ class MoviesOfCollectionView(FilterView):
     """
 
     filterset_class = MovieFilter
-    paginate_by = 32
+    paginate_by = 30
     template_name = "movies/movie_list.html"
 
     def get_collection(self):
