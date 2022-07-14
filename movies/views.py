@@ -6,7 +6,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic.base import View
 from django_filters.views import FilterView
 
-from common.views import BaseView
+from common.views import BaseView, is_ajax
 from movies.models import Cast, Collection, Movie
 from movies.services import services
 from movies.services.filters import MovieFilter, SearchFilter
@@ -91,7 +91,7 @@ class AddFavoriteMovieView(View):
     """
 
     def post(self, request: HttpRequest, pk: int) -> HttpResponse:
-        if request.is_ajax():
+        if is_ajax(request=request):
             services.add_favorite_movie(movie_id=pk, user_id=request.user.id)
             return HttpResponse("success")
 
@@ -102,7 +102,7 @@ class AddWatchlistMovieView(View):
     """
 
     def post(self, request: HttpRequest, pk: int) -> HttpResponse:
-        if request.is_ajax():
+        if is_ajax(request=request):
             services.add_watchlist_movie(movie_id=pk, user_id=request.user.id)
             return HttpResponse("success")
 
@@ -292,7 +292,7 @@ def get_filter_countries(request: HttpRequest) -> JsonResponse:
     Get all the countries from the DB.
     """
 
-    if request.method == "GET" and request.is_ajax():
+    if request.method == "GET" and is_ajax(request=request):
         countries = services.DataFilters.get_countries()
         data = {"countries": countries}
         return JsonResponse(data, status=200)
@@ -303,7 +303,7 @@ def get_filter_categories(request: HttpRequest) -> JsonResponse:
     Get all the categories from the DB.
     """
 
-    if request.method == "GET" and request.is_ajax():
+    if request.method == "GET" and is_ajax(request=request):
         categories = services.DataFilters.get_categories()
         data = {"categories": categories}
         return JsonResponse(data, status=200)
@@ -314,7 +314,7 @@ def get_filter_year(request: HttpRequest) -> JsonResponse:
     Get all the years from the DB.
     """
 
-    if request.method == "GET" and request.is_ajax():
+    if request.method == "GET" and is_ajax(request=request):
         years = services.DataFilters.get_years()
         data = {"years": years}
         return JsonResponse(data, status=200)
@@ -325,7 +325,7 @@ def get_filter_genres(request: HttpRequest) -> JsonResponse:
     Get all the genres from the DB.
     """
 
-    if request.method == "GET" and request.is_ajax():
+    if request.method == "GET" and is_ajax(request=request):
         genres = services.DataFilters.get_genres()
         data = {"genres": genres}
         return JsonResponse(data, status=200)
@@ -336,7 +336,7 @@ def get_filter_platforms(request: HttpRequest) -> JsonResponse:
     Get all the platforms from the DB.
     """
 
-    if request.method == "GET" and request.is_ajax():
+    if request.method == "GET" and is_ajax(request=request):
         platforms = services.DataFilters.get_platforms()
         data = {"platforms": platforms}
         return JsonResponse(data, status=200)
@@ -371,7 +371,7 @@ class VoteView(View):
 
     def post(self, request, pk: int) -> HttpResponse:
         obj = get_object_or_404(self.model, pk=pk)
-        if request.is_ajax():
+        if is_ajax(request=request):
             context = services.add_vote(
                 user=request.user, vote_type=self.vote_type, obj=obj
             )

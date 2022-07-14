@@ -8,6 +8,10 @@ JSON_DUMPS_PARAMS = {"ensure_ascii": False}
 logger = logging.getLogger(__name__)
 
 
+def is_ajax(request: HttpRequest) -> bool:
+    return request.META.get("HTTP_X_REQUESTED_WITH") == "XMLHttpRequest"
+
+
 class BaseView(View):
     """
     Base class for all views, handles exceptions.
