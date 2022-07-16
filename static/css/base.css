@@ -947,10 +947,10 @@
      font-weight: 600;
 }
  .btn-acc {
-     background: -moz-linear-gradient(90deg, #ed7cff 0%, #665ef1 100%);
-     background: -webkit-linear-gradient(90deg, #ed7cff 0%, #665ef1 100%);
-     background: -ms-linear-gradient(90deg, #ed7cff 0%, #665ef1 100%);
-     background: linear-gradient(90deg, #ed7cff 0%,#665ef1 100%);
+     background: -moz-linear-gradient(45deg, #ff55a5 0%, #665ef1 100%);
+     background: -webkit-linear-gradient(45deg, #ff55a5 0%, #665ef1 100%);
+     background: -ms-linear-gradient(45deg, #ff55a5 0%, #665ef1 100%);
+     background: linear-gradient(45deg, #ff55a5 0%,#665ef1 100%);
      border: 1px solid rgba(255, 75, 230, 0.5);
 }
  .btn-acc .icon {

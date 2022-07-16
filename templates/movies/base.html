@@ -67,6 +67,14 @@
             Admin Panel
         </a>
         {% endif %}
+        <a href="{% url 'user_watchlist' %}" class="button btn-acc">
+            <i class="icon ion-md-bookmark" ></i>
+            My Watchlist
+        </a>
+        <a href="{% url 'user_favorites' %}" class="button btn-acc">
+            <i class="icon ion-md-heart" ></i>
+            My Favorites
+        </a>
         <a href="{% url 'account_logout' %}" class="button btn-acc">
             <i class="icon ion-ios-log-out" ></i>
             Sign Out

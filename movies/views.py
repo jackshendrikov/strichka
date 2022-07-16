@@ -138,7 +138,7 @@ class SearchMovieView(FilterView):
 
     page_title = "Search Result"
     filterset_class = SearchFilter
-    paginate_by = 32
+    paginate_by = 30
     template_name = "movies/movie_list.html"
 
     def get_queryset(self) -> QuerySet:
