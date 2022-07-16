@@ -5,10 +5,10 @@
 {% block title %}{{ page_title }}{% endblock %}
 
 {% block metablock %}
-    <meta property="og:image" content="https://wlasmzaoktipkzxewcne.supabase.co/storage/v1/object/public/strichka-storage/Stricka%20Catalog.png?t=2022-07-16T20%3A54%3A11.976Z" />
+    <meta property="og:image" content="{% static 'img/meta/catalog.png' %}" />
     <meta property="og:image:alt" content="{{ page_title }}" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="600" />
+    <meta property="og:image:width" content="1300" />
+    <meta property="og:image:height" content="610" />
     <meta property="og:title" content="{{ page_title }}" />
     <meta property="og:description" content="Movie Catalog for your query" />
 {% endblock %}
