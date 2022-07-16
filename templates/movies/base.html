@@ -5,15 +5,21 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Strichka">
+    <meta name="description" content="Strichka UA">
     <meta name="author" content="JackShen">
 
-    <meta property="og:site_name" content="{% block meta_sitename %}Strichka{% endblock %}">
-    <meta property="og:image:alt" content="Strichka" />
-    <meta property="og:image:width" content="{% block meta_image_width %}1200{% endblock %}" />
-    <meta property="og:image:height" content="{% block meta_image_height %}600{% endblock %}" />
-    <meta property="og:title" content="{% block meta_title %}Strichka{% endblock %}" />
+    <meta property="og:site_name" content="Strichka UA" />
     <meta property="og:type" content="website" />
+    <meta property="og:url" content="{{ request.build_absolute_uri  }}" />
+
+    {% block metablock %}
+    <meta property="og:image" content="https://wlasmzaoktipkzxewcne.supabase.co/storage/v1/object/public/strichka-storage/Stricka%20Main.png?t=2022-07-16T20%3A26%3A58.160Z" />
+    <meta property="og:image:alt" content="Strichka UA" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="600" />
+    <meta property="og:title" content="Strichka UA" />
+    <meta property="og:description" content="Find movie, check if its available on your favorite platform, sign up and check more" />
+    {% endblock %}
 
     <title>{% block title %}Strichka{% endblock %}</title>
     <link rel="icon" href="{% static 'ico/logo.ico' %}" type="image/x-icon">

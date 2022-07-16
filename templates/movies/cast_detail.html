@@ -4,6 +4,15 @@
 {% load humanize %}
 {% block title %}{{ full_name }}{% endblock %}
 
+{% block metablock %}
+    <meta property="og:image" content="{{ photo }}" />
+    <meta property="og:image:alt" content="{{ full_name }} - Strichka UA" />
+    <meta property="og:image:width" content="300" />
+    <meta property="og:image:height" content="445" />
+    <meta property="og:title" content="{{ full_name }} - Strichka UA" />
+    <meta property="og:description" content="{{ full_name }} Short Info" />
+{% endblock %}
+
 {% block extrahead %}
 <link rel="stylesheet" href="{% static 'css/index.css' %}">
 <link rel="stylesheet" href="{% static 'css/detail.css' %}">

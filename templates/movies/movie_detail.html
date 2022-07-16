@@ -3,12 +3,23 @@
 {% load static %}
 {% load humanize %}
 {% block title %}{{ title }} ({{ year }}){% endblock %}
+
+{% block metablock %}
+    <meta property="og:image" content="{{ poster }}" />
+    <meta property="og:image:alt" content="{{ title }} ({{ year }})" />
+    <meta property="og:image:width" content="300" />
+    <meta property="og:image:height" content="445" />
+    <meta property="og:title" content="{{ title }} ({{ year }})" />
+    <meta property="og:description" content="{{ plot }}" />
+{% endblock %}
+
 {% block extrahead %}
 <link rel="stylesheet" href="{% static 'css/libs/jquery.mCustomScrollbar.min.css' %}">
 <link rel="stylesheet" href="{% static 'css/libs/plyr.css' %}">
 <link rel="stylesheet" href="{% static 'css/index.css' %}">
 <link rel="stylesheet" href="{% static 'css/detail.css' %}">
 {% endblock %}
+
 {% block content %}
 <section class="section details">
     <div class="details__bg" data-bg="{% static 'img/section/movie_back.jpg' %}"></div>
