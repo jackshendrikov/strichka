@@ -1,10 +1,9 @@
-from typing import Any, Union
-
 import locale
 import logging
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
-from django.contrib.auth.models import User
+from django.contrib.auth.base_user import AbstractBaseUser
+from django.contrib.auth.models import AnonymousUser, User
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Count, QuerySet, Sum
 from django.db.transaction import atomic
@@ -133,9 +132,11 @@ class GetCastDetail(Service):
             "writer": member.movie_writers.count(),
         }
 
-        known_for = role_movies[max(role_counter, key=role_counter.get)].order_by(
+        known_for = role_movies[max(role_counter, key=role_counter.get)].order_by(  # type: ignore
             "-imdb_votes", "-imdb_rate"
-        )[:6]
+        )[
+            :6
+        ]
 
         context = {
             "member_id": member.id,
@@ -430,23 +431,27 @@ def get_movie_of_month() -> QuerySet:
     )
 
 
-def add_comment(request_post: Any, content_object: Any) -> None:
+def add_comment(post_request: dict, obj: Movie | Cast) -> None:
     """
     Validate and add comment.
     """
-    form = CommentForm(request_post)
+    form = CommentForm(post_request)
     if form.is_valid():
         form = form.save(commit=False)
-        form.content_object = content_object
-        if request_post.get("parent", None):
-            form.parent_id = int(request_post.get("parent"))
+        form.content_object = obj  # type: ignore
+        if post_request.get("parent", None):
+            form.parent_id = int(post_request.get("parent"))  # type: ignore
         form.save()
     else:
         logger.error(form.errors)
 
 
 @atomic
-def add_vote(obj: Union[Movie, Cast, Comment], vote_type: int, user: User) -> dict:
+def add_vote(
+    obj: Movie | Cast | Comment,
+    vote_type: int | None,
+    user: AbstractBaseUser | AnonymousUser,
+) -> dict:
     """
     Add like or dislike.
     If user has already liked or disliked - entry is deleted.
@@ -455,7 +460,7 @@ def add_vote(obj: Union[Movie, Cast, Comment], vote_type: int, user: User) -> di
     try:  # noqa: WPS229
         like_dislike = Vote.objects.get(
             content_type=ContentType.objects.get_for_model(obj),
-            object_id=obj.id,
+            object_id=obj.pk,
             user=user,
         )
         if like_dislike.vote is not vote_type:
@@ -483,10 +488,10 @@ def add_favorite_movie(movie_id: int, user_id: int) -> None:
 
     movie = get_object_or_404(Movie, pk=movie_id)
     user = get_object_or_404(User, pk=user_id)
-    if user.profile.favorites.filter(pk=movie.id).exists():
-        user.profile.favorites.remove(movie)
+    if user.profile.favorites.filter(pk=movie.pk).exists():  # type: ignore
+        user.profile.favorites.remove(movie)  # type: ignore
     else:
-        user.profile.favorites.add(movie)
+        user.profile.favorites.add(movie)  # type: ignore
 
 
 def add_watchlist_movie(movie_id: int, user_id: int) -> None:
@@ -494,10 +499,10 @@ def add_watchlist_movie(movie_id: int, user_id: int) -> None:
 
     movie = get_object_or_404(Movie, pk=movie_id)
     user = get_object_or_404(User, pk=user_id)
-    if user.profile.watchlist.filter(pk=movie.id).exists():
-        user.profile.watchlist.remove(movie)
+    if user.profile.watchlist.filter(pk=movie.pk).exists():  # type: ignore
+        user.profile.watchlist.remove(movie)  # type: ignore
     else:
-        user.profile.watchlist.add(movie)
+        user.profile.watchlist.add(movie)  # type: ignore
 
 
 def search_movie(title: str) -> QuerySet:

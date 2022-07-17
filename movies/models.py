@@ -168,7 +168,7 @@ class Cast(StrichkaBaseModel):
         return self.full_name
 
     def get_absolute_url(self) -> str:
-        return reverse("cast", kwargs={"pk": self.id})
+        return reverse("cast", kwargs={"pk": self.pk})
 
     def clean(self) -> None:
         """
@@ -273,18 +273,18 @@ class Movie(StrichkaBaseModel):
         return f"{self.title} ({self.year})"
 
     def genres(self) -> list[str]:
-        movie = Movie.objects.get(pk=self.id)
+        movie = Movie.objects.get(pk=self.pk)
         genres = movie.categories.filter(parent__slug="genres")
         return [str(genre) for genre in genres]
 
     def get_absolute_url(self) -> str:
-        movie = Movie.objects.get(pk=self.id)
+        movie = Movie.objects.get(pk=self.pk)
         if movie.is_movie:
-            return reverse("movie_detail", kwargs={"pk": self.id})
-        return reverse("series_detail", kwargs={"pk": self.id})
+            return reverse("movie_detail", kwargs={"pk": self.pk})
+        return reverse("series_detail", kwargs={"pk": self.pk})
 
-    def keywords_as_list(self):
-        return self.keywords.split(",")
+    def keywords_as_list(self) -> list[str]:
+        return self.keywords.split(",") if self.keywords else []
 
     def clean(self) -> None:
         """
@@ -326,10 +326,10 @@ class StreamingPlatform(StrichkaBaseModel):
     def __str__(self) -> str:
         return self.service
 
-    def video_format_as_list(self):
+    def video_format_as_list(self) -> list[str]:
         return self.video_format.split(",")
 
-    def purchase_type_as_list(self):
+    def purchase_type_as_list(self) -> list[str]:
         return self.purchase_type.split(",")
 
     def clean(self) -> None:
@@ -375,7 +375,7 @@ class Collection(StrichkaBaseModel):
         return self.name
 
     def get_absolute_url(self) -> str:
-        return reverse("movies_collection", kwargs={"pk": self.id})
+        return reverse("movies_collection", kwargs={"pk": self.pk})
 
     def clean(self) -> None:
         """

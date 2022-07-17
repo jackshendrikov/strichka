@@ -1,7 +1,8 @@
 from typing import Any
 
 import logging
-from django.http import HttpRequest, HttpResponse, JsonResponse
+from django.http import HttpRequest, JsonResponse
+from django.http.response import HttpResponseBase
 from django.views.generic.base import View
 
 JSON_DUMPS_PARAMS = {"ensure_ascii": False}
@@ -17,7 +18,9 @@ class BaseView(View):
     Base class for all views, handles exceptions.
     """
 
-    def dispatch(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
+    def dispatch(
+        self, request: HttpRequest, *args: Any, **kwargs: Any
+    ) -> HttpResponseBase:
         try:
             response = super().dispatch(request, *args, **kwargs)
         except Exception as e:

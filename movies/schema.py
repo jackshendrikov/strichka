@@ -1,5 +1,3 @@
-from typing import Optional
-
 import re
 from datetime import date, timedelta
 from pydantic import BaseModel, HttpUrl, validator
@@ -29,9 +27,9 @@ class CastSchema(BaseModel):
 
     imdb_id: str
     full_name: str
-    description: Optional[str]
-    birthday: Optional[date]
-    place_of_birth: Optional[str]
+    description: str | None
+    birthday: date | None
+    place_of_birth: str | None
     photo: HttpUrl
 
     @validator("imdb_id")
@@ -88,15 +86,15 @@ class MovieSchema(BaseModel):
     actors: list[str]
     directors: list[str]
     writers: list[str]
-    runtime: Optional[timedelta]
-    release: Optional[date]
-    keywords: Optional[str]
+    runtime: timedelta | None
+    release: date | None
+    keywords: str | None
     country: list[str]
-    box_office: Optional[int]
+    box_office: int | None
     age_mark: str
-    awards: Optional[str]
+    awards: str | None
     is_movie: bool
-    total_seasons: Optional[int]
+    total_seasons: int | None
 
     @validator("imdb_id")
     def imdb_id_validation(cls, imdb_id: str) -> str:

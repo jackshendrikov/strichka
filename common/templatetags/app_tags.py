@@ -1,5 +1,7 @@
 from django import template
 from django.contrib.auth.models import User
+from django.db.models import QuerySet
+from django.http import HttpRequest
 from hashlib import md5
 
 register = template.Library()
@@ -14,22 +16,22 @@ def gravatar(user: User, size: int = 35) -> str:
 
 
 @register.filter(name="genres")
-def genres(queryset):
+def genres(queryset: QuerySet) -> QuerySet:
     return queryset.filter(parent__slug="genres")
 
 
 @register.simple_tag
 def is_favorite(user: User, movie_id: int) -> bool:
-    return user.profile.favorites.filter(pk=movie_id).exists()
+    return user.profile.favorites.filter(pk=movie_id).exists()  # type: ignore
 
 
 @register.simple_tag
 def in_watchlist(user: User, movie_id: int) -> bool:
-    return user.profile.watchlist.filter(pk=movie_id).exists()
+    return user.profile.watchlist.filter(pk=movie_id).exists()  # type: ignore
 
 
 @register.simple_tag
-def url_replace(request, field, value):
+def url_replace(request: HttpRequest, field: str, value: str) -> str:
     dict_ = request.GET.copy()
     dict_[field] = value
     return dict_.urlencode()

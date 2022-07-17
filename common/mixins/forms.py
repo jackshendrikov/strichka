@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING
 
 from django.contrib.admin import ModelAdmin
 from django.db import models
@@ -49,7 +49,7 @@ class PreservePreviousFormInputsMixin(_Base):
         self,
         request: HttpRequest,
         obj: type[models.Model],
-        post_url_continue: Optional[str] = None,
+        post_url_continue: str | None = None,
     ) -> HttpResponse:
         if "_addanother" in request.POST:
             return self._response_with_prev_form_values(request, obj)

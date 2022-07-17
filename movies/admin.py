@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
+from django.http import HttpRequest
 from django_mptt_admin.admin import DjangoMpttAdmin
 
 from accounts.models import Profile
@@ -41,7 +42,7 @@ class CustomUserAdmin(UserAdmin):
     list_display = ("username", "email", "first_name", "last_name", "is_staff")
     list_select_related = ("profile",)
 
-    def get_inline_instances(self, request, obj=None):
+    def get_inline_instances(self, request: HttpRequest, obj: User = None) -> list:
         if not obj:
             return []
         return super().get_inline_instances(request, obj)
@@ -55,7 +56,7 @@ admin.site.register(User, CustomUserAdmin)
 class CategoryAdmin(CustomExportMixin, StrichkaBaseModelAdmin, DjangoMpttAdmin):
     resource_class = CategoryResource
 
-    list_display = ("name", "slug", "parent") + StrichkaBaseModelAdmin.list_display
+    list_display = ("name", "slug", "parent") + StrichkaBaseModelAdmin.list_display  # type: ignore
     search_fields = ("name",)
     ordering = ("-created_at",)
 
@@ -72,7 +73,7 @@ class CastAdmin(CustomExportMixin, StrichkaBaseModelAdmin):
         "birthday",
         "place_of_birth",
         "photo",
-    ) + StrichkaBaseModelAdmin.list_display
+    ) + StrichkaBaseModelAdmin.list_display  # type: ignore
     search_fields = ("imdb_id", "full_name")
     ordering = ("-created_at",)
 
@@ -81,7 +82,7 @@ class CastAdmin(CustomExportMixin, StrichkaBaseModelAdmin):
 class CountryAdmin(CustomExportMixin, StrichkaBaseModelAdmin):
     resource_class = CountryResource
 
-    list_display = ("name", "code") + StrichkaBaseModelAdmin.list_display
+    list_display = ("name", "code") + StrichkaBaseModelAdmin.list_display  # type: ignore
     list_editable = ("code",)
     search_fields = ("name", "code")
     ordering = ("-created_at",)
@@ -120,31 +121,27 @@ class MovieAdmin(
         "awards",
         "is_movie",
         "total_seasons",
-    ) + StrichkaBaseModelAdmin.list_display
+    ) + StrichkaBaseModelAdmin.list_display  # type: ignore
     list_filter = ("year", "country", "age_mark", "is_movie")
     list_editable = ("title", "keywords", "is_movie")
     search_fields = ("imdb_id", "title", "year", "country__name")
     ordering = ["-release", "-imdb_votes", "-imdb_rate"]
 
+    @admin.display(description="Countries")
     def get_countries(self, obj: Movie) -> str:
         return ",".join([m.name for m in obj.country.all()])
 
-    get_countries.short_description = "Countries"
-
+    @admin.display(description="Actors")
     def get_actors(self, obj: Movie) -> str:
         return ",".join([m.full_name for m in obj.actors.all()])
 
-    get_actors.short_description = "Actors"
-
+    @admin.display(description="Directors")
     def get_directors(self, obj: Movie) -> str:
         return ",".join([m.full_name for m in obj.directors.all()])
 
-    get_directors.short_description = "Directors"
-
+    @admin.display(description="Writers")
     def get_writers(self, obj: Movie) -> str:
         return ",".join([m.full_name for m in obj.writers.all()])
-
-    get_writers.short_description = "Writers"
 
 
 @admin.register(StreamingPlatform)
@@ -162,7 +159,7 @@ class StreamingPlatformAdmin(
         "url",
         "video_format",
         "purchase_type",
-    ) + StrichkaBaseModelAdmin.list_display
+    ) + StrichkaBaseModelAdmin.list_display  # type: ignore
     list_filter = ("service", "video_format", "purchase_type")
     list_editable = ("url", "video_format", "purchase_type")
     search_fields = ("service", "movie__title")
@@ -173,7 +170,7 @@ class StreamingPlatformAdmin(
 class CollectionAdmin(CustomExportMixin, StrichkaBaseModelAdmin):
     resource_class = CollectionResource
 
-    list_display = ("name", "is_active") + StrichkaBaseModelAdmin.list_display
+    list_display = ("name", "is_active") + StrichkaBaseModelAdmin.list_display  # type: ignore
     raw_id_fields = ("movies",)
     search_fields = ("name",)
     ordering = ("-created_at",)

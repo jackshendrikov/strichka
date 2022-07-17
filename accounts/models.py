@@ -1,3 +1,5 @@
+from typing import Any
+
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models.signals import post_save
@@ -18,7 +20,7 @@ class Profile(models.Model):
         related_name="user_watchlist",
     )
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.user.username
 
     class Meta:
@@ -27,11 +29,13 @@ class Profile(models.Model):
 
 
 @receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
+def create_user_profile(
+    sender: type[User], instance: User, created: bool = False, **kwargs: Any
+) -> None:
     if created:
         Profile.objects.create(user=instance)
 
 
 @receiver(post_save, sender=User)
-def save_user_profile(sender, instance, **kwargs):
-    instance.profile.save()
+def save_user_profile(sender: type[User], instance: User, **kwargs: Any) -> None:
+    instance.profile.save()  # type: ignore

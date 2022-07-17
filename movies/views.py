@@ -12,15 +12,15 @@ from movies.services import services
 from movies.services.filters import MovieFilter, SearchFilter
 
 
-def error_403(request: HttpRequest, exception=None) -> HttpResponse:
+def error_403(request: HttpRequest, exception: type[Exception] = None) -> HttpResponse:
     return render(request, "errors/403.html")
 
 
-def error_404(request: HttpRequest, exception) -> HttpResponse:
+def error_404(request: HttpRequest, exception: type[Exception]) -> HttpResponse:
     return render(request, "errors/404.html", {})
 
 
-def error_500(request: HttpRequest, exception=None) -> HttpResponse:
+def error_500(request: HttpRequest, exception: type[Exception] = None) -> HttpResponse:
     return render(request, "errors/500.html", {})
 
 
@@ -49,7 +49,7 @@ class MovieDetailsView(BaseView):
 
     def get(self, request: HttpRequest, pk: int) -> HttpResponse:
         movie = get_object_or_404(Movie, pk=pk)
-        context = services.GetMovieDetail.execute({"movie": movie.id})
+        context = services.GetMovieDetail.execute({"movie": movie.pk})
         return render(request, "movies/movie_detail.html", context)
 
 
@@ -60,7 +60,7 @@ class CastMemberDetailsView(BaseView):
 
     def get(self, request: HttpRequest, pk: int) -> HttpResponse:
         cast_member = get_object_or_404(Cast, pk=pk)
-        context = services.GetCastDetail.execute({"member": cast_member.id})
+        context = services.GetCastDetail.execute({"member": cast_member.pk})
         return render(request, "movies/cast_detail.html", context)
 
 
@@ -81,7 +81,7 @@ class RandomMovieView(BaseView):
 
     def get(self, request: HttpRequest) -> HttpResponse:
         movie = services.ger_random_movie()
-        context = services.GetMovieDetail.execute({"movie": movie.id})
+        context = services.GetMovieDetail.execute({"movie": movie.pk})
         return render(request, "movies/movie_detail.html", context)
 
 
@@ -92,7 +92,7 @@ class AddFavoriteMovieView(View):
 
     def post(self, request: HttpRequest, pk: int) -> HttpResponse:
         if is_ajax(request=request):
-            services.add_favorite_movie(movie_id=pk, user_id=request.user.id)
+            services.add_favorite_movie(movie_id=pk, user_id=request.user.pk)
             return HttpResponse("success")
 
 
@@ -103,7 +103,7 @@ class AddWatchlistMovieView(View):
 
     def post(self, request: HttpRequest, pk: int) -> HttpResponse:
         if is_ajax(request=request):
-            services.add_watchlist_movie(movie_id=pk, user_id=request.user.id)
+            services.add_watchlist_movie(movie_id=pk, user_id=request.user.pk)
             return HttpResponse("success")
 
 
@@ -116,7 +116,7 @@ class MoviesOfCollectionView(FilterView):
     paginate_by = 30
     template_name = "movies/movie_list.html"
 
-    def get_collection(self):
+    def get_collection(self) -> Collection:
         return get_object_or_404(Collection, pk=self.kwargs["pk"])
 
     def get_queryset(self) -> QuerySet:
@@ -347,17 +347,16 @@ class CommentView(View):
     Adding comments to movies and series
     """
 
-    model = None
+    model: Movie | Cast | None = None
 
-    def post(self, request, pk: int) -> HttpResponse:
+    def post(self, request: HttpRequest, pk: int) -> HttpResponse:
+        _mutable = request.POST._mutable  # noqa: WPS122
+        request.POST._mutable = True  # type: ignore
+        request.POST["user"] = request.user  # type: ignore
+        request.POST._mutable = _mutable  # noqa: WPS121
 
-        _mutable = request.POST._mutable  # noqa: WPS122, WPS437
-        request.POST._mutable = True  # noqa: WPS437
-        request.POST["user"] = request.user
-        request.POST._mutable = _mutable  # noqa: WPS121, WPS437
-
-        obj = get_object_or_404(self.model, pk=pk)
-        services.add_comment(request_post=request.POST, content_object=obj)
+        obj: Movie | Cast = get_object_or_404(self.model, pk=pk)  # type: ignore
+        services.add_comment(post_request=request.POST, obj=obj)
         return redirect(f"{obj.get_absolute_url()}#comments")
 
 
@@ -366,11 +365,11 @@ class VoteView(View):
     Like/Dislike system
     """
 
-    model = None
-    vote_type = None
+    model: Movie | Cast | None = None
+    vote_type: int | None = None
 
-    def post(self, request, pk: int) -> HttpResponse:
-        obj = get_object_or_404(self.model, pk=pk)
+    def post(self, request: HttpRequest, pk: int) -> HttpResponse:
+        obj: Movie | Cast = get_object_or_404(self.model, pk=pk)  # type: ignore
         if is_ajax(request=request):
             context = services.add_vote(
                 user=request.user, vote_type=self.vote_type, obj=obj
