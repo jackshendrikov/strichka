@@ -61,7 +61,7 @@
 }
  @media (min-width: 576px) {
      .section__title {
-         font-size: 30px;
+         font-size: 28px;
     }
 }
  @media (min-width: 768px) {
@@ -69,7 +69,7 @@
          padding: 60px 0;
     }
      .section__title {
-         font-size: 32px;
+         font-size: 30px;
          margin-bottom: 35px;
     }
      .section__title--no-margin {
@@ -94,7 +94,7 @@
 }
  @media (min-width: 1200px) {
      .section__title {
-         font-size: 36px;
+         font-size: 34px;
     }
      .section__title--sidebar {
          font-size: 32px;

@@ -1,8 +1,10 @@
 $(document).ready(function() {
+    getPlatforms();
     getGenres();
     getCountries();
     getYears();
-    getPlatforms();
+    getAgeMarks();
+    getIMDbVotes();
 })
 
 function getGenres() {
@@ -91,6 +93,76 @@ function getYears() {
         },
         async: false
     });
+}
+
+function getIMDbVotes() {
+    let url = $("#imdb_votes").attr("url");
+    if (url) {
+        $.ajax({
+            method: 'GET',
+            url: url,
+            data: {},
+            success: function (result) {
+                let votesSlider = document.getElementById('filter__votes');
+                noUiSlider.create(votesSlider, {
+                    range: {
+                        'min': 0,
+                        'max': result["imdb_votes"]
+                    },
+                    step: 10000,
+                    connect: true,
+                    start: [30000, result["imdb_votes"]],
+                    format: {
+                        from: function (value) {
+                            return parseInt(value);
+                        },
+                        to: function (value) {
+                            return parseInt(value);
+                        }
+                    }
+                });
+                let votesValues = [
+                    document.getElementById('filter__votes-start'),
+                    document.getElementById('filter__votes-end')
+                ];
+                let inputVotesValues = [
+                    document.getElementById('imdb_votes-start'),
+                    document.getElementById('imdb_votes-end')
+                ];
+                votesSlider.noUiSlider.on('update', function (values, handle) {
+                    votesValues[handle].innerHTML = values[handle];
+                    inputVotesValues[handle].setAttribute("value", values[handle]);
+                });
+            },
+            error: function (response) {
+                console.log(response)
+            },
+            async: false
+        });
+    }
+}
+
+function getAgeMarks() {
+    let url = $("#age_marks").attr("url");
+
+    if (url) {
+        $.ajax({
+            method: 'GET',
+            url: url,
+            data: {},
+            success: function (result) {
+                let platforms_option = "<li data-value=''>Any</li>";
+                $.each(result["age_marks"], function (a, b) {
+                    platforms_option += `<li data-value='${b["age_mark"]}'>${b["age_mark"]}</li>`
+                });
+                $("#age_marks").html(platforms_option)
+            },
+            error: function (response) {
+                console.log(response)
+            },
+            async: false
+        });
+    }
 }
 
 function getPlatforms() {

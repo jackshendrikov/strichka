@@ -616,7 +616,7 @@
  .section__title {
      color: #fff;
      font-weight: 300;
-     font-size: 28px;
+     font-size: 26px;
      margin-bottom: 25px;
 }
  .section__title b {
@@ -624,7 +624,7 @@
 }
  @media (min-width: 1200px) {
      .section__title {
-         font-size: 36px;
+         font-size: 34px;
     }
 }
 /*============================== Card ==============================*/

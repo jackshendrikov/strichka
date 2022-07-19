@@ -5,6 +5,8 @@ from movies.models import Cast, Comment, Movie, Vote
 from movies.views import (
     AddFavoriteMovieView,
     AddWatchlistMovieView,
+    AdvancedSearchResultView,
+    AdvancedSearchView,
     CastMemberDetailsView,
     ClassicMoviesView,
     CollectionsView,
@@ -24,8 +26,10 @@ from movies.views import (
     RecentPremieresView,
     SearchMovieView,
     VoteView,
+    get_filter_age_mark,
     get_filter_countries,
     get_filter_genres,
+    get_filter_imdb_votes,
     get_filter_platforms,
     get_filter_year,
 )
@@ -79,6 +83,8 @@ vote_urlpatterns = [
 filter_urlpatterns = [
     path("countries/", get_filter_countries, name="get_countries"),
     path("years/", get_filter_year, name="get_years"),
+    path("imdb_votes/", get_filter_imdb_votes, name="get_imdb_votes"),
+    path("age_mark/", get_filter_age_mark, name="get_age_marks"),
     path("genres/", get_filter_genres, name="get_genres"),
     path("platforms/", get_filter_platforms, name="get_platforms"),
 ]
@@ -112,6 +118,14 @@ catalogs_urlpatterns = [
 urlpatterns = [
     path("", MoviesBaseView.as_view(), name="index"),
     path("search/", SearchMovieView.as_view(), name="movie_search"),
+    path(
+        "search/advanced/", AdvancedSearchView.as_view(), name="advanced_movie_search"
+    ),
+    path(
+        "search/advanced/results",
+        AdvancedSearchResultView.as_view(),
+        name="advanced_movie_search_result",
+    ),
     path("collections/", CollectionsView.as_view(), name="collections"),
     path("favorite/<int:pk>", AddFavoriteMovieView.as_view(), name="movie_favorite"),
     path("watchlist/<int:pk>", AddWatchlistMovieView.as_view(), name="movie_watchlist"),

@@ -124,6 +124,7 @@
                             <li class="dropdown header__nav-item">
                                 <a class="dropdown-toggle header__nav-link header__nav-link--more" href="" role="button" id="dropdownMenuMore" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="icon ion-ios-more"></i></a>
                                 <ul class="dropdown-menu header__dropdown-menu" aria-labelledby="dropdownMenuMore">
+                                    <li><a href="{% url 'advanced_movie_search' %}">Advanced Search</a></li>
                                     {% if user.is_authenticated %}
                                     <li><a href="{% url 'account_logout' %}">Log Out</a></li>
                                     {% else %}
@@ -207,6 +208,8 @@
 
 <!-- jquery main JS -->
 <script src="{% static 'js/libs/jquery.min.js' %}"></script>
+<!-- main JS -->
+<script src="{% static 'js/base.js' %}"></script>
 <!-- jquery more lines JS -->
 <script src="{% static 'js/libs/jquery.morelines.min.js' %}"></script>
 <!-- jquery mouse wheel JS -->
@@ -215,8 +218,6 @@
 <script src="{% static 'js/libs/bootstrap.bundle.min.js' %}"></script>
 <!-- owl carousel JS -->
 <script src="{% static 'js/libs/owl.carousel.min.js' %}"></script>
-<!-- main JS -->
-<script src="{% static 'js/base.js' %}"></script>
 
 {% block extra_js %}
 {% endblock extra_js %}

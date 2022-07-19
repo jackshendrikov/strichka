@@ -26,7 +26,7 @@
         <div class="row">
             <div class="col-12">
                 <div class="section__wrap">
-                    <h2 class="section__title">{{ page_title }}</h2>
+                    <h2 class="section__title">{{ page_title }} {% if objects_len %}({{ objects_len }} items){% endif %}</h2>
                     <ul class="breadcrumb">
                         <li class="breadcrumb__item"><a href="{% url 'index' %}">Home</a></li>
                         <li class="breadcrumb__item breadcrumb__item--active">{{ page_title }}</li>
@@ -166,7 +166,7 @@
                     {% for i in page_obj.paginator.page_range %}
                     {% if page_obj.number == i %}
                     <li class="paginator__item paginator__item--active"><a href="?{% url_replace request 'page' i %}">{{ i }}</a></li>
-                    {% elif page_obj.number > i|add:"-2" and page_obj.number < i|add:"+2"%}
+                    {% elif page_obj.number > i|add:"-4" and page_obj.number < i|add:"+4"%}
                     <li class="paginator__item"><a href="?{% url_replace request 'page' i %}">{{ i }}</a></li>
                     {% endif %}
                     {% endfor %}
@@ -217,14 +217,14 @@
 {% if user.is_authenticated %}
 <script src="{% static 'js/fav_watchlist.js' %}"></script>
 <script type="text/javascript">
-    $('.watchlist-btn').click(function() {
+    $(document).on("click", ".watchlist-btn", function(e) {
         handleFavWatch($(this), "added");
     });
 </script>
 {% else %}
 <script type="text/javascript">
-    $('.watchlist-btn').click(function() {
-        window.open("{% url 'account_login' %}", "_self");
+    $(document).on("click", ".watchlist-btn", function(e) {
+         window.open("{% url 'account_login' %}", "_self");
     });
 </script>
 {% endif %}

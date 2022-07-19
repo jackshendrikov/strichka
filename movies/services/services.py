@@ -211,6 +211,27 @@ class DataFilters:
         return list(genres)
 
     @staticmethod
+    def get_imdb_votes() -> int:
+        imdb_votes = (
+            Movie.objects.values_list("imdb_votes", flat=True)
+            .order_by("-imdb_votes")
+            .distinct()
+        )
+
+        return imdb_votes[0]
+
+    @staticmethod
+    def get_age_marks() -> list[dict[str, str]]:
+        age_marks = (
+            Movie.objects.values("age_mark")
+            .annotate(age_marks_count=Count("age_mark"))
+            .order_by("-age_marks_count")
+            .distinct()
+        )
+
+        return list(age_marks)
+
+    @staticmethod
     def get_platforms() -> list[dict[str, str]]:
         platforms = (
             StreamingPlatform.objects.values("service")

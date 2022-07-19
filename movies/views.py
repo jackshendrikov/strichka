@@ -9,7 +9,7 @@ from django_filters.views import FilterView
 from common.views import BaseView, is_ajax
 from movies.models import Cast, Collection, Movie
 from movies.services import services
-from movies.services.filters import MovieFilter, SearchFilter
+from movies.services.filters import AdvancedMovieFilter, MovieFilter, SearchFilter
 
 
 def error_403(request: HttpRequest, exception: type[Exception] = None) -> HttpResponse:
@@ -32,7 +32,7 @@ class MoviesBaseView(BaseView):
     def get(self, request: HttpRequest) -> HttpResponse:
         context = {
             "index_slider_movies": services.get_movies_slider(limit=12),
-            "best_movies": services.get_top_fantasy(limit=5),
+            "best_movies": services.get_top_fantasy(limit=3),
             "last_movies": services.get_new_movies_and_series(limit=18),
             "new_releases": services.get_recent_premieres(limit=18),
             "popular_movies": services.get_popular_movies(limit=18),
@@ -40,6 +40,13 @@ class MoviesBaseView(BaseView):
             "cinema_movies": services.get_cinema_movies(limit=6),
         }
         return render(request, "movies/index.html", context)
+
+
+class AdvancedSearchView(BaseView):
+    """Page for advanced search of movies."""
+
+    def get(self, request: HttpRequest) -> HttpResponse:
+        return render(request, "movies/adv_search.html")
 
 
 class MovieDetailsView(BaseView):
@@ -131,32 +138,6 @@ class MoviesOfCollectionView(FilterView):
         return context
 
 
-class SearchMovieView(FilterView):
-    """
-    Search movie view.
-    """
-
-    page_title = "Search Result"
-    filterset_class = SearchFilter
-    paginate_by = 30
-    template_name = "movies/movie_list.html"
-
-    def get_queryset(self) -> QuerySet:
-        search_request = self.request.GET
-
-        if search_request:
-            if ("q" in search_request) and search_request["q"].strip():
-                try:
-                    return services.search_movie(title=search_request["q"].strip())
-                except ValueError:
-                    raise Http404()
-
-    def get_context_data(self, **kwargs: Any) -> dict:
-        context = super().get_context_data(**kwargs)
-        context["page_title"] = self.page_title
-        return context
-
-
 class FilteredListView(FilterView):
     """
     Base view for specific movie collection pages.
@@ -170,7 +151,38 @@ class FilteredListView(FilterView):
     def get_context_data(self, **kwargs: Any) -> dict:
         context = super().get_context_data(**kwargs)
         context["page_title"] = self.page_title
+        context["objects_len"] = len(self.object_list)
         return context
+
+
+class SearchMovieView(FilterView):
+    """
+    Search movie view.
+    """
+
+    page_title = "Search Result"
+    filterset_class = SearchFilter
+    paginate_by = 30
+
+    def get_queryset(self) -> QuerySet:
+        search_request = self.request.GET
+
+        if search_request:
+            if ("q" in search_request) and search_request["q"].strip():
+                try:
+                    return services.search_movie(title=search_request["q"].strip())
+                except ValueError:
+                    raise Http404()
+
+
+class AdvancedSearchResultView(FilteredListView):
+    """Page for result of advanced search of movies."""
+
+    page_title = "Search Results"
+    filterset_class = AdvancedMovieFilter
+
+    def get_queryset(self) -> QuerySet:
+        return Movie.objects.all()
 
 
 class MoviesByYearView(FilteredListView):
@@ -328,6 +340,28 @@ def get_filter_genres(request: HttpRequest) -> JsonResponse:
     if request.method == "GET" and is_ajax(request=request):
         genres = services.DataFilters.get_genres()
         data = {"genres": genres}
+        return JsonResponse(data, status=200)
+
+
+def get_filter_imdb_votes(request: HttpRequest) -> JsonResponse:
+    """
+    Get IMDb votes from the DB.
+    """
+
+    if request.method == "GET" and is_ajax(request=request):
+        imdb_votes = services.DataFilters.get_imdb_votes()
+        data = {"imdb_votes": imdb_votes}
+        return JsonResponse(data, status=200)
+
+
+def get_filter_age_mark(request: HttpRequest) -> JsonResponse:
+    """
+    Get age marks from the DB.
+    """
+
+    if request.method == "GET" and is_ajax(request=request):
+        age_marks = services.DataFilters.get_age_marks()
+        data = {"age_marks": age_marks}
         return JsonResponse(data, status=200)
 
 
