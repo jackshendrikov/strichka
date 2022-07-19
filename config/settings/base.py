@@ -1,3 +1,4 @@
+import dj_database_url
 import os
 from dotenv import load_dotenv
 from pathlib import Path
@@ -170,3 +171,6 @@ EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 SERVER_EMAIL = os.getenv("EMAIL_HOST")
 DEFAULT_FROM_EMAIL = os.getenv("EMAIL_HOST")
+
+db_from_env = dj_database_url.config(conn_max_age=500)
+DATABASES["default"].update(db_from_env)
