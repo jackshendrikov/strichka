@@ -243,6 +243,11 @@ class DataFilters:
         return list(platforms)
 
 
+def get_all_movies() -> QuerySet:
+    """Get all movies in DB."""
+    return Movie.objects.distinct()
+
+
 def get_imdb_top() -> QuerySet:
     """
     Get top movies and series list according to IMDB.

@@ -7,6 +7,7 @@ from movies.views import (
     AddWatchlistMovieView,
     AdvancedSearchResultView,
     AdvancedSearchView,
+    AllMoviesView,
     CastMemberDetailsView,
     ClassicMoviesView,
     CollectionsView,
@@ -106,6 +107,7 @@ category_urlpatterns = [
 ]
 
 catalogs_urlpatterns = [
+    path("all/", AllMoviesView.as_view(), name="all-movies"),
     path("imdb-top/", MoviesByImdbRatingView.as_view(), name="imdb-top"),
     path("classic-movies/", ClassicMoviesView.as_view(), name="classic-movies"),
     path("popular-movies/", PopularMoviesView.as_view(), name="popular-movies"),

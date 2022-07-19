@@ -50,9 +50,7 @@ class AdvancedSearchView(BaseView):
 
 
 class MovieDetailsView(BaseView):
-    """
-    Detailed information about the movie.
-    """
+    """Detailed information about the movie."""
 
     def get(self, request: HttpRequest, pk: int) -> HttpResponse:
         movie = get_object_or_404(Movie, pk=pk)
@@ -61,9 +59,7 @@ class MovieDetailsView(BaseView):
 
 
 class CastMemberDetailsView(BaseView):
-    """
-    Detailed information about cast members.
-    """
+    """Detailed information about cast members."""
 
     def get(self, request: HttpRequest, pk: int) -> HttpResponse:
         cast_member = get_object_or_404(Cast, pk=pk)
@@ -72,9 +68,7 @@ class CastMemberDetailsView(BaseView):
 
 
 class CollectionsView(BaseView):
-    """
-    Detailed information about collections.
-    """
+    """Detailed information about collections."""
 
     def get(self, request: HttpRequest) -> HttpResponse:
         context = {"collections": services.get_collections()}
@@ -82,9 +76,7 @@ class CollectionsView(BaseView):
 
 
 class RandomMovieView(BaseView):
-    """
-    Detailed information about random movie.
-    """
+    """Detailed information about random movie."""
 
     def get(self, request: HttpRequest) -> HttpResponse:
         movie = services.ger_random_movie()
@@ -93,9 +85,7 @@ class RandomMovieView(BaseView):
 
 
 class AddFavoriteMovieView(View):
-    """
-    Add movie in User favorite list
-    """
+    """Add movie in User favorite list."""
 
     def post(self, request: HttpRequest, pk: int) -> HttpResponse:
         if is_ajax(request=request):
@@ -104,9 +94,7 @@ class AddFavoriteMovieView(View):
 
 
 class AddWatchlistMovieView(View):
-    """
-    Add movie in User watchlist list
-    """
+    """Add movie in User watchlist."""
 
     def post(self, request: HttpRequest, pk: int) -> HttpResponse:
         if is_ajax(request=request):
@@ -115,9 +103,7 @@ class AddWatchlistMovieView(View):
 
 
 class MoviesOfCollectionView(FilterView):
-    """
-    Displaying a list of movies of a certain collection.
-    """
+    """Displaying a list of movies of a certain collection."""
 
     filterset_class = MovieFilter
     paginate_by = 30
@@ -139,9 +125,7 @@ class MoviesOfCollectionView(FilterView):
 
 
 class FilteredListView(FilterView):
-    """
-    Base view for specific movie collection pages.
-    """
+    """Base view for specific movie collection pages."""
 
     page_title = ""
     filterset_class = MovieFilter
@@ -155,10 +139,17 @@ class FilteredListView(FilterView):
         return context
 
 
+class AllMoviesView(FilteredListView):
+    """All movies view"""
+
+    page_title = "All Movies"
+
+    def get_queryset(self) -> QuerySet:
+        return services.get_all_movies()
+
+
 class SearchMovieView(FilterView):
-    """
-    Search movie view.
-    """
+    """Search movie view."""
 
     page_title = "Search Result"
     filterset_class = SearchFilter
@@ -175,14 +166,11 @@ class SearchMovieView(FilterView):
                     raise Http404()
 
 
-class AdvancedSearchResultView(FilteredListView):
+class AdvancedSearchResultView(AllMoviesView):
     """Page for result of advanced search of movies."""
 
     page_title = "Search Results"
     filterset_class = AdvancedMovieFilter
-
-    def get_queryset(self) -> QuerySet:
-        return Movie.objects.all()
 
 
 class MoviesByYearView(FilteredListView):
@@ -203,9 +191,7 @@ class MoviesByYearView(FilteredListView):
 
 
 class MoviesByCountryView(FilteredListView):
-    """
-    List of movies released in specific country.
-    """
+    """List of movies released in specific country."""
 
     page_title = "Movies by Country"
 
@@ -220,9 +206,7 @@ class MoviesByCountryView(FilteredListView):
 
 
 class MoviesByGenreView(FilteredListView):
-    """
-    List of movies in specific genre.
-    """
+    """List of movies in specific genre."""
 
     page_title = "Movies by Genre"
 
@@ -237,72 +221,56 @@ class MoviesByGenreView(FilteredListView):
 
 
 class MoviesByImdbRatingView(FilteredListView):
-    """
-    Top list of movies and series according to IMDB.
-    """
+    """Top list of movies and series according to IMDB."""
 
     page_title = "Movies by IMDB Rate"
     queryset = services.get_imdb_top()
 
 
 class ClassicMoviesView(FilteredListView):
-    """
-    Top classic movies.
-    """
+    """Top classic movies."""
 
     page_title = "TOP Classic movies"
     queryset = services.get_top_classics()
 
 
 class PopularMoviesView(FilteredListView):
-    """
-    List of popular movies.
-    """
+    """List of popular movies."""
 
     page_title = "Popular movies"
     queryset = services.get_popular_movies()
 
 
 class PopularSeriesView(FilteredListView):
-    """
-    List of popular series.
-    """
+    """List of popular series."""
 
     page_title = "Popular series"
     queryset = services.get_popular_series()
 
 
 class RecentPremieresView(FilteredListView):
-    """
-    Recent movie and series premieres.
-    """
+    """Recent movie and series premieres."""
 
     page_title = "Recent premieres"
     queryset = services.get_recent_premieres()
 
 
 class NewMoviesSeriesView(FilteredListView):
-    """
-    New movies and series.
-    """
+    """New movies and series."""
 
     page_title = "New movies"
     queryset = services.get_new_movies_and_series()
 
 
 class MoviesMonthView(FilteredListView):
-    """
-    List movies of the month.
-    """
+    """List movies of the month."""
 
-    page_title = "Movies of the month"
+    page_title = "Movies of the Month"
     queryset = services.get_movie_of_month()
 
 
 def get_filter_countries(request: HttpRequest) -> JsonResponse:
-    """
-    Get all the countries from the DB.
-    """
+    """Get all the countries from the DB."""
 
     if request.method == "GET" and is_ajax(request=request):
         countries = services.DataFilters.get_countries()
@@ -311,9 +279,7 @@ def get_filter_countries(request: HttpRequest) -> JsonResponse:
 
 
 def get_filter_categories(request: HttpRequest) -> JsonResponse:
-    """
-    Get all the categories from the DB.
-    """
+    """Get all the categories from the DB."""
 
     if request.method == "GET" and is_ajax(request=request):
         categories = services.DataFilters.get_categories()
@@ -322,9 +288,7 @@ def get_filter_categories(request: HttpRequest) -> JsonResponse:
 
 
 def get_filter_year(request: HttpRequest) -> JsonResponse:
-    """
-    Get all the years from the DB.
-    """
+    """Get all the years from the DB."""
 
     if request.method == "GET" and is_ajax(request=request):
         years = services.DataFilters.get_years()
@@ -333,9 +297,7 @@ def get_filter_year(request: HttpRequest) -> JsonResponse:
 
 
 def get_filter_genres(request: HttpRequest) -> JsonResponse:
-    """
-    Get all the genres from the DB.
-    """
+    """Get all the genres from the DB."""
 
     if request.method == "GET" and is_ajax(request=request):
         genres = services.DataFilters.get_genres()
@@ -344,9 +306,7 @@ def get_filter_genres(request: HttpRequest) -> JsonResponse:
 
 
 def get_filter_imdb_votes(request: HttpRequest) -> JsonResponse:
-    """
-    Get IMDb votes from the DB.
-    """
+    """Get IMDb votes from the DB."""
 
     if request.method == "GET" and is_ajax(request=request):
         imdb_votes = services.DataFilters.get_imdb_votes()
@@ -355,9 +315,7 @@ def get_filter_imdb_votes(request: HttpRequest) -> JsonResponse:
 
 
 def get_filter_age_mark(request: HttpRequest) -> JsonResponse:
-    """
-    Get age marks from the DB.
-    """
+    """Get age marks from the DB."""
 
     if request.method == "GET" and is_ajax(request=request):
         age_marks = services.DataFilters.get_age_marks()
@@ -366,9 +324,7 @@ def get_filter_age_mark(request: HttpRequest) -> JsonResponse:
 
 
 def get_filter_platforms(request: HttpRequest) -> JsonResponse:
-    """
-    Get all the platforms from the DB.
-    """
+    """Get all the platforms from the DB."""
 
     if request.method == "GET" and is_ajax(request=request):
         platforms = services.DataFilters.get_platforms()
@@ -377,9 +333,7 @@ def get_filter_platforms(request: HttpRequest) -> JsonResponse:
 
 
 class CommentView(View):
-    """
-    Adding comments to movies and series
-    """
+    """Adding comments to movies and series."""
 
     model: Movie | Cast | None = None
 
@@ -395,9 +349,7 @@ class CommentView(View):
 
 
 class VoteView(View):
-    """
-    Like/Dislike system
-    """
+    """Like/Dislike system."""
 
     model: Movie | Cast | None = None
     vote_type: int | None = None
