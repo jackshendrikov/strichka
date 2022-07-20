@@ -323,6 +323,8 @@ class StreamingPlatform(StrichkaBaseModel):
         verbose_name = "Streaming platform"
         verbose_name_plural = "Streaming platforms"
 
+        unique_together = ("service", "movie")
+
     def __str__(self) -> str:
         return self.service
 

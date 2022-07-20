@@ -123,7 +123,7 @@ class MovieAdmin(
         "total_seasons",
     ) + StrichkaBaseModelAdmin.list_display  # type: ignore
     list_filter = ("year", "country", "age_mark", "is_movie")
-    list_editable = ("title", "keywords", "is_movie")
+    list_editable = ("title", "runtime", "keywords", "age_mark", "is_movie")
     search_fields = ("imdb_id", "title", "year", "country__name")
     ordering = ["-release", "-imdb_votes", "-imdb_rate"]
 
