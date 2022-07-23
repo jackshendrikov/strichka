@@ -166,29 +166,29 @@
                     {% for i in page_obj.paginator.page_range %}
                     {% if page_obj.number == i %}
                     <li class="paginator__item paginator__item--active"><a href="?{% url_replace request 'page' i %}">{{ i }}</a></li>
-                    {% elif page_obj.number > i|add:"-4" and page_obj.number < i|add:"+4"%}
+                    {% elif page_obj.number > i|add:"-2" and page_obj.number < i|add:"+2"%}
                     <li class="paginator__item"><a href="?{% url_replace request 'page' i %}">{{ i }}</a></li>
                     {% endif %}
                     {% endfor %}
                     {% if page_obj.has_next %}
                     <li class="paginator__item paginator__item--next">
-                        <a href="?{% url_replace request 'page' movieItems.next_page_number %}"><i class="icon ion-ios-arrow-forward"></i></a>
+                        <a href="?{% url_replace request 'page' page_obj.next_page_number %}"><i class="icon ion-ios-arrow-forward"></i></a>
                     </li>
                     {% endif %}
                 </ul>
             </div>
             {% endif %}
-            {% if page_obj.has_next %}
-            <div class="justify-content-center loading my-4">
-                <div class="spinner-grow text-warning" role="status">
-                    <span class="sr-only">Loading...</span>
-                </div>
-            </div>
-            <div class="col-12">
-                <a href="?{% url_replace request 'page' page_obj.next_page_number %}" class="infinite-more-link"></a>
-            </div>
-            {% endif %}
         </div>
+        {% if page_obj.has_next %}
+        <div class="col-12">
+            <div class="more-loader">
+                <div class="dot dot1"></div>
+                <div class="dot dot2"></div>
+                <div class="dot dot3"></div>
+            </div>
+            <a id="addMore" href="?{% url_replace request 'page' page_obj.next_page_number %}" class="section__btn infinite-more-link">Show More</a>
+        </div>
+        {% endif %}
     </div>
 </div>
 {% endblock %}
@@ -197,20 +197,17 @@
 <script src="{% static 'js/libs/jquery.mCustomScrollbar.min.js' %}"></script>
 <!-- nouislider js -->
 <script src="{% static 'js/libs/nouislider.min.js' %}"></script>
-<!-- jquery waypoints -->
-<script type="text/javascript" src="{% static 'js/libs/jquery.waypoints.min.js' %}"></script>
 <!-- infinity scroll  -->
-<script type="text/javascript" src="{% static 'js/libs/infinite.min.js' %}"></script>
+<script src="{% static 'js/libs/infinite-scroll.min.js' %}"></script>
 <script type="text/javascript">
-    let infinite = new Waypoint.Infinite({
-        element: $('.infinite-container')[0],
-        onBeforePageLoad: function () {
-        $('.loading').show();
-      },
-        onAfterPageLoad: function ($items) {
-        $('.loading').hide();
-      }
-    });
+$('.infinite-container').infiniteScroll({
+    path: '.infinite-more-link',
+    append: '.infinite-item',
+    button: '.infinite-more-link',
+    scrollThreshold: false,
+    history: false,
+    status: '.more-loader',
+});
 </script>
 <script src="{% static 'js/filters.js' %}"></script>
 <script src="{% static 'js/movie_list.js' %}"></script>

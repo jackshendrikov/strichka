@@ -638,9 +638,12 @@
      -webkit-transition: 0.4s ease;
      -moz-transition: 0.4s ease;
      transition: 0.4s ease;
+     border-radius: 10px;
 }
  .card__cover img {
      width: 100%;
+     border-radius: 10px;
+     box-shadow: 0 2px 4px, 0 4px 8px -1px, 0 8px 16px -2px, 0 16px 32px -4px, 0 32px 64px -8px, 0 64px 128px -16px;
 }
  .card__cover:before {
      content: '';
@@ -659,6 +662,7 @@
      -webkit-transition: 0.4s ease;
      -moz-transition: 0.4s ease;
      transition: 0.4s ease;
+     border-radius: 10px;
 }
  .card__cover:hover {
      -webkit-box-shadow: 0 0 20px 0 rgba(255,88,96,0.5);
@@ -809,6 +813,7 @@
      line-height: 25px;
      color: rgba(255,255,255,0.7);
      letter-spacing: 0.2px;
+     text-align: justify;
 }
  .card--details .card__list {
      display: inline-flex;

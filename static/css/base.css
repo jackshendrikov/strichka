@@ -576,6 +576,11 @@
      object-fit: cover;
      border: 3px solid rgba(255, 88, 96, 0.5);
 }
+  @media screen and (max-width: 350px) {
+     .header__sign-in {
+         display: none;
+    }
+}
  @media screen and (max-width: 450px) {
      .header-profile {
          padding: 0 5px 0 10px;
@@ -952,7 +957,7 @@
      background: -webkit-linear-gradient(45deg, #ff55a5 0%, #665ef1 100%);
      background: -ms-linear-gradient(45deg, #ff55a5 0%, #665ef1 100%);
      background: linear-gradient(45deg, #ff55a5 0%,#665ef1 100%);
-     border: 1px solid rgba(255, 75, 230, 0.5);
+     border: 1px solid rgba(80, 77, 77, 0.5);
 }
  .btn-acc .icon {
      border-right: 1px solid white;
@@ -986,7 +991,7 @@
     height: 40px;
     padding: 0;
     top: 0;
-    border-bottom-right-radius: 10px;
+    border-radius: 10px 0 10px 0;
     z-index: 5;
     background: -moz-linear-gradient(90deg, #c2c2c2 0%, #969696 100%);
     background: -webkit-linear-gradient(90deg, #c2c2c2 0%, #969696 100%);
@@ -1056,4 +1061,58 @@
             transform: translateX(50%) rotate(-55deg);
     top: 41%;
     width: 55%;
+}
+/*============================== More Loading ==============================*/
+#addMore {
+    margin: 0 auto;
+}
+.more-loader {
+    display: none;
+    position: relative;
+    height: 50px;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    vertical-align: middle;
+    margin: 10px 0;
+}
+.more-loader .dot {
+    width: 10px;
+    height: 10px;
+    background: #ff55a5;
+    border-radius: 50%;
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    top: calc(50% - 5px);
+}
+.more-loader .dot1 {
+    left: -40px;
+    -webkit-animation: dot-jump 0.5s cubic-bezier(0.77, 0.47, 0.64, 0.28) alternate infinite;
+    animation: dot-jump 0.5s cubic-bezier(0.77, 0.47, 0.64, 0.28) alternate infinite;
+}
+
+.more-loader .dot2 {
+    left: 0;
+    -webkit-animation: dot-jump 0.5s 0.2s cubic-bezier(0.77, 0.47, 0.64, 0.28) alternate infinite;
+    animation: dot-jump 0.5s 0.2s cubic-bezier(0.77, 0.47, 0.64, 0.28) alternate infinite;
+}
+
+.more-loader .dot3 {
+    left: 40px;
+    -webkit-animation: dot-jump 0.5s 0.4s cubic-bezier(0.77, 0.47, 0.64, 0.28) alternate infinite;
+    animation: dot-jump 0.5s 0.4s cubic-bezier(0.77, 0.47, 0.64, 0.28) alternate infinite;
+}
+
+@keyframes dot-jump {
+    0% {
+        -webkit-transform: translateY(0);
+        transform: translateY(0);
+    }
+    100% {
+        -webkit-transform: translateY(-15px);
+        transform: translateY(-15px);
+    }
 }
