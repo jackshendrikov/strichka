@@ -12,6 +12,7 @@ from django.shortcuts import get_object_or_404
 from random import choice
 from service_objects.services import Service
 
+from common.const import ALL_PLATFORMS_MAP
 from movies.forms import CommentForm
 from movies.models import (
     Cast,
@@ -102,8 +103,9 @@ class GetMovieDetail(Service):
         return movie.writers.all()
 
     @staticmethod
-    def _get_stream_platforms(movie: Movie) -> QuerySet:
-        return StreamingPlatform.objects.filter(movie=movie)
+    def _get_stream_platforms(movie: Movie) -> list[StreamingPlatform]:
+        services = StreamingPlatform.objects.filter(movie=movie)
+        return sorted(services, key=lambda x: ALL_PLATFORMS_MAP[x.service])
 
 
 class GetCastDetail(Service):
