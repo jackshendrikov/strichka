@@ -1,4 +1,10 @@
 /*============================== Details ==============================*/
+ @media (max-width: 576px) {
+    .card__cover {
+        display: table;
+        margin: 0 auto;
+    }
+}
  .section--bg:before {
      content: '';
      position: absolute;
