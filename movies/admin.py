@@ -149,7 +149,7 @@ class StreamingPlatformAdmin(
     PreservePreviousFormInputsMixin, CustomExportMixin, StrichkaBaseModelAdmin
 ):
     resource_class = StreamingPlatformResource
-    list_per_page = 50
+    list_per_page = 100
 
     preserve_inputs_fields = {"service", "video_format", "purchase_type"}
 
