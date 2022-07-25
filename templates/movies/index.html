@@ -14,12 +14,12 @@
         <div class="index-slider-area-slider owl-carousel owl-theme">
             {% for movie in best_movies %}
             <div class="row index-slider-area-slide">
-                <div class="col-lg-6 col-md-5">
+                <div class="col-lg-5 col-md-5">
                     <div class="index-slider-area-content">
                         <img src="{{ movie.poster }}" alt="{{ movie.title }}" />
                     </div>
                 </div>
-                <div class="col-lg-6 col-md-7">
+                <div class="col-lg-7 col-md-7">
                     <div class="index-slider-area-content pr-50">
                         <h2 class="index-slider-area-h2">{{ movie.title }}</h2>
                         <div class="review">
@@ -46,13 +46,6 @@
                                 </a>
                             </div>
                             {% endfor %}
-                            {% for writer in movie.writers.all %}
-                            <div class="single-slide-cast">
-                                <a href="{{ writer.get_absolute_url }}">
-                                    <img src="{{ writer.photo }}" alt="{{ writer.full_name }}" />
-                                </a>
-                            </div>
-                            {% endfor %}
                         </div>
                         <div class="slide-trailor">
                             <a class="read-more-btn read-more-btn2" href="{{ movie.get_absolute_url }}"><i class="icon ion-md-bookmark"></i>  Read More</a>
@@ -65,12 +58,12 @@
         <div class="index-slider-area-thumb">
             <div class="thumb-prev">
                 <div class="row index-slider-area-slide">
-                    <div class="col-lg-6 col-md-5">
+                    <div class="col-lg-5 col-md-5">
                         <div class="index-slider-area-content">
                             <img src="{{ best_movies.2.poster }}" alt="{{ best_movies.2.title }}" />
                         </div>
                     </div>
-                    <div class="col-lg-6 col-md-7">
+                    <div class="col-lg-7 col-md-7">
                         <div class="index-slider-area-content pr-50">
                             <h2 class="index-slider-area-h2">{{ best_movies.2.title }}</h2>
                             <div class="review">
@@ -98,12 +91,12 @@
             </div>
             <div class="thumb-next">
                 <div class="row index-slider-area-slide">
-                    <div class="col-lg-6 col-md-5">
+                    <div class="col-lg-5 col-md-5">
                         <div class="index-slider-area-content">
                             <img src="{{ best_movies.1.poster }}" alt="{{ best_movies.1.title }}" />
                         </div>
                     </div>
-                    <div class="col-lg-6 col-md-7">
+                    <div class="col-lg-7 col-md-7">
                         <div class="index-slider-area-content pr-50">
                             <h2 class="index-slider-area-h2">{{ best_movies.1.title }}</h2>
                             <div class="review">

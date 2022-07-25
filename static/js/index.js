@@ -1,8 +1,8 @@
 $(document).ready(function() {
     "use strict";
 
-    let heroSlider = $('.index-slider-area-slider');
-    heroSlider.owlCarousel({
+    let indexSlider = $('.index-slider-area-slider');
+    indexSlider.owlCarousel({
         dots: true,
         loop: true,
         autoplay: false,
@@ -14,7 +14,7 @@ $(document).ready(function() {
             }
         }
     });
-    heroSlider.on('changed.owl.carousel', function(property) {
+    indexSlider.on('changed.owl.carousel', function(property) {
         let current = property.item.index;
         let prevRating = $(property.target).find(".owl-item").eq(current).prev().find('.index-slider-area-slide').html();
         let nextRating = $(property.target).find(".owl-item").eq(current).next().find('.index-slider-area-slide').html();
@@ -22,11 +22,11 @@ $(document).ready(function() {
         $('.thumb-next .index-slider-area-slide').html(nextRating);
     });
     $('.thumb-next').on('click', function() {
-        heroSlider.trigger('next.owl.carousel', [300]);
+        indexSlider.trigger('next.owl.carousel', [300]);
         return false;
     });
     $('.thumb-prev').on('click', function() {
-        heroSlider.trigger('prev.owl.carousel', [300]);
+        indexSlider.trigger('prev.owl.carousel', [300]);
         return false;
     });
 
