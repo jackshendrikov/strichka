@@ -156,14 +156,15 @@
             </div>
             <div class="col-12 col-xl-6">
                 <div class="accordion" id="accordion">
+                    {% for country, services in platforms.items %}
                     <div class="accordion__card">
-                        <div class="card-header" id="headingOne">
-                            <button type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                            <span>Available on platforms:</span>
-                            <span>{{ platforms|length }} streaming platforms in total.</span>
+                        <div class="card-header" id="heading{{ country }}">
+                            <button type="button" data-toggle="collapse" data-target="#collapse{{ country }}" aria-expanded="false" aria-controls="collapse{{ country }}">
+                            <span><img class="service-flag" src="{% static 'img/country/'|add:country|lower|add:'.ico' %}" alt="{{ country }} Flag"> Available {% if country != "Global" %}in{% endif %} <strong>{{ country }}</strong> on platforms:</span>
+                            <span><strong>{{ services|length }}</strong> streaming platforms in total.</span>
                             </button>
                         </div>
-                        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                        <div id="collapse{{ country }}" class="collapse" aria-labelledby="heading{{ country }}" data-parent="#accordion">
                             <div class="card-body">
                                 <table class="accordion__list">
                                     <thead>
@@ -174,7 +175,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {% for platform in platforms %}
+                                        {% for platform in services %}
                                         <tr>
                                             <th><a href="{{ platform.url }}" class="service-name"><img class="service-icon" src="{% static 'img/services/'|add:platform.service|add:'.ico' %}" alt="{{ platform.service }} Icon">{{ platform.service }}</a></th>
                                             <td class="video-types">
@@ -198,6 +199,7 @@
                             </div>
                         </div>
                     </div>
+                    {% endfor %}
                 </div>
             </div>
         </div>

@@ -37,10 +37,10 @@
      width: 160px;
      -webkit-border-radius: 4px;
      border-radius: 4px;
-     background-image: -moz-linear-gradient(90deg, #ff55a5 0%, #ff5860 100%);
-     background-image: -webkit-linear-gradient(90deg, #ff55a5 0%, #ff5860 100%);
-     background-image: -ms-linear-gradient(90deg, #ff55a5 0%, #ff5860 100%);
-     background-image: linear-gradient(90deg, #ff55a5 0%, #ff5860 100%);
+     background-image: -moz-linear-gradient(225deg,#f14b44,#c33253 50%,#8e4083);
+     background-image: -webkit-linear-gradient(225deg,#f14b44,#c33253 50%,#8e4083);
+     background-image: -ms-linear-gradient(225deg,#f14b44,#c33253 50%,#8e4083);
+     background-image: linear-gradient(225deg,#f14b44,#c33253 50%,#8e4083);
      -webkit-box-shadow: 0 0 20px 0 rgba(255,88,96,0.5);
      box-shadow: 0 0 20px 0 rgba(255,88,96,0.5);
      opacity: 0.85;
@@ -79,10 +79,10 @@
      right: 0;
      height: 2px;
      display: block;
-     background-image: -moz-linear-gradient(90deg, #ff55a5 0%, #ff5860 100%);
-     background-image: -webkit-linear-gradient(90deg, #ff55a5 0%, #ff5860 100%);
-     background-image: -ms-linear-gradient(90deg, #ff55a5 0%, #ff5860 100%);
-     background-image: linear-gradient(90deg, #ff55a5 0%, #ff5860 100%);
+     background-image: -moz-linear-gradient(225deg,#f14b44,#c33253 50%,#8e4083);
+     background-image: -webkit-linear-gradient(225deg,#f14b44,#c33253 50%,#8e4083);
+     background-image: -ms-linear-gradient(225deg,#f14b44,#c33253 50%,#8e4083);
+     background-image: linear-gradient(225deg,#f14b44,#c33253 50%,#8e4083);
      -webkit-box-shadow: 0 0 20px 0 rgba(255,88,96,0.5);
      box-shadow: 0 0 20px 0 rgba(255,88,96,0.5);
 }
@@ -312,10 +312,10 @@
      right: 0;
      height: 2px;
      display: block;
-     background-image: -moz-linear-gradient(90deg, #ff55a5 0%, #ff5860 100%);
-     background-image: -webkit-linear-gradient(90deg, #ff55a5 0%, #ff5860 100%);
-     background-image: -ms-linear-gradient(90deg, #ff55a5 0%, #ff5860 100%);
-     background-image: linear-gradient(90deg, #ff55a5 0%, #ff5860 100%);
+     background-image: -moz-linear-gradient(225deg,#f14b44,#c33253 50%,#8e4083);
+     background-image: -webkit-linear-gradient(225deg,#f14b44,#c33253 50%,#8e4083);
+     background-image: -ms-linear-gradient(225deg,#f14b44,#c33253 50%,#8e4083);
+     background-image: linear-gradient(225deg,#f14b44,#c33253 50%,#8e4083);
      -webkit-box-shadow: 0 0 20px 0 rgba(255,88,96,0.5);
      box-shadow: 0 0 20px 0 rgba(255,88,96,0.5);
 }
@@ -355,10 +355,10 @@
      width: 140px;
      -webkit-border-radius: 4px;
      border-radius: 4px;
-     background-image: -moz-linear-gradient(90deg, #ff55a5 0%, #ff5860 100%);
-     background-image: -webkit-linear-gradient(90deg, #ff55a5 0%, #ff5860 100%);
-     background-image: -ms-linear-gradient(90deg, #ff55a5 0%, #ff5860 100%);
-     background-image: linear-gradient(90deg, #ff55a5 0%, #ff5860 100%);
+     background-image: -moz-linear-gradient(225deg,#f14b44,#c33253 50%,#8e4083);
+     background-image: -webkit-linear-gradient(225deg,#f14b44,#c33253 50%,#8e4083);
+     background-image: -ms-linear-gradient(225deg,#f14b44,#c33253 50%,#8e4083);
+     background-image: linear-gradient(225deg,#f14b44,#c33253 50%,#8e4083);
      -webkit-box-shadow: 0 0 20px 0 rgba(255,88,96,0.5);
      box-shadow: 0 0 20px 0 rgba(255,88,96,0.5);
      opacity: 0.85;
@@ -456,10 +456,10 @@
      border: none;
 }
  .noUi-connect {
-     background-image: -moz-linear-gradient(90deg, #ff55a5 0%, #ff5860 100%);
-     background-image: -webkit-linear-gradient(90deg, #ff55a5 0%, #ff5860 100%);
-     background-image: -ms-linear-gradient(90deg, #ff55a5 0%, #ff5860 100%);
-     background-image: linear-gradient(90deg, #ff55a5 0%, #ff5860 100%);
+     background-image: -moz-linear-gradient(225deg,#f14b44,#c33253 50%,#8e4083);
+     background-image: -webkit-linear-gradient(225deg,#f14b44,#c33253 50%,#8e4083);
+     background-image: -ms-linear-gradient(225deg,#f14b44,#c33253 50%,#8e4083);
+     background-image: linear-gradient(225deg,#f14b44,#c33253 50%,#8e4083);
 }
  .noUi-handle {
      border: none;
@@ -574,10 +574,10 @@
      color: #fff;
      cursor: default;
      font-weight: 500;
-     background-image: -moz-linear-gradient(90deg, #ff55a5 0%, #ff5860 100%);
-     background-image: -webkit-linear-gradient(90deg, #ff55a5 0%, #ff5860 100%);
-     background-image: -ms-linear-gradient(90deg, #ff55a5 0%, #ff5860 100%);
-     background-image: linear-gradient(90deg, #ff55a5 0%, #ff5860 100%);
+     background-image: -moz-linear-gradient(225deg,#f14b44,#c33253 50%,#8e4083);
+     background-image: -webkit-linear-gradient(225deg,#f14b44,#c33253 50%,#8e4083);
+     background-image: -ms-linear-gradient(225deg,#f14b44,#c33253 50%,#8e4083);
+     background-image: linear-gradient(225deg,#f14b44,#c33253 50%,#8e4083);
      -webkit-box-shadow: 0 0 20px 0 rgba(255,88,96,0.5);
      box-shadow: 0 0 20px 0 rgba(255,88,96,0.5);
 }

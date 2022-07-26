@@ -1,5 +1,6 @@
 import locale
 import logging
+from collections import defaultdict
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 from django.contrib.auth.base_user import AbstractBaseUser
@@ -12,7 +13,7 @@ from django.shortcuts import get_object_or_404
 from random import choice
 from service_objects.services import Service
 
-from common.const import ALL_PLATFORMS_MAP
+from common.const import ALL_PLATFORMS_MAP, COUNTRY_PLATFORMS_MAP
 from movies.forms import CommentForm
 from movies.models import (
     Cast,
@@ -103,9 +104,17 @@ class GetMovieDetail(Service):
         return movie.writers.all()
 
     @staticmethod
-    def _get_stream_platforms(movie: Movie) -> list[StreamingPlatform]:
+    def _get_stream_platforms(movie: Movie) -> dict[str, list[StreamingPlatform]]:
         services = StreamingPlatform.objects.filter(movie=movie)
-        return sorted(services, key=lambda x: ALL_PLATFORMS_MAP[x.service])
+        services = sorted(services, key=lambda x: ALL_PLATFORMS_MAP[x.service])
+        service_map = defaultdict(list)
+        for country, platforms in COUNTRY_PLATFORMS_MAP.items():
+            for item in services:
+                if item.service in platforms:
+                    service_map[country].append(item)
+                    services.remove(item)
+        service_map.default_factory = None
+        return service_map
 
 
 class GetCastDetail(Service):

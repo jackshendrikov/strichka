@@ -442,10 +442,10 @@
      right: 0;
      height: 2px;
      display: block;
-     background-image: -moz-linear-gradient(90deg, #ff55a5 0%, #ff5860 100%);
-     background-image: -webkit-linear-gradient(90deg, #ff55a5 0%, #ff5860 100%);
-     background-image: -ms-linear-gradient(90deg, #ff55a5 0%, #ff5860 100%);
-     background-image: linear-gradient(90deg, #ff55a5 0%, #ff5860 100%);
+     background-image: -moz-linear-gradient(225deg,#f14b44,#c33253 50%,#8e4083);
+     background-image: -webkit-linear-gradient(225deg,#f14b44,#c33253 50%,#8e4083);
+     background-image: -ms-linear-gradient(225deg,#f14b44,#c33253 50%,#8e4083);
+     background-image: linear-gradient(225deg,#f14b44,#c33253 50%,#8e4083);
      -webkit-box-shadow: 0 0 20px 0 rgba(255,88,96,0.5);
      box-shadow: 0 0 20px 0 rgba(255,88,96,0.5);
 }
@@ -559,10 +559,10 @@
      right: 0;
      height: 2px;
      display: block;
-     background-image: -moz-linear-gradient(90deg, #ff55a5 0%, #ff5860 100%);
-     background-image: -webkit-linear-gradient(90deg, #ff55a5 0%, #ff5860 100%);
-     background-image: -ms-linear-gradient(90deg, #ff55a5 0%, #ff5860 100%);
-     background-image: linear-gradient(90deg, #ff55a5 0%, #ff5860 100%);
+     background-image: -moz-linear-gradient(225deg,#f14b44,#c33253 50%,#8e4083);
+     background-image: -webkit-linear-gradient(225deg,#f14b44,#c33253 50%,#8e4083);
+     background-image: -ms-linear-gradient(225deg,#f14b44,#c33253 50%,#8e4083);
+     background-image: linear-gradient(225deg,#f14b44,#c33253 50%,#8e4083);
      -webkit-box-shadow: 0 0 20px 0 rgba(255,88,96,0.5);
      box-shadow: 0 0 20px 0 rgba(255,88,96,0.5);
 }
@@ -626,10 +626,10 @@
          right: 0;
          height: 2px;
          display: block;
-         background-image: -moz-linear-gradient(90deg, #ff55a5 0%, #ff5860 100%);
-         background-image: -webkit-linear-gradient(90deg, #ff55a5 0%, #ff5860 100%);
-         background-image: -ms-linear-gradient(90deg, #ff55a5 0%, #ff5860 100%);
-         background-image: linear-gradient(90deg, #ff55a5 0%, #ff5860 100%);
+         background-image: -moz-linear-gradient(225deg,#f14b44,#c33253 50%,#8e4083);
+         background-image: -webkit-linear-gradient(225deg,#f14b44,#c33253 50%,#8e4083);
+         background-image: -ms-linear-gradient(225deg,#f14b44,#c33253 50%,#8e4083);
+         background-image: linear-gradient(225deg,#f14b44,#c33253 50%,#8e4083);
          -webkit-box-shadow: none;
          box-shadow: none;
          -webkit-transition: 0.4s ease;
@@ -715,10 +715,10 @@
      left: 0;
      right: 0;
      bottom: 0;
-     background-image: -moz-linear-gradient(90deg, #ff55a5 0%, #ff5860 100%);
-     background-image: -webkit-linear-gradient(90deg, #ff55a5 0%, #ff5860 100%);
-     background-image: -ms-linear-gradient(90deg, #ff55a5 0%, #ff5860 100%);
-     background-image: linear-gradient(90deg, #ff55a5 0%, #ff5860 100%);
+     background-image: -moz-linear-gradient(225deg,#f14b44,#c33253 50%,#8e4083);
+     background-image: -webkit-linear-gradient(225deg,#f14b44,#c33253 50%,#8e4083);
+     background-image: -ms-linear-gradient(225deg,#f14b44,#c33253 50%,#8e4083);
+     background-image: linear-gradient(225deg,#f14b44,#c33253 50%,#8e4083);
      z-index: 1;
      opacity: 0;
      -webkit-transition: 0.4s ease;
