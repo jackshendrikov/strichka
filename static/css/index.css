@@ -1,6 +1,10 @@
 @import url('https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,900');
 /*============================== Index Slider ==============================*/
- .index-slider-area {
+.index-slider-area .animated  {
+  -webkit-animation-duration: 2000ms;
+  animation-duration: 2000ms;
+}
+.index-slider-area {
      position: relative;
      background-image: url('../img/section/main.jpg');
      background-repeat: no-repeat;
@@ -37,7 +41,7 @@
  .index-slider-area-content > img {
      position: relative;
      margin-top: -80px;
-     box-shadow: 2px 2px 10px #09093f;
+     box-shadow: 2px 2px 10px #c6b090;
      border-radius: 10px;
 }
  .owl-item.active > .index-slider-area-slide > .col-md-5 > .index-slider-area-content > img {
@@ -229,11 +233,32 @@
          padding: 10px 20px;
     }
      .index-slider-area-slide {
-         margin-top: 130px;
+         margin: 90px 20px 0;
     }
      .index-slider-area-h2 {
-        padding-top: 10px;
+         padding-top: 10px;
+         font-size: 22px;
+         text-align: center;
     }
+     .index-slider-area-content h3 {
+         font-size: 22px;
+         margin-top: 5px;
+    }
+     .single-slide-cast {
+         margin: 0;
+     }
+     .index-slider-area-content .review {
+         margin: 5px 0 5px;
+         display: inline-flex;
+         justify-content: space-between;
+         width: 100%;
+     }
+     .slide-trailor {
+         display: flex;
+         margin-top: 15px;
+         justify-content: center;
+         padding-bottom: 0;
+     }
 }
  @media only screen and (max-width: 576px){
      .single-slide-cast {
@@ -247,12 +272,23 @@
      .index-slider-area-content .imdb-rate {
          float: none;
     }
+     .index-slider-area-content h2,
+     .index-slider-area-content p {
+         text-align: justify;
+     }
      .index-slider-area-content .review h4 {
          padding: 0;
     }
      .index-slider-area-content h2 {
-         font-size: 24px;
+         font-size: 20px;
          padding-bottom: 5px;
+    }
+     .index-slider-area-content h3 {
+         display: none;
+    }
+     .index-slider-area-content h4 {
+         line-height: unset;
+         font-size: 16px;
     }
      .index-slider-area-content.pr-50 {
          padding: 5px;
@@ -261,7 +297,29 @@
          float: none;
          margin: 0 0 8px;
     }
+     .single-slide-cast {
+        display: none;
+     }
+     .imdb-rate {
+         font-size: 16px;
+         padding-right: 5px;
+     }
+     .slide-trailor {
+         margin-top: 0;
+     }
 }
+ @media only screen and (max-width: 320px){
+     .index-slider-area-content h2 {
+         font-size: 16px;
+     }
+     .imdb-rate, .index-slider-area-content h4 {
+         font-size: 14px;
+     }
+     .read-more-btn {
+         padding: 4px 20px;
+         font-size: 14px;
+     }
+ }
 /*============================== season ==============================*/
  .season {
      margin-top: 20px;

@@ -563,7 +563,7 @@
     }
 }
  .service-name {
-     background-image: -webkit-linear-gradient(45deg, #7b2ad7 0%, #7a8cf3 100%);
+     background-image: -webkit-linear-gradient(45deg, #ff55a5 0%, #a2a2a2 100%);
      -webkit-background-clip: text;
      -webkit-text-fill-color: transparent;
 }

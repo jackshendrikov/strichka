@@ -3,16 +3,11 @@ $(document).ready(function() {
 
     let indexSlider = $('.index-slider-area-slider');
     indexSlider.owlCarousel({
-        dots: true,
+        dots: false,
         loop: true,
-        autoplay: false,
-        autoplayTimeout: 4000,
-        items: 1,
-        responsive: {
-            992: {
-                dots: false,
-            }
-        }
+        autoplay: true,
+        autoplayTimeout: 6000,
+        items: 1
     });
     indexSlider.on('changed.owl.carousel', function(property) {
         let current = property.item.index;
