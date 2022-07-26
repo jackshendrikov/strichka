@@ -9,13 +9,16 @@
     <meta name="author" content="JackShen">
 
     <meta property="og:site_name" content="{% block meta_sitename %}Strichka{% endblock %}">
-    <meta property="og:image:alt" content="Strichka Login" />
-    <meta property="og:image:width" content="{% block meta_image_width %}1200{% endblock %}" />
-    <meta property="og:image:height" content="{% block meta_image_height %}600{% endblock %}" />
-    <meta property="og:title" content="{% block meta_title %}Strichka{% endblock %}" />
+    <meta property="og:image:alt" content="Strichka UA: Account Settings" />
+    <meta property="og:image" content="https://i.imgur.com/KnYQmJ5.jpg" />
+    <meta property="og:image:width" content="{% block meta_image_width %}350{% endblock %}" />
+    <meta property="og:image:height" content="{% block meta_image_height %}350{% endblock %}" />
+    {% block metablock %}
+    <meta property="og:title" content="Strichka UA: Account Settings" />
+    {% endblock %}
     <meta property="og:type" content="website" />
 
-    <title>{% block title %}{% endblock %}</title>
+    <title>{% block title %}Strichka UA: Account Settings{% endblock %}</title>
     <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
 
     <!-- Main core CSS -->

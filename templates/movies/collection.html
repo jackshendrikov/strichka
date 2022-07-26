@@ -2,6 +2,15 @@
 {% load static %}
 {% block title %}Collections{% endblock %}
 
+{% block metablock %}
+<meta property="og:image" content="https://i.imgur.com/KnYQmJ5.jpg" />
+<meta property="og:image:alt" content="Stricka UA: Collections" />
+<meta property="og:image:width" content="350" />
+<meta property="og:image:height" content="350" />
+<meta property="og:title" content="Stricka UA: Collections" />
+<meta property="og:description" content="Find the best movie to watch for your mood with our specialized collections." />
+{% endblock %}
+
 {% block extrahead %}
 <link rel="stylesheet" href="{% static 'css/index.css' %}">
 <link rel="stylesheet" href="{% static 'css/collection.css' %}">

@@ -2,6 +2,15 @@
 {% load static %}
 {% block title %}Advanced Search{% endblock %}
 
+{% block metablock %}
+<meta property="og:image" content="https://i.imgur.com/KnYQmJ5.jpg" />
+<meta property="og:image:alt" content="Stricka UA: Advanced Search" />
+<meta property="og:image:width" content="350" />
+<meta property="og:image:height" content="350" />
+<meta property="og:title" content="Stricka UA: Advanced Search" />
+<meta property="og:description" content="Find the most suitable movie for you with our excellent advanced search form." />
+{% endblock %}
+
 {% block extrahead %}
 <link rel="stylesheet" href="{% static 'css/libs/jquery.mCustomScrollbar.min.css' %}">
 <link rel="stylesheet" href="{% static 'css/libs/nouislider.min.css' %}">
