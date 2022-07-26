@@ -112,7 +112,6 @@ class GetMovieDetail(Service):
             for item in services:
                 if item.service in platforms:
                     service_map[country].append(item)
-                    services.remove(item)
         service_map.default_factory = None
         return service_map
 
