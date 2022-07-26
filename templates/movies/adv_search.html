@@ -1,0 +1,188 @@
+{% extends 'movies/base.html' %}
+{% load static %}
+{% block title %}Advanced Search{% endblock %}
+
+{% block metablock %}
+<meta property="og:image" content="https://i.imgur.com/BXDCNXr.png" />
+<meta property="og:image:alt" content="Stricka UA: Advanced Search" />
+<meta property="og:image:width" content="350" />
+<meta property="og:image:height" content="350" />
+<meta property="og:title" content="Stricka UA: Advanced Search" />
+<meta property="og:description" content="Find the most suitable movie for you with our excellent advanced search form." />
+{% endblock %}
+
+{% block extrahead %}
+<link rel="stylesheet" href="{% static 'css/libs/jquery.mCustomScrollbar.min.css' %}">
+<link rel="stylesheet" href="{% static 'css/libs/nouislider.min.css' %}">
+<link rel="stylesheet" href="{% static 'css/index.css' %}">
+<link rel="stylesheet" href="{% static 'css/movie_list.css' %}">
+<link rel="stylesheet" href="{% static 'css/adv_search.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="section section--first section--bg" data-bg="{% static 'img/section/section.jpg' %}">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="section__wrap">
+                    <h2 class="section__title">Advanced Search</h2>
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb__item"><a href="{% url 'index' %}">Home</a></li>
+                        <li class="breadcrumb__item breadcrumb__item--active">Advanced Search</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="row">
+            <form class="adv_search__form" action="{% url 'advanced_movie_search_result' %}" method="GET" autocomplete="off">
+                <h3 class="form__title">Advanced Search</h3>
+                <div class="filter__filters">
+                    <div class="filter__item" id="filter__genre">
+                        <label for="genres" class="filter__item-label">Genre:</label>
+                        <div class="filter__item-btn dropdown-toggle" role="navigation" id="filter-genre" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <input type="hidden" name="genres" value="">
+                            <input type="button" value="Any Genre">
+                            <span></span>
+                        </div>
+                        <ul class="filter__item-menu dropdown-menu scrollbar-dropdown" id="genres" aria-labelledby="filter-genre" url="{% url 'get_genres' %}"></ul>
+                    </div>
+                    <div class="filter__item" id="filter__year">
+                        <span class="filter__item-label">Release Year:</span>
+                        <div class="filter__item-btn dropdown-toggle" role="button" id="filter-year" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <input type="hidden" name="year__gt" id="years-start">
+                            <input type="hidden" name="year__lt" id="years-end">
+                            <div class="filter__range">
+                                <div id="filter__years-start"></div>
+                                <div id="filter__years-end"></div>
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="filter__item-menu filter__item-menu--range dropdown-menu" id="years" name="year" aria-labelledby="filter-year" url="{% url 'get_years' %}">
+                            <div id="filter__years"></div>
+                        </div>
+                    </div>
+                    <div class="filter__item" id="filter__country">
+                        <span class="filter__item-label">Country:</span>
+                        <div class="filter__item-btn dropdown-toggle" role="navigation" id="filter-quality" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <input type="hidden" name="country" value="">
+                            <input type="button" value="Any Country">
+                            <span></span>
+                        </div>
+                        <ul class="filter__item-menu dropdown-menu scrollbar-dropdown" id="countries" aria-labelledby="filter-country" url="{% url 'get_countries' %}"></ul>
+                    </div>
+                    <div class="filter__item" id="filter__rate">
+                        <span class="filter__item-label">IMBd Rate:</span>
+                        <div class="filter__item-btn dropdown-toggle" role="button" id="filter-rate" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <input type="hidden" name="imdb_rate__gt" id="imbd-start">
+                            <input type="hidden" name="imdb_rate__lt" id="imbd-end">
+                            <div class="filter__range">
+                                <div id="filter__imbd-start"></div>
+                                <div id="filter__imbd-end"></div>
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="filter__item-menu filter__item-menu--range dropdown-menu" aria-labelledby="filter-rate">
+                            <div id="filter__imbd"></div>
+                        </div>
+                    </div>
+                    <div class="filter__item" id="filter__platforms">
+                        <label for="platforms" class="filter__item-label">Platform:</label>
+                        <div class="filter__item-btn dropdown-toggle" role="navigation" id="filter-platform" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <input type="hidden" name="platforms" value="">
+                            <input type="button" value="Any Platform">
+                            <span></span>
+                        </div>
+                        <ul class="filter__item-menu dropdown-menu scrollbar-dropdown" id="platforms" aria-labelledby="filter-genre" url="{% url 'get_platforms' %}"></ul>
+                    </div>
+                    <div class="filter__item" id="filter__vote">
+                        <span class="filter__item-label">IMDb Votes:</span>
+                        <div class="filter__item-btn dropdown-toggle" role="button" id="filter-votes" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <input type="hidden" name="imdb_vote__gt" id="imdb_votes-start">
+                            <input type="hidden" name="imdb_vote__lt" id="imdb_votes-end">
+                            <div class="filter__range">
+                                <div id="filter__votes-start"></div>
+                                <div id="filter__votes-end"></div>
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="filter__item-menu filter__item-menu--range dropdown-menu" id="imdb_votes" name="imdb_votes" aria-labelledby="filter-imdb_votes" url="{% url 'get_imdb_votes' %}">
+                            <div id="filter__votes"></div>
+                        </div>
+                    </div>
+                    <div class="filter__item" id="filter__age_mark">
+                        <label for="age_marks" class="filter__item-label">Age Mark:</label>
+                        <div class="filter__item-btn dropdown-toggle" role="navigation" id="filter-age_mark" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <input type="hidden" name="age_marks" value="">
+                            <input type="button" value="Any">
+                            <span></span>
+                        </div>
+                        <ul class="filter__item-menu dropdown-menu scrollbar-dropdown" id="age_marks" aria-labelledby="filter-age_mark" url="{% url 'get_age_marks' %}"></ul>
+                    </div>
+                    <div class="filter__item" id="filter__runtimes">
+                        <span class="filter__item-label">Runtime (minutes):</span>
+                        <div class="filter__item-btn dropdown-toggle" role="button" id="filter-runtime" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <input type="hidden" name="runtime__gt" id="runtime-start">
+                            <input type="hidden" name="runtime__lt" id="runtime-end">
+                            <div class="filter__range">
+                                <div id="filter__runtime-start"></div>
+                                <div id="filter__runtime-end"></div>
+                            </div>
+                            <span></span>
+                        </div>
+                        <div class="filter__item-menu filter__item-menu--range dropdown-menu" aria-labelledby="filter-runtime">
+                            <div id="filter__runtime"></div>
+                        </div>
+                    </div>
+                    <div class="filter__item__grid">
+                        <span class="filter__item-label">Cast Member:</span>
+                        <input type="text" name="cast" class="filter__input" placeholder="Cast member name..." autofocus="autofocus" minlength="5" maxlength="50">
+                    </div>
+                    <div class="filter__item__grid">
+                        <span class="filter__item-label">Keywords:</span>
+                        <input type="text" name="keywords" class="filter__input" placeholder="Type any keyword..." autofocus="autofocus" minlength="3" maxlength="50">
+                    </div>
+                </div>
+                <div class="filter__item" id="movie_type">
+                    <span class="filter__item-label">Type:</span>
+                    <div class="filter__switch-field">
+                        <input type="radio" id="radio-one" name="is_movie" value="True" checked/>
+                        <label for="radio-one">Movie</label>
+                        <input type="radio" id="radio-two" name="is_movie" value="False" />
+                        <label for="radio-two">Series</label>
+                    </div>
+                </div>
+                <div class="filter__item" id="sort_by">
+                    <span class="filter__item-label">Sort By:</span>
+                    <div class="filter__item-btn dropdown-toggle" role="navigation" id="filter-quality" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <input type="hidden" name="sort_by" value="-imdb_votes">
+                        <input type="button" value="IMDb Votes">
+                        <span></span>
+                    </div>
+                    <ul class="filter__item-menu dropdown-menu scrollbar-dropdown" aria-labelledby="order-by">
+                        <li data-value="-imdb_rate">IMDb Rate</li>
+                        <li data-value="-imdb_votes">IMDb Votes</li>
+                        <li data-value="-year">Year</li>
+                        <li data-value="-comments">Comments</li>
+                    </ul>
+                </div>
+                <button type="submit" class="filter__btn" id="filter-search">search movies!</button>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<!-- jquery custom scrollbar -->
+<script src="{% static 'js/libs/jquery.mCustomScrollbar.min.js' %}"></script>
+<!-- nouislider js -->
+<script src="{% static 'js/libs/nouislider.min.js' %}"></script>
+<script src="{% static 'js/filters.js' %}"></script>
+<script src="{% static 'js/movie_list.js' %}"></script>
+<script src="{% static 'js/adv_search.js' %}"></script>
+{% endblock extra_js %}

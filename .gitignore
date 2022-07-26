@@ -7,6 +7,7 @@ logs
 .env.production
 *.db
 db.sqlite3
-main/static
+staticfiles/
 !.gitkeep
 .coverage
+scripts/

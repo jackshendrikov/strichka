@@ -1,0 +1,69 @@
+{% extends 'movies/base.html' %}
+{% load static %}
+{% block title %}Collections{% endblock %}
+
+{% block metablock %}
+<meta property="og:image" content="https://i.imgur.com/BXDCNXr.png" />
+<meta property="og:image:alt" content="Stricka UA: Collections" />
+<meta property="og:image:width" content="350" />
+<meta property="og:image:height" content="350" />
+<meta property="og:title" content="Stricka UA: Collections" />
+<meta property="og:description" content="Find the best movie to watch for your mood with our specialized collections." />
+{% endblock %}
+
+{% block extrahead %}
+<link rel="stylesheet" href="{% static 'css/index.css' %}">
+<link rel="stylesheet" href="{% static 'css/collection.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="section section--first section--bg" data-bg="{% static 'img/section/section.jpg' %}" style="margin-bottom: 50px;">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="section__wrap">
+                    <h2 class="section__title">Collections</h2>
+
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb__item"><a href="{% url 'index' %}">Home</a></li>
+                        <li class="breadcrumb__item breadcrumb__item--active">Collections</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="catalog">
+    <div class="container">
+            <div class="card__container">
+                {% for collection in collections %}
+                <div class="card">
+                    <img src="{{ collection.background }}" alt="{{ collection.name }}">
+                    <a href="{{ collection.get_absolute_url }}">{{ collection.name }}</a>
+                    <p>{{ collection.movies.all.count }} movie{{ collection.movies.all.count|pluralize:",s" }}</p>
+                </div>
+                {% empty %}
+                <div class="col-12">
+                    <span class="section__title" style="display: block; text-align: center;">No Results...</span>
+                </div>
+                {% endfor %}
+            </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script type="text/javascript">
+    $('.section--bg').each(function() {
+        if ($(this).attr("data-bg")) {
+            $(this).css({
+                'background': 'url(' + $(this).data('bg') + ')',
+                'background-position': 'center center',
+                'background-repeat': 'no-repeat',
+                'background-size': 'cover'
+            });
+        }
+    });
+</script>
+{% endblock extra_js %}

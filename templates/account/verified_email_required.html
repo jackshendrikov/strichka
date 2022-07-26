@@ -1,0 +1,27 @@
+{% extends "account/base.html" %}
+{% block title %}Verify Your E-mail Address{% endblock %}
+{% block metablock %}
+<meta property="og:title" content="Strichka UA: Verify Your E-mail Address" />
+{% endblock %}
+
+{% block content %}
+{% url 'account_email' as email_url %}
+<div class="sign__content">
+    <div class="sign__form">
+        <h3>Verify Your E-mail Address</h3>
+        <span class="sign__text">
+           This part of the site requires us to verify that you are who you claim to be. <br>
+           For this purpose, we require that you verify ownership of your e-mail address.
+        </span>
+
+        <span class="sign__text">
+           We have sent an e-mail to you for verification. Please click on the link inside this e-mail. <br>
+           Please contact us if you do not receive it within a few minutes.
+        </span>
+
+        <span class="sign__text">
+           <strong>Note:</strong> you can still <a href="{{ email_url }}">change your e-mail address</a>.
+        </span>
+    </div>
+</div>
+{% endblock %}

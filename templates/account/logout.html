@@ -1,0 +1,28 @@
+{% extends "account/base.html" %}
+{% load static %}
+{% block title %}Sign Out{% endblock %}
+{% block metablock %}
+<meta property="og:title" content="Strichka UA: Sign Out" />
+{% endblock %}
+
+{% block content %}
+<div class="sign__content">
+    <form method="POST" action="{% url 'account_logout' %}" id="logout_form" class="sign__form">
+        {% csrf_token %}
+        <div class="sign__logo">
+            <img alt="Stichka Logo" src="{% static 'img/logo.png' %}" />
+        </div>
+
+        <span class="sign__text" style="font-size: 18px; margin-top: 0; padding-bottom: 20px;">Are you sure you want to sign out?</span>
+
+        {% if redirect_field_value %}
+        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+        {% endif %}
+
+        <div class="inline__group">
+            <button class="sign__btn" type="submit">Sign Out</button>
+            <button class="sign__btn danger" id="custom_logout_no" onclick="window.history.go(-1); return false;">No</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

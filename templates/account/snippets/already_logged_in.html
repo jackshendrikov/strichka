@@ -1,0 +1,9 @@
+{% extends "account/base.html" %}
+{% load account %}
+
+{% block content %}
+{% user_display user as user_display %}
+<h3 class="sign__text" style="font-size: 16px;">Already Logged in!</h3>
+<p class="sign__text">You are already logged in as <strong>{{ user_display }}</strong>.</p>
+<a class="sign__btn" href="/account/profile/" style="margin-bottom: 10px;">Back to Profile</a>
+{% endblock %}

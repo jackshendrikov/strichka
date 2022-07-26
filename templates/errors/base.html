@@ -1,0 +1,44 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+    <meta charset="UTF-8">
+    <title>Error</title>
+    <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}" media="all"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/error.css' %}">
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-01PQS21PGC"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-01PQS21PGC');
+    </script>
+</head>
+
+<body>
+    <!-- page 403 -->
+    <div class="error-page section--bg" data-bg="{% static 'img/section/section.jpg' %}">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="error-page__wrap">
+                        <div class="error-page__content">
+                            {% block content %}{% endblock %}
+                            <a href="#" onclick="window.history.go(-1); return false;" class="error-page__btn">Go back.</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- jquery main JS -->
+    <script src="{% static 'js/libs/jquery.min.js' %}"></script>
+    <!-- end page 403 -->
+    <script src="{% static 'js/error.js' %}"></script>
+</body>
+</html>

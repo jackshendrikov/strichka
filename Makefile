@@ -1,14 +1,31 @@
+user:
+	python manage.py createsuperuser --username admin --email 'admin@email.com'
+
+shell:
+	python manage.py shell
+
+shell_prod:
+	python manage.py shell --settings=config.settings.production
+
 runserver:
-	python main/manage.py runserver 0.0.0.0:8080
+	python manage.py runserver 0.0.0.0:8080
+
+runserver_dev:
+	python manage.py runserver 0.0.0.0:8080 --settings=config.settings.development
+
+runserver_prod:
+	python manage.py runserver 0.0.0.0:8080 --settings=config.settings.production
 
 runserver_gunicorn:
-	python main/manage.py collectstatic --noinput && \
-	export PYTHONPATH=main:$$PYTHONPATH; \
+	python manage.py collectstatic --noinput && \
  	gunicorn -b :8080 entrypoint:app --timeout 600 --workers=5 --threads=2
 
 migrate:
-	python main/manage.py makemigrations && \
- 	python main/manage.py migrate --run-syncdb
+	python manage.py makemigrations && \
+ 	python manage.py migrate --run-syncdb
+
+migrate_prod:
+	python manage.py migrate --settings=config.settings.production
 
 install_hooks:
 	pip install -r requirements.txt; \
@@ -22,7 +39,9 @@ style:
 
 types:
 	mypy --namespace-packages \
-		 -p "config" \
+		 -p "accounts" \
+		 -p "common" \
+		 -p "movies" \
 		 --disable-error-code=no-redef \
 		 --config-file setup.cfg && \
  	cd ../

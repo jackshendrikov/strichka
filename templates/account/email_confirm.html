@@ -1,0 +1,33 @@
+{% extends "account/base.html" %}
+{% load account %}
+{% block title %}Confirm E-mail Address{% endblock %}
+{% block metablock %}
+<meta property="og:title" content="Strichka UA: Confirm Your Email" />
+{% endblock %}
+
+{% block content %}
+<div class="sign__content">
+    {% if confirmation %}
+    <form method="POST" action="{% url 'account_confirm_email' confirmation.key %}" class="sign__form">
+        {% csrf_token %}
+        {% user_display confirmation.email_address.user as user_display %}
+        <h3>Confirm E-mail Address</h3>
+        <span class="sign__text" style="padding-bottom: 10px;">
+            {% with confirmation.email_address.email as email %}
+            Please confirm that <a href="mailto:{{ email }}">{{ email }}</a> is an e-mail address for user {{ user_display }}.{% endwith %}
+        </span>
+        <button class="sign__btn" type="submit">Confirm</button>
+    </form>
+    {% else %}
+    <div class="sign__form">
+        {% url 'account_email' as email_url %}
+        <h3>Confirmation Link Invalid</h3>
+        <span class="sign__text">
+            This e-mail confirmation link expired or is invalid. Please <a href="{{ email_url }}">issue a new e-mail confirmation request</a>. <br>
+            You will be redirected to login page in 5 seconds.
+        </span>
+        <script>setTimeout("location.href = '{% url 'account_login' %}';",5000);</script>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

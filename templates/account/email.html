@@ -1,0 +1,108 @@
+{% extends "account/base.html" %}
+{% block title %}Account{% endblock %}
+{% block metablock %}
+<meta property="og:title" content="Strichka UA: Email Settings" />
+{% endblock %}
+{% block extra_head %}
+<style rel="stylesheet">
+@media (max-width: 900px) {
+    .sign__content { display: grid; }
+    .sign__form { margin: 0 30px; }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+{% block messages %}
+{% if messages %}
+    {% for message in messages %}
+<div class="alert alert-warning alert-dismissible fade show" role="alert">
+    <strong>{{message}}</strong>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+    {% endfor %}
+{% endif %}
+{% endblock %}
+
+<div class="sign__content">
+    {% if user.emailaddress_set.all %}
+    <form action="{% url 'account_email' %}" class="sign__form" method="POST">
+        {% csrf_token %}
+        <h3>E-mail Addresses</h3>
+        <span class="sign__text">The following e-mail addresses are associated with your account:</span>
+        {% for emailaddress in user.emailaddress_set.all %}
+        <div>
+            <label for="email_radio_{{forloop.counter}}" class="{% if emailaddress.primary %}primary_email{%endif%}">
+                {{ emailaddress.email }}
+
+                {% if emailaddress.verified %}
+                <span class="verified">&nbsp;<i class="fa fa-check" aria-hidden="true"> (Verified) &nbsp;</i></span>
+                {% else %}
+                <span class="unverified">&nbsp;<i class="fa fa-circle-o-notch" aria-hidden="true"> (Not Verified!) &nbsp;</i></span>
+                {% endif %}
+
+                <input id="email_radio_{{forloop.counter}}" type="radio" name="email" {% if emailaddress.primary or user.emailaddress_set.count == 1 %}checked="checked"{%endif %} value="{{emailaddress.email}}"/>
+
+                {% if emailaddress.primary %}
+                <span class="primary">&nbsp;Primary Email</span>
+                {% endif %}
+            </label>
+        </div>
+        {% endfor %}
+        <div class="inline__group">
+            <button class="sign__btn primary" type="submit" name="action_primary">Make Primary</button>
+            <button class="sign__btn info" type="submit" name="action_send">Re-send Verification</button>
+            <button class="sign__btn danger" type="submit" name="action_remove">Remove</button>
+        </div>
+    </form>
+    {% else %}
+    <div class="sign__form">
+        <span class="sign__text">
+            <strong>Warning:</strong> You currently do not have any e-mail address set up.
+            You should really add an e-mail address so you can receive notifications, reset your password, etc.
+        </span>
+    </div>
+    {% endif %}
+
+    <form method="post" class="sign__form" id="email_form" action="{% url 'account_email' %}">
+        {% csrf_token %}
+        <h3 style="padding-bottom: 10px;">Add E-mail Address</h3>
+
+         <div class="sign__group">
+             <input type="email" name="email" id="id_email" class="sign__input" placeholder="E-mail address" autocomplete="email" required>
+         </div>
+
+        <div class="sign__group">
+             <input type="text" name="username" id="id_username" class="sign__input" placeholder="Username" autocomplete="username" minlength="5" maxlength="150" required>
+        </div>
+
+        <div class="sign__group">
+             <input type="password" name="password1" id="id_password1" class="sign__input" placeholder="Password" autocomplete="new-password" required>
+        </div>
+
+        <div class="sign__group">
+            <input type="password" name="password2" id="id_password2" class="sign__input" placeholder="Password (again)" autocomplete="new-password" required>
+        </div>
+
+        <button class="sign__btn primary" name="action_add" type="submit">Add E-mail</button>
+    </form>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script type="text/javascript">
+(function() {
+    let message = "Do you really want to remove the selected e-mail address?";
+    let actions = document.getElementsByName('action_remove');
+    if (actions.length) {
+        actions[0].addEventListener("click", function(e) {
+            if (! confirm(message)) {
+                e.preventDefault();
+            }
+        });
+    }
+})();
+</script>
+{% endblock %}

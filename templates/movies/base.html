@@ -1,0 +1,236 @@
+{% load static %}
+{% load app_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Strichka UA: Find Where to Watch Your Favorite Movies &amp; TV Shows">
+    <meta name="author" content="JackShen">
+
+    <meta property="og:site_name" content="Strichka UA" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="{{ request.build_absolute_uri  }}" />
+
+    {% block metablock %}
+    <meta property="og:image" content="https://i.imgur.com/BXDCNXr.png" />
+    <meta property="og:image:alt" content="Strichka UA" />
+    <meta property="og:image:width" content="1000" />
+    <meta property="og:image:height" content="1000" />
+    <meta property="og:title" content="Strichka UA: Home Page" />
+    <meta property="og:description" content="Strichka UA: Find where to watch your favorite movies &amp; TV shows across dozens of streaming providers. Check movie trailers, full info about movies and actors. Sign up and find more." />
+    {% endblock %}
+
+    <title>{% block title %}Strichka{% endblock %}</title>
+    <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
+
+    <!-- Main core CSS -->
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/libs/bootstrap-grid.min.css' %}" media="all"/>
+    <!-- Bootstrap reboot CSS -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/libs/bootstrap-reboot.min.css' %}" media="all"/>
+    <!-- Owl carousel CSS -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/libs/owl.carousel.min.css' %}">
+    <!-- ionicons -->
+    <link rel="stylesheet" type="text/css"  href="{% static 'css/libs/ionicons.min.css' %}">
+
+    <!-- Main style CSS -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}" media="all"/>
+
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    {% block extrahead %}
+    {% endblock extrahead %}
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-01PQS21PGC"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-01PQS21PGC');
+    </script>
+</head>
+
+<body>
+<div class="spinner">
+  <div class="inner one"></div>
+  <div class="inner two"></div>
+  <div class="inner three"></div>
+</div>
+
+{% if user.is_authenticated %}
+<input type="checkbox" id="modal" />
+<label for="modal" class="modal-bg"></label>
+<div class="modal-content">
+    <label for="modal" class="close">
+        <i class="icon ion-md-close"></i>
+	</label>
+
+    <img class="round" src="{{ user|gravatar:128 }}" alt="user" />
+
+    <header>
+		<h2>{{ user.username|truncatechars:15 }}</h2>
+	</header>
+	<footer>
+        {% if user.is_superuser %}
+        <a href="{% url "admin:index" %}" class="button btn-acc">
+            <i class="icon ion-ios-bowtie" ></i>
+            Admin Panel
+        </a>
+        {% endif %}
+        <a href="{% url 'user_watchlist' %}" class="button btn-acc">
+            <i class="icon ion-md-bookmark" ></i>
+            My Watchlist
+        </a>
+        <a href="{% url 'user_favorites' %}" class="button btn-acc">
+            <i class="icon ion-md-heart" ></i>
+            My Favorites
+        </a>
+        <a href="{% url 'account_logout' %}" class="button btn-acc">
+            <i class="icon ion-ios-log-out" ></i>
+            Sign Out
+        </a>
+	</footer>
+</div>
+{% endif %}
+
+<div id="app">
+<header class="header">
+    <div class="header__wrap">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="header__content">
+                        <a href="{% url 'index' %}" class="header__logo"><img src="{% static 'img/logo.png' %}" alt="Logo"></a>
+                        <ul class="header__nav">
+                            <li class="header__nav-item">
+                                <a href="{% url 'index' %}" class="header__nav-link">Home</a>
+                            </li>
+                            <li class="header__nav-item">
+                                <a class="dropdown-toggle header__nav-link" href="" role="button" id="dropdownMenuCatalog" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Catalog</a>
+                                <ul class="dropdown-menu header__dropdown-menu" aria-labelledby="dropdownMenuCatalog">
+                                    <li><a href="{% url 'all-movies' %}">All Movies</a></li>
+                                    <li><a href="{% url 'popular-movies' %}">Popular Movies</a></li>
+                                    <li><a href="{% url 'popular-series' %}">Popular Series</a></li>
+                                    <li><a href="{% url 'imdb-top' %}">IMDb TOP</a></li>
+                                    <li><a href="{% url 'classic-movies' %}">Classic Movies</a></li>
+                                    <li><a href="{% url 'recent-premieres' %}">Recent Premieres</a></li>
+                                    <li><a href="{% url 'new-movies-series' %}">New Releases</a></li>
+                                    <li><a href="{% url 'movies-month' %}">Movies of Month</a></li>
+                                </ul>
+                            </li>
+                            <li class="header__nav-item">
+                                <a href="{% url 'random_movie' %}" class="header__nav-link">Random Movie</a>
+                            </li>
+
+                            <li class="header__nav-item">
+                                <a href="{% url 'collections' %}" class="header__nav-link">Collections</a>
+                            </li>
+
+                            <li class="dropdown header__nav-item">
+                                <a class="dropdown-toggle header__nav-link header__nav-link--more" href="" role="button" id="dropdownMenuMore" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="icon ion-ios-more"></i></a>
+                                <ul class="dropdown-menu header__dropdown-menu" aria-labelledby="dropdownMenuMore">
+                                    <li><a href="{% url 'advanced_movie_search' %}">Advanced Search</a></li>
+                                    {% if user.is_authenticated %}
+                                    <li><a href="{% url 'account_logout' %}">Log Out</a></li>
+                                    {% else %}
+                                    <li><a href="{% url 'account_login'%}">Log In</a></li>
+                                    <li><a href="{% url 'account_signup' %}">Sign Up</a></li>
+                                    {% endif %}
+                                </ul>
+                            </li>
+                        </ul>
+
+                        <div class="header__auth">
+                            <button class="header__search-btn" type="button">
+                                <i class="icon ion-ios-search"></i>
+                            </button>
+
+                            {% if user.is_authenticated %}
+                            <a href="{% url 'account_logout' %}" class="header__sign-in">
+                                <i class="icon ion-ios-log-in"></i>
+                                <span>log out</span>
+                            </a>
+                            <label for="modal" class="header-profile" style="cursor: pointer; margin-bottom: 0;">
+                                <img class="profile-img" src="{{ user|gravatar:60 }}" alt="avatar"/>
+                            </label>
+                            {% else %}
+                            <a href="{% url 'account_login' %}" class="header__sign-in">
+                                <i class="icon ion-ios-log-in"></i>
+                                <span>log in</span>
+                            </a>
+                            {% endif %}
+                        </div>
+
+                        <button class="header__btn" type="button">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <form action="{% url 'movie_search' %}" method="GET" class="header__search">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="header__search-content">
+                        <input type="text" name="q" value="" id="q" placeholder="Search for a movie, TV Series that you are looking for">
+                        <button type="submit">search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</header>
+
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+{% block content %}{% endblock %}
+
+<!-- footer -->
+<footer class="footer">
+    <div class="container">
+        <h6 class="footer__title">JackShen Engineering, {% now 'Y' %}</h6>
+        <ul class="footer__social">
+            <li class="facebook"><a href=""><i class="icon ion-logo-facebook"></i></a></li>
+            <li class="instagram"><a href=""><i class="icon ion-logo-instagram"></i></a></li>
+            <li class="twitter"><a href=""><i class="icon ion-logo-twitter"></i></a></li>
+            <li class="github"><a href=""><i class="icon ion-logo-github"></i></a></li>
+        </ul>
+    </div>
+</footer>
+<!-- end footer -->
+</div>
+
+<!-- jquery main JS -->
+<script src="{% static 'js/libs/jquery.min.js' %}"></script>
+<!-- main JS -->
+<script src="{% static 'js/base.js' %}"></script>
+<!-- jquery more lines JS -->
+<script src="{% static 'js/libs/jquery.morelines.min.js' %}"></script>
+<!-- jquery mouse wheel JS -->
+<script src="{% static 'js/libs/jquery.mousewheel.min.js' %}"></script>
+<!-- Bootstrap JS -->
+<script src="{% static 'js/libs/bootstrap.bundle.min.js' %}"></script>
+<!-- owl carousel JS -->
+<script src="{% static 'js/libs/owl.carousel.min.js' %}"></script>
+
+{% block extra_js %}
+{% endblock extra_js %}
+</body>
+</html>

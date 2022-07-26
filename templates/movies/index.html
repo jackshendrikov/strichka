@@ -1,0 +1,389 @@
+{% extends 'movies/base.html' %}
+{% load app_tags %}
+{% load static %}
+{% load humanize %}
+{% block title %}Strichka Home{% endblock %}
+
+{% block extrahead %}
+<link rel="stylesheet" href="{% static 'css/index.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="index-slider-area" id="IndexSlider">
+    <div class="container">
+        <div class="index-slider-area-slider owl-carousel owl-theme">
+            {% for movie in best_movies %}
+            <div class="row index-slider-area-slide">
+                <div class="col-lg-5 col-md-5">
+                    <div class="index-slider-area-content">
+                        <img src="{{ movie.poster }}" alt="{{ movie.title }}" />
+                    </div>
+                </div>
+                <div class="col-lg-7 col-md-7">
+                    <div class="index-slider-area-content pr-50">
+                        <h2 class="index-slider-area-h2">{{ movie.title }}</h2>
+                        <div class="review">
+                            <div class="imdb-rate">
+                                <i class="icon ion-ios-star"></i>
+                                {{ movie.imdb_rate }}
+                            </div>
+                            <h4 class="index-slider-area-h4">{{ movie.imdb_votes|intcomma }} votes</h4>
+                        </div>
+                        <p>{{ movie.plot }}</p>
+                        <h3 class="index-slider-area-h3">Cast:</h3>
+                        <div class="slide-cast">
+                            {% for actor in movie.actors.all %}
+                            <div class="single-slide-cast">
+                                <a href="{{ actor.get_absolute_url }}">
+                                    <img src="{{ actor.photo }}" alt="{{ actor.full_name }}" />
+                                </a>
+                            </div>
+                            {% endfor %}
+                            {% for director in movie.directors.all %}
+                            <div class="single-slide-cast">
+                                <a href="{{ director.get_absolute_url }}">
+                                    <img src="{{ director.photo }}" alt="{{ director.full_name }}" />
+                                </a>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <div class="slide-trailor">
+                            <a class="read-more-btn read-more-btn2" href="{{ movie.get_absolute_url }}"><i class="icon ion-md-bookmark"></i>  Read More</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="index-slider-area-thumb">
+            <div class="thumb-prev">
+                <div class="row index-slider-area-slide">
+                    <div class="col-lg-5 col-md-5">
+                        <div class="index-slider-area-content">
+                            <img src="{{ best_movies.2.poster }}" alt="{{ best_movies.2.title }}" />
+                        </div>
+                    </div>
+                    <div class="col-lg-7 col-md-7">
+                        <div class="index-slider-area-content pr-50">
+                            <h2 class="index-slider-area-h2">{{ best_movies.2.title }}</h2>
+                            <div class="review">
+                                <div class="imdb-rate">
+                                    <i class="icon ion-ios-star"></i>
+                                    {{ best_movies.2.imdb_rate }}
+                                </div>
+                                <h4 class="index-slider-area-h4">{{ best_movies.2.imdb_votes|intcomma }} votes</h4>
+                            </div>
+                            <p>{{ best_movies.2.plot }}</p>
+                            <h3 class="index-slider-area-h3">Cast:</h3>
+                            <div class="slide-cast">
+                                {% for actor in best_movies.2.actors.all %}
+                                <div class="single-slide-cast">
+                                    <img src="{{ actor.photo }}" alt="{{ actor.full_name }}" />
+                                </div>
+                                {% endfor %}
+                            </div>
+                            <div class="slide-trailor">
+                                <a class="read-more-btn read-more-btn2" href="{{ best_movies.2.get_absolute_url }}"><i class="icon ion-md-bookmark"></i>  Read More</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="thumb-next">
+                <div class="row index-slider-area-slide">
+                    <div class="col-lg-5 col-md-5">
+                        <div class="index-slider-area-content">
+                            <img src="{{ best_movies.1.poster }}" alt="{{ best_movies.1.title }}" />
+                        </div>
+                    </div>
+                    <div class="col-lg-7 col-md-7">
+                        <div class="index-slider-area-content pr-50">
+                            <h2 class="index-slider-area-h2">{{ best_movies.1.title }}</h2>
+                            <div class="review">
+                                <div class="imdb-rate">
+                                    <i class="icon ion-ios-star"></i>
+                                    {{ best_movies.1.imdb_rate }}
+                                </div>
+                                <h4 class="index-slider-area-h4">{{ best_movies.1.imdb_votes|intcomma }} votes</h4>
+                            </div>
+                            <p>{{ best_movies.1.plot }}</p>
+                            <h3 class="index-slider-area-h3">Cast:</h3>
+                            <div class="slide-cast">
+                                {% for actor in best_movies.1.actors.all %}
+                                <div class="single-slide-cast">
+                                    <img src="{{ actor.photo }}" alt="{{ actor.full_name }}" />
+                                </div>
+                                {% endfor %}
+                            </div>
+                            <div class="slide-trailor">
+                                <a class="read-more-btn read-more-btn2" href="{{ best_movies.1.get_absolute_url }}"><i class="icon ion-md-bookmark"></i>  Read More</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="season">
+    <div class="owl-carousel season__bg">
+        <div class="item season__cover" data-bg="{% static 'img/home/home__bg.jpg' %}"></div>
+        <div class="item season__cover" data-bg="{% static 'img/home/home__bg2.jpg' %}"></div>
+        <div class="item season__cover" data-bg="{% static 'img/home/home__bg3.jpg' %}"></div>
+        <div class="item season__cover" data-bg="{% static 'img/home/home__bg4.jpg' %}"></div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="season__title"><b>BEST</b> OF THIS SEASON</h1>
+
+                <button class="season__nav season__nav--prev" type="button">
+                    <i class="icon ion-ios-arrow-round-back"></i>
+                </button>
+                <button class="season__nav season__nav--next" type="button">
+                    <i class="icon ion-ios-arrow-round-forward"></i>
+                </button>
+            </div>
+
+            <div class="col-12">
+                <div class="owl-carousel season__carousel">
+                    {% for movie in index_slider_movies %}
+                    <div class="item">
+                        <div class="card card--big">
+                            <div class="card__cover">
+                                <img src="{{ movie.poster }}" alt="{{ movie.title }}">
+                                <a href="{{ movie.get_absolute_url }}" class="card__play">
+                                    <i class="icon ion-ios-play"></i>
+                                </a>
+                            </div>
+                            <div class="card__content">
+                                <h3 class="card__title"><a href="{{ movie.get_absolute_url }}">{{ movie.title }}</a></h3>
+                                <span class="card__category">
+                                    {% for genre in movie.categories|genres %}
+                                    <a href="{{ genre.get_absolute_url }}">{{ genre.name }}</a>
+                                    {% endfor %}
+                                </span>
+                                <span class="card__rate"><i class="icon ion-ios-star"></i>{{ movie.imdb_rate }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="content">
+    <div class="content__head">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h2 class="content__title">New items</h2>
+
+                    <ul class="nav nav-tabs content__tabs" id="content__tabs" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-toggle="tab" href="#tab-1" role="tab" aria-controls="tab-1" aria-selected="true">NEW RELEASES</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#tab-2" role="tab" aria-controls="tab-2" aria-selected="false">POPULAR MOVIES</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#tab-3" role="tab" aria-controls="tab-3" aria-selected="false">POPULAR SERIES</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#tab-4" role="tab" aria-controls="tab-4" aria-selected="false">LAST MOVIES</a>
+                        </li>
+                    </ul>
+
+                    <div class="content__mobile-tabs" id="content__mobile-tabs">
+                        <div class="content__mobile-tabs-btn dropdown-toggle" role="navigation" id="mobile-tabs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <input type="button" value="New items">
+                            <span></span>
+                        </div>
+
+                        <div class="content__mobile-tabs-menu dropdown-menu" aria-labelledby="mobile-tabs">
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li class="nav-item"><a class="nav-link active" id="1-tab" data-toggle="tab" href="#tab-1" role="tab" aria-controls="tab-1" aria-selected="true">NEW RELEASES</a></li>
+
+                                <li class="nav-item"><a class="nav-link" id="2-tab" data-toggle="tab" href="#tab-2" role="tab" aria-controls="tab-2" aria-selected="false">POPULAR MOVIES</a></li>
+
+                                <li class="nav-item"><a class="nav-link" id="3-tab" data-toggle="tab" href="#tab-3" role="tab" aria-controls="tab-3" aria-selected="false">POPULAR SERIES</a></li>
+
+                                <li class="nav-item"><a class="nav-link" id="4-tab" data-toggle="tab" href="#tab-4" role="tab" aria-controls="tab-4" aria-selected="false">LAST MOVIES</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="tab-1" role="tabpanel" aria-labelledby="1-tab">
+                <div class="row">
+                    {% for movie in new_releases %}
+                    <div class="col-6 col-sm-12 col-lg-6">
+                        <div class="card card--list">
+                            <div class="row">
+                                <div class="col-12 col-sm-4">
+                                    <div class="card__cover">
+                                        <img src="{{ movie.poster }}" alt="{{ movie.title }}">
+                                        <a href="{{ movie.get_absolute_url }}" class="card__play">
+                                            <i class="icon ion-ios-play"></i>
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-sm-8">
+                                    <div class="card__content">
+                                        <h3 class="card__title"><a href="{{ movie.get_absolute_url }}">{{ movie.title }}</a></h3>
+                                        <span class="card__category">
+                                            {% for genre in movie.categories|genres %}
+                                            <a href="{{ genre.get_absolute_url }}">{{ genre.name }}</a>
+                                            {% endfor %}
+                                        </span>
+
+                                        <div class="card__wrap">
+                                            <span class="card__rate"><i class="icon ion-ios-star"></i>{{ movie.imdb_rate }}</span>
+
+                                            <ul class="card__list">
+                                                <li>{% if movie.is_movie %}Movie{% else %}Series{% endif %}</li>
+                                                <li>{{ movie.age_mark }}</li>
+                                            </ul>
+                                        </div>
+
+                                        <div class="card__description">
+                                            <p>{{ movie.plot }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="tab-2" role="tabpanel" aria-labelledby="2-tab">
+                <div class="row">
+                    {% for movie in popular_movies %}
+                    <div class="col-6 col-sm-4 col-lg-3 col-xl-2">
+                        <div class="card">
+                            <div class="card__cover">
+                                <img src="{{ movie.poster }}" alt="{{ movie.title }}">
+                                <a href="{{ movie.get_absolute_url }}" class="card__play">
+                                    <i class="icon ion-ios-play"></i>
+                                </a>
+                            </div>
+                            <div class="card__content">
+                                <h3 class="card__title"><a href="{{ movie.get_absolute_url }}">{{ movie.title }}</a></h3>
+                                <span class="card__category">
+                                    {% for genre in movie.categories|genres %}
+                                    <a href="{{ genre.get_absolute_url }}">{{ genre.name }}</a>
+                                    {% endfor %}
+                                </span>
+                                <span class="card__rate"><i class="icon ion-ios-star"></i>{{ movie.imdb_rate }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="tab-3" role="tabpanel" aria-labelledby="3-tab">
+                <div class="row">
+                    {% for movie in popular_series %}
+                    <div class="col-6 col-sm-4 col-lg-3 col-xl-2">
+                        <div class="card">
+                            <div class="card__cover">
+                                <img src="{{ movie.poster }}" alt="{{ movie.title }}">
+                                <a href="{{ movie.get_absolute_url }}" class="card__play">
+                                    <i class="icon ion-ios-play"></i>
+                                </a>
+                            </div>
+                            <div class="card__content">
+                                <h3 class="card__title"><a href="{{ movie.get_absolute_url }}">{{ movie.title }}</a></h3>
+                                <span class="card__category">
+                                    {% for genre in movie.categories|genres %}
+                                    <a href="{{ genre.get_absolute_url }}">{{ genre.name }}</a>
+                                    {% endfor %}
+                                </span>
+                                <span class="card__rate"><i class="icon ion-ios-star"></i>{{ movie.imdb_rate }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="tab-4" role="tabpanel" aria-labelledby="4-tab">
+                <div class="row">
+                    {% for movie in last_movies %}
+                    <div class="col-6 col-sm-4 col-lg-3 col-xl-2">
+                        <div class="card">
+                            <div class="card__cover">
+                                <img src="{{ movie.poster }}" alt="{{ movie.title }}">
+                                <a href="{{ movie.get_absolute_url }}" class="card__play">
+                                    <i class="icon ion-ios-play"></i>
+                                </a>
+                            </div>
+                            <div class="card__content">
+                                <h3 class="card__title"><a href="{{ movie.get_absolute_url }}">{{ movie.title }}</a></h3>
+                                <span class="card__category">
+                                    {% for genre in movie.categories|genres %}
+                                    <a href="{{ genre.get_absolute_url }}">{{ genre.name }}</a>
+                                    {% endfor %}
+                                </span>
+                                <span class="card__rate"><i class="icon ion-ios-star"></i>{{ movie.imdb_rate }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section section--bg" data-bg="{% static 'img/section/section.jpg' %}">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h2 class="section__title">Movies in cinema</h2>
+            </div>
+            {% for movie in cinema_movies %}
+            <div class="col-6 col-sm-4 col-lg-3 col-xl-2">
+                <div class="card">
+                    <div class="card__cover">
+                        <img src="{{ movie.poster }}" alt="{{ movie.title }}">
+                        <a href="{{ movie.get_absolute_url }}" class="card__play">
+                            <i class="icon ion-ios-play"></i>
+                        </a>
+                    </div>
+                    <div class="card__content">
+                        <h3 class="card__title"><a href="{{ movie.get_absolute_url }}">{{ movie.title }}</a></h3>
+                        <span class="card__category">
+                            {% for genre in movie.categories|genres %}
+                            <a href="{{ genre.get_absolute_url }}">{{ genre.name }}</a>
+                            {% endfor %}
+                        </span>
+                        <span class="card__rate"><i class="icon ion-ios-star"></i>{{ movie.imdb_rate }}</span>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/index.js' %}"></script>
+{% endblock extra_js %}

@@ -1,0 +1,300 @@
+h1, h3 {
+     color: white;
+}
+/*============================== Sign ==============================*/
+ .sign {
+     display: block;
+     position: relative;
+}
+ .sign__content {
+     display: flex;
+     flex-direction: row;
+     justify-content: center;
+     align-items: center;
+     width: 100%;
+     min-height: 100vh;
+     font-size: 16px;
+     padding: 40px 0;
+}
+ .sign__form {
+     background-color: #28282d;
+     -webkit-box-shadow: 0 5px 25px 0 rgba(0,0,0,0.3);
+     box-shadow: 0 5px 25px 0 rgba(0,0,0,0.3);
+     display: flex;
+     flex-direction: column;
+     justify-content: center;
+     align-items: center;
+     padding: 40px 20px;
+     position: relative;
+}
+ .sign__form:before {
+     content: '';
+     position: absolute;
+     top: 0;
+     left: 0;
+     right: 0;
+     height: 2px;
+     display: block;
+     background-image: -moz-linear-gradient(225deg,#f14b44,#c33253 50%,#8e4083);
+     background-image: -webkit-linear-gradient(225deg,#f14b44,#c33253 50%,#8e4083);
+     background-image: -ms-linear-gradient(225deg,#f14b44,#c33253 50%,#8e4083);
+     background-image: linear-gradient(225deg,#f14b44,#c33253 50%,#8e4083);
+     -webkit-box-shadow: 0 0 20px 0 rgba(255,88,96,0.5);
+     box-shadow: 0 0 20px 0 rgba(255,88,96,0.5);
+}
+ .sign__form + .sign__form {
+     margin: 0 30px;
+}
+ .sign__logo {
+     margin-bottom: 10px;
+}
+ .sign__logo a {
+     max-width: 100%;
+     width: auto;
+}
+ .sign__logo img {
+     max-width: 172px;
+}
+ .sign__input {
+     background-color: #2b2b31;
+     border: none;
+     height: 50px;
+     position: relative;
+     color: #fff;
+     font-size: 15px;
+     width: 250px;
+     -webkit-border-radius: 0;
+     border-radius: 0;
+     padding: 0 20px;
+     letter-spacing: 0.2px;
+     font-family: 'Open Sans', sans-serif;
+}
+ .sign__group {
+     position: relative;
+     margin-bottom: 20px;
+}
+ .sign__group--checkbox {
+     width: 100%;
+     text-align: left;
+}
+ .sign__group--checkbox input:not(:checked), .sign__group--checkbox input:checked {
+     position: absolute;
+     left: -9999px;
+}
+ .sign__group--checkbox input:not(:checked) + label, .sign__group--checkbox input:checked + label {
+     font-size: 14px;
+     color: rgba(255,255,255,0.5);
+     font-family: 'Open Sans', sans-serif;
+     position: relative;
+     cursor: pointer;
+     padding-left: 34px;
+     line-height: 22px;
+     margin: 0;
+}
+ .sign__group--checkbox input:not(:checked) + label a, .sign__group--checkbox input:checked + label a {
+     background-image: -webkit-linear-gradient(0deg, #ff55a5 0%, #ff5860 100%);
+     -webkit-background-clip: text;
+     -webkit-text-fill-color: transparent;
+     color: #ff5860;
+     opacity: 0.75;
+}
+ .sign__group--checkbox input:not(:checked) + label a:hover, .sign__group--checkbox input:checked + label a:hover {
+     opacity: 1;
+}
+ .sign__group--checkbox input:not(:checked) + label:before, .sign__group--checkbox input:checked + label:before {
+     content: '';
+     position: absolute;
+     left: 0;
+     top: 0;
+     width: 20px;
+     height: 20px;
+     background-color: #2b2b31;
+}
+ .sign__group--checkbox input:not(:checked) + label:after, .sign__group--checkbox input:checked + label:after {
+     font-family: 'Ionicons';
+     content: '\f3ff';
+     position: absolute;
+     left: 0;
+     top: 0;
+     width: 20px;
+     height: 20px;
+     font-size: 20px;
+     line-height: 20px;
+     text-align: center;
+     -webkit-transition: 0.4s;
+     -moz-transition: 0.4s;
+     transition: 0.4s;
+     color: #ff55a5;
+}
+ .sign__group--checkbox input:not(:checked) + label:after {
+     opacity: 0;
+     -webkit-transform: scale(0);
+     -moz-transform: scale(0);
+     transform: scale(0);
+}
+ .sign__group--checkbox input:checked + label:after {
+     opacity: 1;
+     -webkit-transform: scale(1);
+     -moz-transform: scale(1);
+     transform: scale(1);
+}
+ .sign__group--checkbox label::-moz-selection {
+     background: transparent;
+     color: rgba(255,255,255,0.5);
+}
+ .sign__group--checkbox label::selection {
+     background: transparent;
+     color: rgba(255,255,255,0.5);
+}
+ a.sign__btn {
+     -webkit-appearance: button;
+     -moz-appearance: button;
+     appearance: button;
+     text-decoration: none;
+     -webkit-box-shadow: unset;
+     box-shadow: unset;
+}
+ .sign__btn {
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     height: 50px;
+     width: 100%;
+     -webkit-border-radius: 4px;
+     border-radius: 4px;
+     background-image: -moz-linear-gradient(225deg,#f14b44,#c33253 50%,#8e4083);
+     background-image: -webkit-linear-gradient(225deg,#f14b44,#c33253 50%,#8e4083);
+     background-image: -ms-linear-gradient(225deg,#f14b44,#c33253 50%,#8e4083);
+     background-image: linear-gradient(225deg,#f14b44,#c33253 50%,#8e4083);
+     -webkit-box-shadow: 0 0 20px 0 rgba(255,88,96,0.5);
+     box-shadow: 0 0 20px 0 rgba(255,88,96,0.5);
+     opacity: 0.85;
+     font-size: 13px;
+     color: #fff;
+     text-transform: uppercase;
+     font-weight: 500;
+     letter-spacing: 1px;
+     margin: 0 auto 0;
+}
+ .sign__btn:hover {
+     opacity: 1;
+     color: #fff;
+}
+ .sign__btn + .danger {
+     background-image: -moz-linear-gradient(90deg, #ff5555 0%, #bb0202 100%);
+     background-image: -webkit-linear-gradient(90deg, #ff5555 0%, #bb0202 100%);
+     background-image: -ms-linear-gradient(90deg, #ff5555 0%, #bb0202 100%);
+     background-image: linear-gradient(90deg, #ff5555 0%, #bb0202 100%);
+     -webkit-box-shadow: 0 0 20px 0 rgba(119, 2, 4, 0.5);
+     box-shadow: 0 0 20px 0 rgba(119, 2, 4, 0.5);
+}
+ .sign__btn + .info {
+     background-image: -moz-linear-gradient(90deg, #558bff 0%, #023dbb 100%);
+     background-image: -webkit-linear-gradient(90deg, #558bff 0%, #023dbb 100%);
+     background-image: -ms-linear-gradient(90deg, #558bff 0%, #023dbb 100%);
+     background-image: linear-gradient(90deg, #558bff 0%, #023dbb 100%);
+     -webkit-box-shadow: 0 0 20px 0 rgba(2, 49, 119, 0.5);
+     box-shadow: 0 0 20px 0 rgba(2, 49, 119, 0.5);
+}
+ .sign__btn + .primary {
+     background-image: -moz-linear-gradient(90deg, #8055ff 0%, #6202bb 100%);
+     background-image: -webkit-linear-gradient(90deg, #8055ff 0%, #6202bb 100%);
+     background-image: -ms-linear-gradient(90deg, #8055ff 0%, #6202bb 100%);
+     background-image: linear-gradient(90deg, #8055ff 0%, #6202bb 100%);
+     -webkit-box-shadow: 0 0 20px 0 rgba(62, 2, 119, 0.5);
+     box-shadow: 0 0 20px 0 rgba(62, 2, 119, 0.5);
+}
+ .inline__group {
+     display: inline-flex;
+     width: fit-content;
+     width: -webkit-fill-available;
+}
+ .inline__group .sign__btn {
+     padding: 0 20px;
+     margin: 0 10px;
+}
+ .sign__text {
+     margin-top: 20px;
+     font-size: 14px;
+     color: rgba(255,255,255,0.5);
+     font-family: 'Open Sans', sans-serif;
+}
+ .sign__text a {
+     position: relative;
+     background-image: -webkit-linear-gradient(0deg, #ff55a5 0%, #ff5860 100%);
+     -webkit-background-clip: text;
+     -webkit-text-fill-color: transparent;
+     color: #ff5860;
+     opacity: 0.8;
+}
+ .sign__text a:hover {
+     opacity: 1;
+}
+ @media (min-width: 360px) {
+     .sign__input {
+         width: 280px;
+    }
+}
+ @media (min-width: 768px) {
+     .sign__form {
+         padding: 50px 60px;
+    }
+     .sign__logo {
+         margin-bottom: 20px;
+    }
+}
+ .btn {
+     width: auto;
+     display: inline-block;
+     padding: 0 18px 0 6px;
+     border: 0 none;
+     border-radius: 5px;
+     text-decoration: none;
+     transition: all 250ms linear;
+}
+ .btn:hover {
+     text-decoration: none;
+}
+ .btn-social-login {
+     margin-top: 18px;
+     color: white;
+     height: 50px;
+     line-height: 46px;
+     position: relative;
+     text-align: left;
+}
+ .btn-social-login .icon {
+     margin-right: 12px;
+     font-size: 24px;
+     line-height: 24px;
+     width: 42px;
+     height: 24px;
+     text-align: center;
+     display: inline-block;
+     position: relative;
+     top: 4px;
+}
+ .btn-social-login .icon:before {
+     display: inline-block;
+     width: 40px;
+}
+ .btn-social-login .icon :after {
+     content:"";
+}
+ .btn-github {
+     background-color: #333;
+     border: 1px solid #1a1a1a;
+}
+ .btn-github .icon {
+     border-right: 1px solid #1a1a1a;
+}
+ .btn-github .icon:after {
+     border-right: 1px solid #4d4d4d;
+}
+ .btn-github:hover {
+     background-color: #464646;
+     color: white;
+}
+ .alert {
+     margin-top: 20px;
+}

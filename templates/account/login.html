@@ -1,0 +1,74 @@
+{% extends "account/base.html" %}
+{% load static %}
+{% load account socialaccount %}
+{% block title %}Sign In{% endblock %}
+
+{% block metablock %}
+<meta property="og:title" content="Strichka UA: Sign In" />
+{% endblock %}
+
+{% block content %}
+{% block messages %}
+<div class="error">
+    {% if form.errors %}
+    <div class="alert alert-warning mx-3">
+         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+            &times;
+         </button>
+        {{ form.errors }}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% if form.non_field_errors %}
+    <div class="alert alert-warning mx-3">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+            &times;
+        </button>
+        {{ form.non_field_errors }}
+    </div>
+{% endif %}
+
+<div class="sign__content">
+    <form action="{% url 'account_login' %}" method="post" class="sign__form">
+        {% csrf_token %}
+        <a href="{% url 'index' %}" class="sign__logo">
+            <img src="{% static 'img/logo.png' %}" alt="">
+        </a>
+
+        <div class="sign__group">
+            {% if form.username.errors or form.email.errors %}
+            <div class="alert alert-warning mx-3">{{ form.username.errors }} or {{ form.email.errors }}</div>
+            {% endif %}
+            <input type="text" name="login" id="id_login" class="sign__input" placeholder="Username or Email" autofocus="autofocus" required>
+        </div>
+
+        <div class="sign__group">
+            {% if form.password.errors %}
+            <div class="alert alert-warning mx-3">{{ form.password.errors }}</div>
+            {% endif %}
+            <input type="password" name="password" id="id_password" class="sign__input" placeholder="Password" required>
+        </div>
+
+        <div class="sign__group sign__group--checkbox">
+            <input id="id_remember" name="remember" type="checkbox" checked="checked">
+            <label for="remember">Remember Me</label>
+        </div>
+
+        <button class="sign__btn" type="submit">Sign in</button>
+
+        {% get_providers as socialaccount_providers %}
+        {% for provider in socialaccount_providers %}
+        <a title="{{provider.name}}" class="btn btn-social-login btn-{{provider.name|lower}}" href="{% provider_login_url provider.id process=process scope=scope auth_params=auth_params %}">
+            <i class="icon ion-logo-{{provider.name|lower}}" id="{{provider.name|lower}}_icon"></i>
+            Sign In With {{ provider.name }}
+        </a>
+        {% endfor %}
+
+        <span class="sign__text">Don't have an account? <a href="{% url 'account_signup' %}">Sign up!</a></span>
+
+        <span class="sign__text"><a href="{% url 'account_reset_password' %}">Forgot password?</a></span>
+    </form>
+</div>
+{% endblock %}
