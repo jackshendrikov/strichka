@@ -908,7 +908,7 @@
      margin: 0 auto;
      width: 128px;
      height: 128px;
-     border: 2px solid #ff55a5;
+     border: 2px solid rgb(195, 50, 83);
      padding: 7px;
      border-radius: 50%;
      -o-object-fit: cover;
@@ -994,11 +994,11 @@
      font-weight: 600;
 }
  .btn-acc {
-     background: -moz-linear-gradient(45deg, #ff55a5 0%, #665ef1 100%);
-     background: -webkit-linear-gradient(45deg, #ff55a5 0%, #665ef1 100%);
-     background: -ms-linear-gradient(45deg, #ff55a5 0%, #665ef1 100%);
-     background: linear-gradient(45deg, #ff55a5 0%,#665ef1 100%);
-     border: 1px solid rgba(80, 77, 77, 0.5);
+     background: -moz-linear-gradient(225deg, rgb(241, 75, 68), rgb(195, 50, 83) 50%, rgb(142, 64, 131));
+     background: -webkit-linear-gradient(225deg, rgb(241, 75, 68), rgb(195, 50, 83) 50%, rgb(142, 64, 131));
+     background: -ms-linear-gradient(225deg, rgb(241, 75, 68), rgb(195, 50, 83) 50%, rgb(142, 64, 131));
+     background: linear-gradient(225deg, rgb(241, 75, 68), rgb(195, 50, 83) 50%, rgb(142, 64, 131));
+     border: 1px solid rgba(51, 49, 49, 0.5);
 }
  .btn-acc .icon {
      border-right: 1px solid white;
