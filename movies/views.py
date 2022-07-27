@@ -33,7 +33,6 @@ class MoviesBaseView(BaseView):
         context = {
             "index_slider_movies": services.get_movies_slider(limit=12),
             "best_movies": services.get_top_fantasy(limit=3),
-            "last_movies": services.get_new_movies_and_series(limit=18),
             "new_releases": services.get_recent_premieres(limit=18),
             "popular_movies": services.get_popular_movies(limit=18),
             "popular_series": services.get_popular_series(limit=18),

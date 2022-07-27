@@ -128,10 +128,10 @@
 
 <section class="season">
     <div class="owl-carousel season__bg">
-        <div class="item season__cover" data-bg="{% static 'img/home/home__bg.jpg' %}"></div>
-        <div class="item season__cover" data-bg="{% static 'img/home/home__bg2.jpg' %}"></div>
-        <div class="item season__cover" data-bg="{% static 'img/home/home__bg3.jpg' %}"></div>
-        <div class="item season__cover" data-bg="{% static 'img/home/home__bg4.jpg' %}"></div>
+        <div class="item season__cover" data-bg="{% static 'img/home/home__bg.webp' %}"></div>
+        <div class="item season__cover" data-bg="{% static 'img/home/home__bg2.webp' %}"></div>
+        <div class="item season__cover" data-bg="{% static 'img/home/home__bg3.webp' %}"></div>
+        <div class="item season__cover" data-bg="{% static 'img/home/home__bg4.webp' %}"></div>
     </div>
 
     <div class="container">
@@ -194,10 +194,6 @@
 
                         <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#tab-3" role="tab" aria-controls="tab-3" aria-selected="false">POPULAR SERIES</a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#tab-4" role="tab" aria-controls="tab-4" aria-selected="false">LAST MOVIES</a>
                         </li>
                     </ul>
 
@@ -322,37 +318,11 @@
                     {% endfor %}
                 </div>
             </div>
-
-            <div class="tab-pane fade" id="tab-4" role="tabpanel" aria-labelledby="4-tab">
-                <div class="row">
-                    {% for movie in last_movies %}
-                    <div class="col-6 col-sm-4 col-lg-3 col-xl-2">
-                        <div class="card">
-                            <div class="card__cover">
-                                <img src="{{ movie.poster }}" alt="{{ movie.title }}">
-                                <a href="{{ movie.get_absolute_url }}" class="card__play">
-                                    <i class="icon ion-ios-play"></i>
-                                </a>
-                            </div>
-                            <div class="card__content">
-                                <h3 class="card__title"><a href="{{ movie.get_absolute_url }}">{{ movie.title }}</a></h3>
-                                <span class="card__category">
-                                    {% for genre in movie.categories|genres %}
-                                    <a href="{{ genre.get_absolute_url }}">{{ genre.name }}</a>
-                                    {% endfor %}
-                                </span>
-                                <span class="card__rate"><i class="icon ion-ios-star"></i>{{ movie.imdb_rate }}</span>
-                            </div>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
         </div>
     </div>
 </section>
 
-<section class="section section--bg" data-bg="{% static 'img/section/section.jpg' %}">
+<section class="section section--bg" data-bg="{% static 'img/section/section.webp' %}">
     <div class="container">
         <div class="row">
             <div class="col-12">

@@ -6,7 +6,7 @@
 }
 .index-slider-area {
      position: relative;
-     background-image: url('../img/section/main.jpg');
+     background-image: url('../img/section/main.webp');
      background-repeat: no-repeat;
      background-position: center;
      background-size: cover;
@@ -395,7 +395,7 @@
      bottom: 0;
      left: 0;
      display: block;
-     background: url("../img/home/home__bg.jpg") no-repeat center/cover;
+     background: url("../img/home/home__bg.webp") no-repeat center/cover;
      opacity: 0.06;
 }
  @media (min-width: 576px) {
