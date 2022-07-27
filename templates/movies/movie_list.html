@@ -7,8 +7,8 @@
 {% block metablock %}
 <meta property="og:image" content="https://i.imgur.com/BXDCNXr.png" />
 <meta property="og:image:alt" content="{{ page_title }}" />
-<meta property="og:image:width" content="1300" />
-<meta property="og:image:height" content="610" />
+<meta property="og:image:width" content="1000" />
+<meta property="og:image:height" content="1000" />
 <meta property="og:title" content="Stricka UA: {{ page_title }}" />
 <meta property="og:description" content="List of movies found by your request." />
 {% endblock %}
@@ -205,8 +205,9 @@ $('.infinite-container').infiniteScroll({
     append: '.infinite-item',
     button: '.infinite-more-link',
     scrollThreshold: false,
-    history: false,
     status: '.more-loader',
+}).on( 'last.infiniteScroll', function( event, body, path ) {
+    $('.more-loader').hide();
 });
 </script>
 <script src="{% static 'js/filters.js' %}"></script>
