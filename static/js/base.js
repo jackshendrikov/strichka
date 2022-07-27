@@ -1,4 +1,4 @@
-$(window).on("load", function(){
+$(document).ready(function() {
     "use strict";
 
     $('.spinner').hide();
