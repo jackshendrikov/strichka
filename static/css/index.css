@@ -322,7 +322,6 @@
  }
 /*============================== season ==============================*/
  .season {
-     margin-top: 20px;
      position: relative;
      display: block;
      background-color: #2b2b31;
@@ -405,7 +404,6 @@
 }
  @media (min-width: 768px) {
      .season {
-         margin-top: 20px;
          padding: 60px 0;
     }
      .season__title {
