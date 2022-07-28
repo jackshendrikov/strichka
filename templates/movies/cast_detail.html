@@ -39,15 +39,23 @@
                                     <h1 class="details__title">{{ full_name }}</h1>
                                 </div>
 
+                                {% if birthday or place_of_birth %}
                                 <ul class="card__meta">
+                                    {% if birthday %}
                                     <li><span>Birthday:</span> {{ birthday|date:"d F Y" }}</li>
+                                    {% endif %}
+                                    {% if place_of_birth %}
                                     <li><span>Place of Birth:</span> {{ place_of_birth }}</li>
+                                    {% endif %}
                                 </ul>
+                                {% endif %}
 
+                                {% if description %}
                                 <div class="card__description card__description--details" style="color: #9da1a8;">
                                     {{ description|truncatechars:700 }}
                                     <a href="https://www.imdb.com/name/{{ imdb_id }}">Read More</a>
                                 </div>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
