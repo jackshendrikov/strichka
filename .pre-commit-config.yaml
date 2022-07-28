@@ -54,3 +54,17 @@ repos:
   hooks:
     - id: pyupgrade
       args: [--py310-plus]
+
+- repo: https://github.com/pre-commit/mirrors-prettier
+  rev: v2.7.1
+  hooks:
+    - id: prettier
+      exclude: libs/
+      types_or: [css, javascript]
+
+- repo: https://github.com/pre-commit/mirrors-fixmyjs
+  rev: v2.0.0
+  hooks:
+    - id: fixmyjs
+      exclude: libs/
+      args: ['-l', '-c', '.jshintrc']

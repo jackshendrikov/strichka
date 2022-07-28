@@ -1,3 +1,6 @@
+
+
+
 {% extends 'movies/base.html' %}
 {% load app_tags %}
 {% load static %}
@@ -151,10 +154,13 @@
                 <span>Dislike<span class="hidden-like">d</span> <span id="dislike{{ movie_id }}" class="number">{{ dislikes_count }}</span></span>
                 </button>
             </div>
-            <div class="col-12 col-xl-6">
+            {% if trailer_id %}
+            <div class="col-12 col-xl-6" style="margin: 0 auto;">
                 <div id="player" data-plyr-provider="youtube" data-plyr-embed-id="{{ trailer_id }}"></div>
             </div>
-            <div class="col-12 col-xl-6">
+            {% endif %}
+            {% if platforms %}
+            <div class="col-12 col-xl-6" style="margin: 0 auto;">
                 <div class="accordion" id="accordion">
                     {% for country, services in platforms.items %}
                     <div class="accordion__card">
@@ -202,6 +208,7 @@
                     {% endfor %}
                 </div>
             </div>
+            {% endif %}
         </div>
     </div>
 </section>
