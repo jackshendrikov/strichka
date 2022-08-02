@@ -992,29 +992,23 @@
 }
 .card--details .card__meta {
   margin-top: 15px;
-  display: block;
+  display: grid;
   font-size: 15px;
   line-height: 24px;
   color: rgba(255, 255, 255, 0.7);
+  font-family: "Poppins", sans-serif;
+  width: 100%;
 }
-.card--details .card__meta span {
+.card--details .card__meta th {
+  display: block;
   color: rgba(255, 255, 255, 0.7);
   font-weight: bold;
-  margin-right: 7px;
+  margin-right: 10px;
 }
-.card--details .card__meta li {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: flex-start;
-  flex-wrap: wrap;
-  width: 100%;
-  font-family: "Poppins", sans-serif;
-}
-.card--details .card__meta li:last-child {
+.card--details .card__meta tr:last-child {
   margin-bottom: 0;
 }
-.card--details .card__meta a {
+.card--details .card__meta td a {
   font-size: 15px;
   position: relative;
   background-image: -webkit-linear-gradient(0deg, #ff55a5 0%, #ff5860 100%);
@@ -1024,7 +1018,7 @@
   margin-right: 7px;
   opacity: 0.8;
 }
-.card--details .card__meta a:after {
+.card--details .card__meta td a:after {
   content: ",";
   position: absolute;
   display: block;
@@ -1035,13 +1029,13 @@
   -webkit-text-fill-color: transparent;
   color: #ff5860;
 }
-.card--details .card__meta a:last-child {
+.card--details .card__meta td a:last-child {
   margin-right: 0;
 }
-.card--details .card__meta a:last-child:after {
+.card--details .card__meta td a:last-child:after {
   display: none;
 }
-.card--details .card__meta a:hover {
+.card--details .card__meta td a:hover {
   opacity: 1;
 }
 .card--details .card__rate {

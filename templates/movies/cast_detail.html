@@ -36,18 +36,24 @@
                         <div class="col-12 col-sm-7 col-md-7 col-lg-8 col-xl-8">
                             <div class="card__content">
                                 <div class="card__wrap">
-                                    <h1 class="details__title">{{ full_name }}</h1>
+                                    <h1 class="details__title" style="margin-bottom: 0;">{{ full_name }}</h1>
                                 </div>
 
                                 {% if birthday or place_of_birth %}
-                                <ul class="card__meta">
+                                <table class="card__meta">
                                     {% if birthday %}
-                                    <li><span>Birthday:</span> {{ birthday|date:"d F Y" }}</li>
+                                    <tr>
+                                        <th>Birthday:</th>
+                                        <td>{{ birthday|date:"d F Y" }}</td>
+                                    </tr>
                                     {% endif %}
                                     {% if place_of_birth %}
-                                    <li><span>Place of Birth:</span> {{ place_of_birth }}</li>
+                                    <tr>
+                                        <th>Place of Birth:</th>
+                                        <td>{{ place_of_birth }}</td>
+                                    </tr>
                                     {% endif %}
-                                </ul>
+                                </table>
                                 {% endif %}
 
                                 {% if description %}
