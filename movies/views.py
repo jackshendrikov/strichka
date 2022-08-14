@@ -83,7 +83,11 @@ class RandomMovieView(BaseView):
 
     def get(self, request: HttpRequest) -> HttpResponse:
         movie = services.ger_random_movie()
-        context = services.GetMovieDetail.execute({"movie": movie.pk})
+        context = {"movie": movie.pk}
+        context.update(
+            {"user": request.user.id if request.user.is_authenticated else None}
+        )
+        context = services.GetMovieDetail.execute(context)
         return render(request, "movies/movie_detail.html", context)
 
 
