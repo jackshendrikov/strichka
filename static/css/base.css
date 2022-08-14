@@ -971,7 +971,8 @@ ul {
   z-index: 11;
   color: white;
 }
-.modal-content header {
+.modal-content header,
+.modal-rating-content header {
   position: relative;
   display: block;
 }
@@ -994,7 +995,8 @@ ul {
   font-size: 24px;
   text-align: center;
 }
-.modal-content footer {
+.modal-content footer,
+.modal-rating-content footer {
   position: relative;
   display: grid;
   align-items: center;
@@ -1047,15 +1049,18 @@ ul {
 .modal-content footer .button .icon:after {
   content: "";
 }
-#modal {
+#modal,
+#modal-rating {
   display: none;
 }
-#modal:checked ~ .modal-bg {
+#modal:checked ~ .modal-bg,
+#modal-rating:checked ~ .modal-rating-bg {
   visibility: visible;
   background-color: black;
   opacity: 0.7;
   transition: background-color 250ms linear;
 }
+#modal-rating:checked ~ .modal-rating-content,
 #modal:checked ~ .modal-content {
   visibility: visible;
   transition: transform 250ms ease;

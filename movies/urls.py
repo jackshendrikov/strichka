@@ -24,6 +24,7 @@ from movies.views import (
     PopularMoviesView,
     PopularSeriesView,
     RandomMovieView,
+    RatingView,
     RecentPremieresView,
     SearchMovieView,
     VoteView,
@@ -79,6 +80,14 @@ vote_urlpatterns = [
         login_required(VoteView.as_view(model=Cast, vote_type=Vote.DISLIKE)),
         name="cast_dislike",
     ),
+]
+
+rate_urlpatterns = [
+    path(
+        "movie/<int:pk>/rate",
+        login_required(RatingView.as_view(model=Movie)),
+        name="movie_rate",
+    )
 ]
 
 filter_urlpatterns = [
@@ -142,6 +151,7 @@ urlpatterns = [
     path("cast/<int:pk>", CastMemberDetailsView.as_view(), name="cast"),
     # ajax vote
     path("", include(vote_urlpatterns)),
+    path("", include(rate_urlpatterns)),
     path("", include(category_urlpatterns)),
     path("comment/", include(comment_urlpatterns)),
     path("filter/", include(filter_urlpatterns)),

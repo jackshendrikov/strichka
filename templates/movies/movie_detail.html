@@ -1,6 +1,3 @@
-
-
-
 {% extends 'movies/base.html' %}
 {% load app_tags %}
 {% load static %}
@@ -22,6 +19,35 @@
 <link rel="stylesheet" href="{% static 'css/index.css' %}">
 <link rel="stylesheet" href="{% static 'css/detail.css' %}">
 {% endblock %}
+
+{% if user.is_authenticated %}
+{% block modal_rating %}
+<input type="checkbox" id="modal-rating" />
+<label for="modal-rating" class="modal-rating-bg"></label>
+<div class="modal-rating-content">
+    <label for="modal-rating" class="close">
+        <i class="icon ion-md-close"></i>
+	</label>
+
+    <header>
+		<h2>Your Rating</h2>
+	</header>
+    <footer>
+        <form action="" id="ratingForm" method="POST">
+            {% csrf_token %}
+            <input type="hidden" value="{{ imdb_id }}" name="imdb">
+            {% include "movies/include/rating.html" %}
+            <label id='exclude-rating' {% if rate_value %}style="display: flex;" {% endif %} data-action="rate" {% if user.is_authenticated %}data-csrf_token="{{ csrf_token }}" data-url="{% url 'movie_rate' movie_id %}" onclick="$(this).hide();" {% else %}onclick="openLogin();"{% endif %}>
+                <span>
+                    <i class="icon ion-md-trash" style="font-size: 14px;"></i>
+                    &nbsp;Remove Rating
+                </span>
+            </label>
+        </form>
+    </footer>
+</div>
+{% endblock %}
+{% endif %}
 
 {% block content %}
 <section class="section details">
@@ -56,60 +82,92 @@
                                         <li>{{ age_mark }}</li>
                                         {% endif %}
                                     </ul>
+                                    <label for="modal-rating" id='movie-card-rating-button'>
+                                        {% if rate_value %}
+                                        <span><i class="icon ion-md-star"></i>&nbsp; {{ rate_value }} / 10</span>
+                                        {% else %}
+                                        <span><i class="icon ion-md-star-outline"></i>&nbsp;Rate</span>
+                                        {% endif %}
+                                    </label>
                                 </div>
-                                <ul class="card__meta">
-                                    <li>
-                                        <span>Genre:</span>
-                                        {% for genre in genres %}
-                                        <a href="{{ genre.get_absolute_url }}">{{ genre.name }}</a>
-                                        {% endfor %}
-                                    </li>
-                                    <li><span>Release Date:</span> {{ release|date:"d F Y" }}</li>
+                                <table class="card__meta">
+                                    <tr>
+                                        <th>Genre:</th>
+                                        <td>
+                                            {% for genre in genres %}
+                                            <a href="{{ genre.get_absolute_url }}">{{ genre.name }}</a>
+                                            {% endfor %}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Release Date:</th>
+                                        <td>{{ release|date:"d F Y" }}</td>
+                                    </tr>
                                     {% if runtime|time:"H:i" != "00:00" %}
-                                    <li><span>Runtime:</span> {{ runtime|time:"H:i" }}</li>
+                                    <tr>
+                                        <th>Runtime:</th>
+                                        <td>{{ runtime|time:"H:i" }}</td>
+                                    </tr>
                                     {% endif %}
-                                    <li>
-                                        <span>Country:</span>
-                                        {% for country in countries %}
-                                        <a href="{{ country.get_absolute_url }}">{{ country.name }}</a>
-                                        {% endfor %}
-                                    </li>
-                                    <li>
-                                        <span>Year:</span>
-                                        <a href="{% url 'movies_years_list' year %}">{{ year }}</a>
-                                    </li>
+                                    <tr>
+                                        <th>Country:</th>
+                                        <td>
+                                            {% for country in countries %}
+                                            <a href="{{ country.get_absolute_url }}">{{ country.name }}</a>
+                                            {% endfor %}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Year:</th>
+                                        <td><a href="{% url 'movies_years_list' year %}">{{ year }}</a></td>
+                                    </tr>
                                     {% if box_office %}
-                                    <li><span>Box Office:</span> ${{ box_office|intcomma }}</li>
+                                    <tr>
+                                        <th>Box Office:</th>
+                                        <td>${{ box_office|intcomma }}</td>
+                                    </tr>
                                     {% endif %}
                                     {% if total_seasons %}
-                                    <li><span>Total Seasons:</span> {{ total_seasons }}</li>
+                                    <tr>
+                                        <th>Total Seasons:</th>
+                                        <td>{{ total_seasons }}</td>
+                                    </tr>
                                     {% endif %}
                                     {% if awards %}
-                                    <li><span>Awards:</span> {{ awards }}</li>
+                                    <tr>
+                                        <th>Awards:</th>
+                                        <td>{{ awards }}</td>
+                                    </tr>
                                     {% endif %}
                                     {% if directors %}
-                                    <li>
-                                        <span>Director:</span>
-                                        {% for director in directors %}
-                                        <a href="{{ director.get_absolute_url }}">{{ director.full_name }}</a>
-                                        {% endfor %}
-                                    </li>
+                                    <tr>
+                                        <th>Director:</th>
+                                        <td>
+                                            {% for director in directors %}
+                                            <a href="{{ director.get_absolute_url }}">{{ director.full_name }}</a>
+                                            {% endfor %}
+                                        </td>
+                                    </tr>
                                     {% endif %}
                                     {% if writers %}
-                                    <li>
-                                        <span>Writers:</span>
-                                        {% for writer in writers %}
-                                        <a href="{{ writer.get_absolute_url }}">{{ writer.full_name }}</a>
-                                        {% endfor %}
-                                    </li>
+                                    <tr>
+                                        <th>Writers:</th>
+                                        <td>
+                                            {% for writer in writers %}
+                                            <a href="{{ writer.get_absolute_url }}">{{ writer.full_name }}</a>
+                                            {% endfor %}
+                                        </td>
+                                    </tr>
                                     {% endif %}
-                                    <li>
-                                        <span>Cast:</span>
-                                        {% for actor in actors %}
-                                        <a href="{{ actor.get_absolute_url }}">{{ actor.full_name }}</a>
-                                        {% endfor %}
-                                    </li>
-                                </ul>
+                                    <tr>
+                                        <th>Cast:</th>
+                                        <td>
+                                            {% for actor in actors %}
+                                            <a href="{{ actor.get_absolute_url }}">{{ actor.full_name }}</a>
+                                            {% endfor %}
+                                        </td>
+                                    </tr>
+                                </table>
                                 <div class="card__description card__description--details" style="color: #9da1a8;">
                                     {{ plot }}
                                 </div>
@@ -126,7 +184,7 @@
                 {% endfor %}
             </div>
             {% endif %}
-            <div class="col-12" style="display: flex; justify-content: center; margin-bottom: 20px;">
+            <div class="col-12 detail__rating">
                 <button data-id="{{ movie_id }}" data-action="like" {% if user.is_authenticated %}data-csrf_token="{{ csrf_token }}" data-url="{% url 'movie_like' movie_id %}"{% endif %} class="like-button">
                 <div class="emitter"></div>
                 <div class="hand">
@@ -134,7 +192,7 @@
                 </div>
                 <span>Like<span class="hidden-like">d</span> <span id="like{{ movie_id }}" class="number">{{ likes_count }}</span></span>
                 </button>
-                <button id="favorite" {% if user.is_authenticated %}data-csrf_token="{{ csrf_token }}" data-url="{% url 'movie_favorite' movie_id %}"{% endif %} class="fav-button" style="margin: 0 10px;">
+                <button id="favorite" {% if user.is_authenticated %}data-csrf_token="{{ csrf_token }}" data-url="{% url 'movie_favorite' movie_id %}"{% endif %} class="fav-button">
                 <svg width="515.99" height="480.73" version="1.1" viewBox="0 0 515.99347 480.73038" xmlns="http://www.w3.org/2000/svg"  xmlns:xlink="http://www.w3.org/1999/xlink">
                     <defs>
                         <path class="heart" id="b" d="m372.59 17.99c-48.54 0-92.99 26.12-118 67.99-24.79-42.41-67.41-68-115.18-68-72.86 0-131.09 59.68-138.55 141.94-0.59 3.63-3.02 22.76 4.35 53.94 10.61 44.98 35.13 85.89 70.89 118.29 11.89 10.79 71.34 64.75 178.37 161.87 108.86-97.12 169.34-151.07 181.43-161.86 35.76-32.41 60.28-73.31 70.89-118.3 7.37-31.17 4.94-50.3 4.36-53.93-7.47-82.26-65.69-141.94-138.56-141.94z"></path>
@@ -311,15 +369,23 @@
 <script src="{% static 'js/detail.js' %}"></script>
 {% if user.is_authenticated %}
 <script src="{% static 'js/votes.js' %}"></script>
+<script src="{% static 'js/rate.js' %}"></script>
 <script src="{% static 'js/fav_watchlist.js' %}"></script>
 {% endif %}
 <script type="text/javascript">
     {% if user.is_authenticated %}
+    {% if rate_value %}
+    $("#rating-{{ rate_value }}").prop("checked", true);
+    {% endif %}
     document.getElementById("form-comment").action = "{% url 'movie_comment' movie_id %}";
 
     function addComment(name, id) {
         document.getElementById("comment-parent").value = id;
         document.getElementById("contact-comment").innerText = `${name}, `
+    }
+
+    function openLogin() {
+        window.open("{% url 'account_login' %}", "_self");
     }
 
     $('#favorite, #watchlist').click(function() {
@@ -337,7 +403,7 @@
         {% endif %}
     {% else %}
     $("#watchlist, #favorite, .like-button, .dislike-button, .comment-like, .comment-dislike").click(function() {
-        window.open("{% url 'account_login' %}", "_self");
+        openLogin();
     });
     {% endif %}
 
