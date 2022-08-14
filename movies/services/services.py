@@ -8,7 +8,7 @@ from django.contrib.auth.models import AnonymousUser, User
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Count, QuerySet, Sum
 from django.db.transaction import atomic
-from django.forms import ModelChoiceField
+from django.forms import IntegerField, ModelChoiceField
 from django.shortcuts import get_object_or_404
 from random import choice
 from service_objects.services import Service
@@ -21,6 +21,7 @@ from movies.models import (
     Collection,
     Comment,
     Movie,
+    Rating,
     StreamingPlatform,
     Vote,
 )
@@ -35,19 +36,22 @@ class GetMovieDetail(Service):
     """
 
     movie = ModelChoiceField(queryset=Movie.objects.all())
+    user = IntegerField()
 
     def process(self) -> dict:
         movie = self.cleaned_data["movie"]
+        user = self.cleaned_data["user"]
 
-        genres = self._get_genres(movie)
-        countries = self._get_countries(movie)
-        actors = self._get_actors(movie)
-        directors = self._get_directors(movie)
-        writers = self._get_writers(movie)
-        platforms = self._get_stream_platforms(movie)
+        genres = self._get_genres(movie=movie)
+        countries = self._get_countries(movie=movie)
+        actors = self._get_actors(movie=movie)
+        directors = self._get_directors(movie=movie)
+        writers = self._get_writers(movie=movie)
+        platforms = self._get_stream_platforms(movie=movie)
         comments = movie.comments.all()
         likes_count = movie.votes.likes().count()
         dislikes_count = movie.votes.dislikes().count()
+        rate_value = self._get_user_rate(movie=movie, user_id=user)
         movies_to_discover = get_new_movies_and_series(limit=6)
 
         context = {
@@ -77,11 +81,21 @@ class GetMovieDetail(Service):
             "comments": comments,
             "platforms": platforms,
             "likes_count": likes_count,
+            "rate_value": rate_value,
             "dislikes_count": dislikes_count,
             "movies_to_discover": movies_to_discover,
         }
 
         return context
+
+    @staticmethod
+    def _get_user_rate(movie: Movie, user_id: int | None) -> int | None:
+        if (
+            user_id
+            and Rating.objects.filter(object_id=movie.pk, user_id=user_id).exists()
+        ):
+            return Rating.objects.get(object_id=movie.pk, user_id=user_id).value
+        return None
 
     @staticmethod
     def _get_genres(movie: Movie) -> QuerySet:
@@ -515,6 +529,31 @@ def add_vote(
         "like_count": obj.votes.likes().count(),
         "dislike_count": obj.votes.dislikes().count(),
     }
+
+    return context
+
+
+@atomic
+def add_rate(
+    obj: Movie, rate_value: int | None, user: AbstractBaseUser | AnonymousUser
+) -> dict:
+    """Add rate to a movie."""
+    try:  # noqa: WPS229
+        rating = Rating.objects.get(
+            content_type=ContentType.objects.get_for_model(obj),
+            object_id=obj.pk,
+            user=user,
+        )
+        if not rate_value:
+            rating.delete()
+            rate_value = None
+        elif rating.value != rate_value:
+            rating.value = rate_value
+            rating.save(update_fields=["value"])
+    except Rating.DoesNotExist:
+        obj.ratings.create(user=user, value=rate_value)
+
+    context = {"result_value": rate_value}
 
     return context
 

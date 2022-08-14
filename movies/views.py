@@ -53,7 +53,11 @@ class MovieDetailsView(BaseView):
 
     def get(self, request: HttpRequest, pk: int) -> HttpResponse:
         movie = get_object_or_404(Movie, pk=pk)
-        context = services.GetMovieDetail.execute({"movie": movie.pk})
+        context = {"movie": movie.pk}
+        context.update(
+            {"user": request.user.id if request.user.is_authenticated else None}
+        )
+        context = services.GetMovieDetail.execute(context)
         return render(request, "movies/movie_detail.html", context)
 
 
@@ -359,5 +363,21 @@ class VoteView(View):
         if is_ajax(request=request):
             context = services.add_vote(
                 user=request.user, vote_type=self.vote_type, obj=obj
+            )
+            return JsonResponse(context)
+
+
+class RatingView(View):
+    """Rating system."""
+
+    model: Movie | None = None
+
+    def post(self, request: HttpRequest, pk: int) -> HttpResponse:
+        obj: Movie = get_object_or_404(self.model, pk=pk)  # type: ignore
+        if is_ajax(request=request):
+            context = services.add_rate(
+                user=request.user,
+                rate_value=self.request.POST.get("rate_value", None),
+                obj=obj,
             )
             return JsonResponse(context)

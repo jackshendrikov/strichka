@@ -20,6 +20,35 @@
 <link rel="stylesheet" href="{% static 'css/detail.css' %}">
 {% endblock %}
 
+{% if user.is_authenticated %}
+{% block modal_rating %}
+<input type="checkbox" id="modal-rating" />
+<label for="modal-rating" class="modal-rating-bg"></label>
+<div class="modal-rating-content">
+    <label for="modal-rating" class="close">
+        <i class="icon ion-md-close"></i>
+	</label>
+
+    <header>
+		<h2>Your Rating</h2>
+	</header>
+    <footer>
+        <form action="" id="ratingForm" method="POST">
+            {% csrf_token %}
+            <input type="hidden" value="{{ imdb_id }}" name="imdb">
+            {% include "movies/include/rating.html" %}
+            <label id='exclude-rating' {% if rate_value %}style="display: flex;" {% endif %} data-action="rate" {% if user.is_authenticated %}data-csrf_token="{{ csrf_token }}" data-url="{% url 'movie_rate' movie_id %}" onclick="$(this).hide();" {% else %}onclick="openLogin();"{% endif %}>
+                <span>
+                    <i class="icon ion-md-trash" style="font-size: 14px;"></i>
+                    &nbsp;Remove Rating
+                </span>
+            </label>
+        </form>
+    </footer>
+</div>
+{% endblock %}
+{% endif %}
+
 {% block content %}
 <section class="section details">
     <div class="details__bg" data-bg="{% static 'img/section/movie_back.webp' %}"></div>
@@ -53,6 +82,13 @@
                                         <li>{{ age_mark }}</li>
                                         {% endif %}
                                     </ul>
+                                    <label for="modal-rating" id='movie-card-rating-button'>
+                                        {% if rate_value %}
+                                        <span><i class="icon ion-md-star"></i>&nbsp; {{ rate_value }} / 10</span>
+                                        {% else %}
+                                        <span><i class="icon ion-md-star-outline"></i>&nbsp;Rate</span>
+                                        {% endif %}
+                                    </label>
                                 </div>
                                 <table class="card__meta">
                                     <tr>
@@ -333,15 +369,23 @@
 <script src="{% static 'js/detail.js' %}"></script>
 {% if user.is_authenticated %}
 <script src="{% static 'js/votes.js' %}"></script>
+<script src="{% static 'js/rate.js' %}"></script>
 <script src="{% static 'js/fav_watchlist.js' %}"></script>
 {% endif %}
 <script type="text/javascript">
     {% if user.is_authenticated %}
+    {% if rate_value %}
+    $("#rating-{{ rate_value }}").prop("checked", true);
+    {% endif %}
     document.getElementById("form-comment").action = "{% url 'movie_comment' movie_id %}";
 
     function addComment(name, id) {
         document.getElementById("comment-parent").value = id;
         document.getElementById("contact-comment").innerText = `${name}, `
+    }
+
+    function openLogin() {
+        window.open("{% url 'account_login' %}", "_self");
     }
 
     $('#favorite, #watchlist').click(function() {
@@ -359,7 +403,7 @@
         {% endif %}
     {% else %}
     $("#watchlist, #favorite, .like-button, .dislike-button, .comment-like, .comment-dislike").click(function() {
-        window.open("{% url 'account_login' %}", "_self");
+        openLogin();
     });
     {% endif %}
 
