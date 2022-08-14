@@ -55,7 +55,7 @@ class MovieDetailsView(BaseView):
         movie = get_object_or_404(Movie, pk=pk)
         context = {"movie": movie.pk}
         context.update(
-            {"user": request.user.id if request.user.is_authenticated else None}
+            {"user": request.user.id if request.user.is_authenticated else -1}
         )
         context = services.GetMovieDetail.execute(context)
         return render(request, "movies/movie_detail.html", context)
@@ -85,7 +85,7 @@ class RandomMovieView(BaseView):
         movie = services.ger_random_movie()
         context = {"movie": movie.pk}
         context.update(
-            {"user": request.user.id if request.user.is_authenticated else None}
+            {"user": request.user.id if request.user.is_authenticated else -1}
         )
         context = services.GetMovieDetail.execute(context)
         return render(request, "movies/movie_detail.html", context)

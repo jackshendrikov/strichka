@@ -89,9 +89,10 @@ class GetMovieDetail(Service):
         return context
 
     @staticmethod
-    def _get_user_rate(movie: Movie, user_id: int | None) -> int | None:
+    def _get_user_rate(movie: Movie, user_id: int) -> int | None:
         if (
             user_id
+            and user_id != -1
             and Rating.objects.filter(object_id=movie.pk, user_id=user_id).exists()
         ):
             return Rating.objects.get(object_id=movie.pk, user_id=user_id).value
