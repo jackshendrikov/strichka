@@ -1001,6 +1001,7 @@
 }
 .card--details .card__meta th {
   display: block;
+  width: max-content;
   color: rgba(255, 255, 255, 0.7);
   font-weight: bold;
   margin-right: 10px;
@@ -1021,7 +1022,7 @@
 .card--details .card__meta td a:after {
   content: ",";
   position: absolute;
-  display: block;
+  display: contents;
   left: 100%;
   top: 0;
   background-image: -webkit-linear-gradient(0deg, #ff55a5 0%, #ff5860 100%);

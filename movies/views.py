@@ -155,13 +155,12 @@ class AllMoviesView(FilteredListView):
         return services.get_all_movies()
 
 
-class SearchMovieView(FilterView):
+class SearchMovieView(FilteredListView):
     """Search movie view."""
 
     page_title = "Search Result"
     filterset_class = SearchFilter
     paginate_by = 30
-    template_name = "movies/movie_list.html"
 
     def get_queryset(self) -> QuerySet:
         search_request = self.request.GET
@@ -173,12 +172,22 @@ class SearchMovieView(FilterView):
                 except ValueError:
                     raise Http404()
 
+    def get_context_data(self, **kwargs: Any) -> dict:
+        context = super().get_context_data(**kwargs)
+        context["hide_filters"] = True
+        return context
+
 
 class AdvancedSearchResultView(AllMoviesView):
     """Page for result of advanced search of movies."""
 
     page_title = "Search Results"
     filterset_class = AdvancedMovieFilter
+
+    def get_context_data(self, **kwargs: Any) -> dict:
+        context = super().get_context_data(**kwargs)
+        context["hide_filters"] = True
+        return context
 
 
 class MoviesByYearView(FilteredListView):
