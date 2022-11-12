@@ -36,10 +36,12 @@
         </div>
     </div>
 </section>
+
 <div class="filter">
     <div class="container">
         <div class="row">
             <div class="col-12">
+                {% if not hide_filters %}
                 <form method="get" action="" class="filter__content">
                     <div class="filter__items">
                         <div class="filter__item" id="filter__genre">
@@ -116,6 +118,7 @@
                     </div>
                     <button type="submit" class="filter__btn" id="filter-search">apply filter</button>
                 </form>
+                {% endif %}
             </div>
         </div>
     </div>
@@ -156,7 +159,7 @@
             </div>
             {% endfor %}
             {% if page_obj.has_other_pages %}
-            <div class="col-12">
+            <div class="col-12" id="paginator-wrapper">
                 <ul class="paginator">
                     {% if page_obj.has_previous %}
                     <li class="paginator__item paginator__item--prev">
@@ -171,6 +174,10 @@
                     {% endif %}
                     {% endfor %}
                     {% if page_obj.has_next %}
+                    {% if page_obj.number < page_obj.paginator.num_pages|add:'-2' %}
+                    <li class="paginator__item"><span>...</span></li>
+                    <li class="paginator__item"><a href="?{% url_replace request 'page' page_obj.paginator.num_pages %}">{{ page_obj.paginator.num_pages }}</a></li>
+                    {% endif %}
                     <li class="paginator__item paginator__item--next">
                         <a href="?{% url_replace request 'page' page_obj.next_page_number %}"><i class="icon ion-ios-arrow-forward"></i></a>
                     </li>
@@ -200,17 +207,26 @@
 <!-- infinity scroll  -->
 <script src="{% static 'js/libs/infinite-scroll.min.js' %}"></script>
 <script type="text/javascript">
-$('.infinite-container').infiniteScroll({
-    path: '.infinite-more-link',
-    append: '.infinite-item',
-    button: '.infinite-more-link',
-    scrollThreshold: false,
-    status: '.more-loader',
-}).on( 'last.infiniteScroll', function( event, body, path ) {
-    $('.more-loader').hide();
-});
+    $('.infinite-container').infiniteScroll({
+        path: '.infinite-more-link',
+        append: '.infinite-item',
+        button: '.infinite-more-link',
+        scrollThreshold: false,
+        status: '.more-loader',
+    }).on( 'last.infiniteScroll', function( event, body, path ) {
+        $('.more-loader').hide();
+    });
+
+    let paginatorObj = $('#paginator-wrapper');
+    $(document).on("click", "#addMore", function(e) {
+        if (paginatorObj.is(":visible")) {
+            paginatorObj.hide();
+        }
+    });
 </script>
+{% if not hide_filters %}
 <script src="{% static 'js/filters.js' %}"></script>
+{% endif %}
 <script src="{% static 'js/movie_list.js' %}"></script>
 {% if user.is_authenticated %}
 <script src="{% static 'js/fav_watchlist.js' %}"></script>

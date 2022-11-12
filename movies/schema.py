@@ -27,9 +27,9 @@ class CastSchema(BaseModel):
 
     imdb_id: str
     full_name: str
-    description: str | None
-    birthday: date | None
-    place_of_birth: str | None
+    description: str | None = None
+    birthday: date | None = None
+    place_of_birth: str | None = None
     photo: HttpUrl
 
     @validator("imdb_id")
@@ -76,25 +76,32 @@ class MovieSchema(BaseModel):
 
     imdb_id: str
     title: str
+    plot: str
     year: int
+    poster: HttpUrl
+
     imdb_rate: float
     imdb_votes: int
-    plot: str
-    poster: HttpUrl
     imdb_link: HttpUrl
-    genres: list[str]
-    actors: list[str]
-    directors: list[str]
-    writers: list[str]
-    runtime: timedelta | None
-    release: date | None
-    keywords: str | None
-    country: list[str]
-    box_office: int | None
-    age_mark: str
-    awards: str | None
+
+    runtime: timedelta | None = None
+    release: date | None = None
+    keywords: str = ""
+
+    box_office: int | None = None
+    age_mark: str | None = None
+    awards: str | None = None
+    total_seasons: int | None = None
+
     is_movie: bool
-    total_seasons: int | None
+    trailer_id: str
+
+    genres: list[str]
+    country: list[str]
+
+    actors: list[str] | None = None
+    directors: list[str] | None = None
+    writers: list[str] | None = None
 
     @validator("imdb_id")
     def imdb_id_validation(cls, imdb_id: str) -> str:

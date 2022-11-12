@@ -37,7 +37,8 @@ class MovieFilter(FilterSet):
         model = Movie
         fields = BASE_FILTER_FIELDS
 
-    def filter_platforms(self, queryset: QuerySet, name: str, value: str) -> QuerySet:
+    @staticmethod
+    def filter_platforms(queryset: QuerySet, name: str, value: str) -> QuerySet:
         platform_movies = StreamingPlatform.objects.filter(**{name: value}).values(
             "movie"
         )
@@ -48,7 +49,7 @@ class MovieFilter(FilterSet):
 
 class AdvancedMovieFilter(MovieFilter):
     is_movie = BooleanFilter(field_name="is_movie")
-    age_mark = CharFilter(field_name="age_mark", lookup_expr="iexact")
+    age_marks = CharFilter(field_name="age_mark", lookup_expr="iexact")
 
     imdb_vote__gt = NumberFilter(field_name="imdb_votes", lookup_expr="gte")
     imdb_vote__lt = NumberFilter(field_name="imdb_votes", lookup_expr="lte")

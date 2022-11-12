@@ -215,7 +215,7 @@ class Movie(StrichkaBaseModel):
     title = models.CharField(
         verbose_name="Movie title", max_length=150, help_text="Movie title"
     )
-    plot = models.TextField(null=True, blank=True, help_text="Movie plot")
+    plot = models.TextField(help_text="Movie plot")
     year = models.PositiveSmallIntegerField(verbose_name="Movie release year")
     poster = models.URLField(max_length=220, help_text="Movie poster")
 
