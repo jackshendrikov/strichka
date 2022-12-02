@@ -306,7 +306,9 @@ def get_movies_of_collection(collection: Collection) -> QuerySet:
     """
     Get all movies from collection.
     """
-    movies = collection.movies.all().prefetch_related()
+    movies = (
+        collection.movies.all().prefetch_related().order_by("-imdb_votes", "-imdb_rate")
+    )
     return movies
 
 
