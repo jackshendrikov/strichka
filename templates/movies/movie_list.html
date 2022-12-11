@@ -145,7 +145,7 @@
                     <div class="card__content">
                         <h3 class="card__title"><a href="{{ movie.get_absolute_url }}">{{ movie.title }}</a></h3>
                         <span class="card__category">
-                        {% for genre in movie.categories|genres %}
+                        {% for genre in movie.genres %}
                         <a href="{{ genre.get_absolute_url }}">{{ genre.name }}</a>
                         {% endfor %}
                         </span>

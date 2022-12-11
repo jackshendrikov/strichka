@@ -42,7 +42,9 @@ class CustomUserAdmin(UserAdmin):
     list_display = ("username", "email", "first_name", "last_name", "is_staff")
     list_select_related = ("profile",)
 
-    def get_inline_instances(self, request: HttpRequest, obj: User = None) -> list:
+    def get_inline_instances(
+        self, request: HttpRequest, obj: User | None = None
+    ) -> list:
         if not obj:
             return []
         return super().get_inline_instances(request, obj)
