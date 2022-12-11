@@ -1,5 +1,6 @@
 from typing import Any
 
+from django.core.cache import cache
 from django.db.models import QuerySet
 from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -9,7 +10,7 @@ from django.views.generic.base import View
 from django_filters.views import FilterView
 
 from common.views import BaseView, is_ajax
-from config.settings.base import DEFAULT_SESSION_CACHE_TTL, SPECIAL_SESSION_CACHE_TTL
+from config.settings.base import SESSION_CACHE_TTL, SESSION_SPECIAL_CACHE_TTL
 from movies.const import CoreModels
 from movies.models import Cast, Collection, Movie
 from movies.services import services
@@ -40,7 +41,7 @@ class MoviesBaseView(BaseView):
     model_type: CoreModels = CoreModels.movie
 
     @method_decorator(
-        cache_page(SPECIAL_SESSION_CACHE_TTL, key_prefix=model_type.value)
+        cache_page(SESSION_SPECIAL_CACHE_TTL, key_prefix=model_type.value)
     )
     def get(self, request: HttpRequest) -> HttpResponse:
         context = {
@@ -67,7 +68,7 @@ class MovieDetailsView(BaseView):
     model_type: CoreModels = CoreModels.movie
 
     @method_decorator(
-        cache_page(SPECIAL_SESSION_CACHE_TTL, key_prefix=model_type.value)
+        cache_page(SESSION_SPECIAL_CACHE_TTL, key_prefix=model_type.value)
     )
     def get(self, request: HttpRequest, pk: int) -> HttpResponse:
         movie = get_object_or_404(Movie, pk=pk)
@@ -85,7 +86,7 @@ class CastMemberDetailsView(BaseView):
     model_type: CoreModels = CoreModels.cast
 
     @method_decorator(
-        cache_page(SPECIAL_SESSION_CACHE_TTL, key_prefix=model_type.value)
+        cache_page(SESSION_SPECIAL_CACHE_TTL, key_prefix=model_type.value)
     )
     def get(self, request: HttpRequest, pk: int) -> HttpResponse:
         cast_member = get_object_or_404(Cast, pk=pk)
@@ -99,7 +100,7 @@ class CollectionsView(BaseView):
     model_type: CoreModels = CoreModels.collection
 
     @method_decorator(
-        cache_page(SPECIAL_SESSION_CACHE_TTL, key_prefix=model_type.value)
+        cache_page(SESSION_SPECIAL_CACHE_TTL, key_prefix=model_type.value)
     )
     def get(self, request: HttpRequest) -> HttpResponse:
         context = {"collections": services.get_collections()}
@@ -383,9 +384,7 @@ class CommentView(View):
     model: Movie | Cast | None = None
     model_type: CoreModels = CoreModels.comment
 
-    @method_decorator(
-        cache_page(DEFAULT_SESSION_CACHE_TTL, key_prefix=model_type.value)
-    )
+    @method_decorator(cache_page(SESSION_CACHE_TTL, key_prefix=model_type.value))
     def post(self, request: HttpRequest, pk: int) -> HttpResponse:
         _mutable = request.POST._mutable  # noqa: WPS122
         request.POST._mutable = True  # type: ignore
@@ -404,9 +403,7 @@ class VoteView(View):
     vote_type: int | None = None
     model_type: CoreModels = CoreModels.vote
 
-    @method_decorator(
-        cache_page(DEFAULT_SESSION_CACHE_TTL, key_prefix=model_type.value)
-    )
+    @method_decorator(cache_page(SESSION_CACHE_TTL, key_prefix=model_type.value))
     def post(self, request: HttpRequest, pk: int) -> HttpResponse | None:
         obj: Movie | Cast = get_object_or_404(self.model, pk=pk)  # type: ignore
         if is_ajax(request=request):
@@ -422,9 +419,7 @@ class RatingView(View):
     model: Movie | None = None
     model_type: CoreModels = CoreModels.rating
 
-    @method_decorator(
-        cache_page(DEFAULT_SESSION_CACHE_TTL, key_prefix=model_type.value)
-    )
+    @method_decorator(cache_page(SESSION_CACHE_TTL, key_prefix=model_type.value))
     def post(self, request: HttpRequest, pk: int) -> HttpResponse | None:
         obj: Movie = get_object_or_404(self.model, pk=pk)  # type: ignore
         if is_ajax(request=request):

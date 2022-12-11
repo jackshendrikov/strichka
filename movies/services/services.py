@@ -1,7 +1,8 @@
+from typing import Any
+
 import locale
 import logging
 from collections import defaultdict
-from collections.abc import Generator
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 from django.contrib.auth.base_user import AbstractBaseUser
@@ -307,7 +308,7 @@ def get_imdb_top() -> QuerySet:
 
 def get_movies_slider(
     limit: int | None = None, serialize: bool = False
-) -> QuerySet | Generator:
+) -> QuerySet | list[dict[str, Any]]:
     """
     Get the best movies and series for slider on main page (last 6 months).
     """
@@ -331,7 +332,7 @@ def get_movies_slider(
 
 def get_popular_movies(
     limit: int | None = None, serialize: bool = False
-) -> QuerySet | Generator:
+) -> QuerySet | list[dict[str, Any]]:
     """
     Get popular movies according to IMDB.
     """
@@ -357,7 +358,7 @@ def get_popular_movies(
 
 def get_popular_series(
     limit: int | None = None, serialize: bool = False
-) -> QuerySet | Generator:
+) -> QuerySet | list[dict[str, Any]]:
     """
     Get popular series according to IMDB.
     """
@@ -383,7 +384,7 @@ def get_popular_series(
 
 def get_cinema_movies(
     limit: int | None = None, serialize: bool = False
-) -> QuerySet | Generator:
+) -> QuerySet | list[dict[str, Any]]:
     """
     Get movies currently in cinema.
     """
@@ -408,7 +409,7 @@ def get_cinema_movies(
 
 def get_recent_premieres(
     limit: int | None = None, serialize: bool = False
-) -> QuerySet | Generator:
+) -> QuerySet | list[dict[str, Any]]:
     """
     Get recent movies and series premieres.
     """
@@ -431,7 +432,7 @@ def get_recent_premieres(
 
 def get_top_fantasy(
     limit: int | None = None, serialize: bool = False
-) -> QuerySet | Generator:
+) -> QuerySet | list[dict[str, Any]]:
     """
     Get top fantasy movies and series list according to IMDB.
     """

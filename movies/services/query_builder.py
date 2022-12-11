@@ -1,3 +1,5 @@
+from typing import Any, Dict, List
+
 from collections.abc import Generator
 from dataclasses import dataclass
 from django.db.models import QuerySet
@@ -31,13 +33,13 @@ class MovieQueryBuilder:
         "is_movie",
     ]
 
-    def serialize_queryset(self) -> Generator:
-        """Serialize each object of queryset and return generator"""
+    def serialize_queryset(self) -> list[dict[str, Any]]:
+        """Serialize each object of queryset."""
 
         fields, _ = self._get_fields_to_obtain()
         query = self.build_queryset()
 
-        return (model_to_dict(item, fields=fields) for item in query)
+        return [model_to_dict(item, fields=fields) for item in query]
 
     def build_queryset(self) -> QuerySet:
         """Build movie queryset."""
