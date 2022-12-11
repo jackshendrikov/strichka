@@ -1,10 +1,14 @@
 from django import template
 from django.contrib.auth.models import User
-from django.db.models import QuerySet
 from django.http import HttpRequest
+from django.urls import reverse
 from hashlib import md5
 
 register = template.Library()
+
+default_img_size = 300
+default_selector = "_V1_SX{img_size}"
+default_size_selector = default_selector.format(img_size=default_img_size)
 
 
 @register.filter(name="gravatar")
@@ -15,9 +19,18 @@ def gravatar(user: User, size: int = 35) -> str:
     return url.format(email_hash, size)
 
 
-@register.filter(name="genres")
-def genres(queryset: QuerySet) -> QuerySet:
-    return queryset.filter(parent__slug="genres")
+@register.filter
+def reduce_img_size(link: str, new_size: int) -> str:
+    return link.replace(
+        default_size_selector, default_selector.format(img_size=new_size)
+    )
+
+
+@register.simple_tag
+def get_movie_url(is_movie: bool, movie_id: int) -> str:
+    if is_movie:
+        return reverse("movie_detail", kwargs={"pk": movie_id})
+    return reverse("series_detail", kwargs={"pk": movie_id})
 
 
 @register.simple_tag

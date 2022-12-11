@@ -1,6 +1,7 @@
 import locale
 import logging
 from collections import defaultdict
+from collections.abc import Generator
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 from django.contrib.auth.base_user import AbstractBaseUser
@@ -25,6 +26,7 @@ from movies.models import (
     StreamingPlatform,
     Vote,
 )
+from movies.services.query_builder import MovieQueryBuilder
 
 locale.setlocale(locale.LC_ALL, "")
 logger = logging.getLogger(__name__)
@@ -268,32 +270,6 @@ class DataFilters:
         return list(platforms)
 
 
-def get_all_movies() -> QuerySet:
-    """Get all movies in DB."""
-    return Movie.objects.distinct()
-
-
-def get_imdb_top() -> QuerySet:
-    """
-    Get top movies and series list according to IMDB.
-    """
-    return Movie.objects.order_by("-imdb_rate", "-imdb_votes").distinct()
-
-
-def get_movies_slider(limit: int = None) -> QuerySet:
-    """
-    Get best movies and series for slider on main page (last 6 months).
-    """
-    slider_movies = Movie.objects.filter(
-        release__range=(datetime.today() + relativedelta(months=-6), datetime.today())
-    ).order_by("-imdb_rate", "-imdb_votes")
-
-    if limit:
-        return slider_movies[:limit]
-
-    return slider_movies
-
-
 def get_collections() -> QuerySet:
     """
     Get collections of movies+serials for main page.
@@ -306,130 +282,209 @@ def get_movies_of_collection(collection: Collection) -> QuerySet:
     """
     Get all movies from collection.
     """
+
     movies = (
-        collection.movies.all().prefetch_related().order_by("-imdb_votes", "-imdb_rate")
+        collection.movies.all()
+        .prefetch_related("directors", "writers", "actors", "country", "categories")
+        .order_by("-imdb_votes", "-imdb_rate")
     )
     return movies
 
 
-def get_popular_movies(limit: int = None) -> QuerySet:
+def get_all_movies() -> QuerySet:
+    """Get all movies in DB."""
+
+    return Movie.objects.distinct()
+
+
+def get_imdb_top() -> QuerySet:
+    """
+    Get top movies and series list according to IMDB.
+    """
+
+    return Movie.objects.order_by("-imdb_rate", "-imdb_votes").distinct()
+
+
+def get_movies_slider(
+    limit: int | None = None, serialize: bool = False
+) -> QuerySet | Generator:
+    """
+    Get the best movies and series for slider on main page (last 6 months).
+    """
+
+    query_builder = MovieQueryBuilder(
+        filter_by={
+            "release__range": (
+                datetime.today() + relativedelta(months=-6),
+                datetime.today(),
+            )
+        },
+        order_by=["-imdb_rate", "-imdb_votes"],
+        limit=limit,
+        distinct=False,
+    )
+
+    if serialize:
+        return query_builder.serialize_queryset()
+    return query_builder.build_queryset()
+
+
+def get_popular_movies(
+    limit: int | None = None, serialize: bool = False
+) -> QuerySet | Generator:
     """
     Get popular movies according to IMDB.
     """
-    popular_movies = Movie.objects.filter(
-        is_movie=True,
-        release__range=(datetime.today() + relativedelta(years=-1), datetime.today()),
-        imdb_rate__gte=5,
-    ).order_by("-imdb_votes", "-imdb_rate")
 
-    if limit:
-        return popular_movies[:limit]
+    query_builder = MovieQueryBuilder(
+        filter_by={
+            "is_movie": True,
+            "release__range": (
+                datetime.today() + relativedelta(years=-1),
+                datetime.today(),
+            ),
+            "imdb_rate__gte": 5,
+        },
+        order_by=["-imdb_votes", "-imdb_rate"],
+        limit=limit,
+        distinct=False,
+    )
 
-    return popular_movies
+    if serialize:
+        return query_builder.serialize_queryset()
+    return query_builder.build_queryset()
 
 
-def get_popular_series(limit: int = None) -> QuerySet:
+def get_popular_series(
+    limit: int | None = None, serialize: bool = False
+) -> QuerySet | Generator:
     """
     Get popular series according to IMDB.
     """
-    popular_series = Movie.objects.filter(
-        is_movie=False,
-        release__range=(datetime.today() + relativedelta(years=-1), datetime.today()),
-        imdb_rate__gte=5,
-    ).order_by("-imdb_votes", "-imdb_rate")
 
-    if limit:
-        return popular_series[:limit]
+    query_builder = MovieQueryBuilder(
+        filter_by={
+            "is_movie": False,
+            "release__range": (
+                datetime.today() + relativedelta(years=-1),
+                datetime.today(),
+            ),
+            "imdb_rate__gte": 5,
+        },
+        order_by=["-imdb_votes", "-imdb_rate"],
+        limit=limit,
+        distinct=False,
+    )
 
-    return popular_series
+    if serialize:
+        return query_builder.serialize_queryset()
+    return query_builder.build_queryset()
 
 
-def get_cinema_movies(limit: int = None) -> QuerySet:
+def get_cinema_movies(
+    limit: int | None = None, serialize: bool = False
+) -> QuerySet | Generator:
     """
     Get movies currently in cinema.
     """
-    cinema_movies = Movie.objects.filter(
-        is_movie=True,
-        release__range=(datetime.today() + relativedelta(months=-1), datetime.today()),
-    ).order_by("-imdb_votes", "-imdb_rate")
 
-    if limit:
-        return cinema_movies[:limit]
+    query_builder = MovieQueryBuilder(
+        filter_by={
+            "is_movie": True,
+            "release__range": (
+                datetime.today() + relativedelta(months=-1),
+                datetime.today(),
+            ),
+        },
+        order_by=["-imdb_votes", "-imdb_rate"],
+        limit=limit,
+        distinct=False,
+    )
 
-    return cinema_movies
+    if serialize:
+        return query_builder.serialize_queryset()
+    return query_builder.build_queryset()
 
 
-def get_recent_premieres(limit: int = None) -> QuerySet:
+def get_recent_premieres(
+    limit: int | None = None, serialize: bool = False
+) -> QuerySet | Generator:
     """
     Get recent movies and series premieres.
     """
-    new_releases = (
-        Movie.objects.filter(
-            release__range=(
+
+    query_builder = MovieQueryBuilder(
+        filter_by={
+            "release__range": (
                 datetime.today() + relativedelta(months=-3),
                 datetime.today(),
             )
-        )
-        .order_by("-imdb_votes", "-imdb_rate", "-release")
-        .distinct()
+        },
+        order_by=["-imdb_votes", "-imdb_rate", "-release"],
+        limit=limit,
     )
 
-    if limit:
-        return new_releases[:limit]
-
-    return new_releases
-
-
-def get_top_classics(limit: int = None) -> QuerySet:
-    """
-    Get top classic movies and series list according to IMDB.
-    """
-    best_movies = (
-        Movie.objects.exclude(release__gt=datetime.today() + relativedelta(years=-20))
-        .exclude(release__isnull=True)
-        .order_by("-imdb_votes", "-imdb_rate")
-        .distinct()
-    )
-
-    if limit:
-        return best_movies[:limit]
-
-    return best_movies
+    if serialize:
+        return query_builder.serialize_queryset()
+    return query_builder.build_queryset()
 
 
-def get_top_fantasy(limit: int = None) -> QuerySet:
+def get_top_fantasy(
+    limit: int | None = None, serialize: bool = False
+) -> QuerySet | Generator:
     """
     Get top fantasy movies and series list according to IMDB.
     """
-    best_fantasy = (
-        Movie.objects.filter(categories__name="Fantasy")
-        .order_by("-imdb_votes", "-imdb_rate")
-        .distinct()
+
+    query_builder = MovieQueryBuilder(
+        additional_prefetch=["actors", "directors"],
+        filter_by={"categories__name": "Fantasy"},
+        order_by=["-imdb_votes", "-imdb_rate"],
+        limit=limit,
     )
 
-    if limit:
-        return best_fantasy[:limit]
+    if serialize:
+        return query_builder.serialize_queryset()
+    return query_builder.build_queryset()
 
-    return best_fantasy
+
+def get_top_classics(limit: int | None = None) -> QuerySet:
+    """
+    Get top classic movies and series list according to IMDB.
+    """
+
+    query_builder = MovieQueryBuilder(
+        exclude={
+            "release__gt": datetime.today() + relativedelta(years=-20),
+            "release__isnull": True,
+        },
+        order_by=["-imdb_votes", "-imdb_rate"],
+        limit=limit,
+    )
+
+    return query_builder.build_queryset()
 
 
-def get_new_movies_and_series(limit: int = None) -> QuerySet:
+def get_new_movies_and_series(limit: int | None = None) -> QuerySet:
     """
     Get new movies and series (during the year).
     """
-    new_movies = Movie.objects.filter(
-        release__range=(
-            datetime.today() + relativedelta(years=-1),
-            datetime.today() + relativedelta(months=-2),
-        ),
-        imdb_rate__gte=5,
-        release__isnull=False,
-    ).order_by("-imdb_votes", "-imdb_rate", "-release")
 
-    if limit:
-        return new_movies[:limit]
+    query_builder = MovieQueryBuilder(
+        filter_by={
+            "release__range": (
+                datetime.today() + relativedelta(years=-1),
+                datetime.today() + relativedelta(months=-2),
+            ),
+            "imdb_rate__gte": 5,
+            "release__isnull": False,
+        },
+        order_by=["-imdb_votes", "-imdb_rate", "-release"],
+        limit=limit,
+        distinct=False,
+    )
 
-    return new_movies
+    return query_builder.build_queryset()
 
 
 def get_movies_list_by_genre(slug: str) -> QuerySet:
@@ -456,7 +511,11 @@ def get_movies_list_by_country(country: str) -> QuerySet:
     return Movie.objects.filter(country__name__exact=country).distinct()
 
 
-def ger_random_movie() -> Movie:
+def get_random_movie() -> Movie:
+    """
+    Select random movie.
+    """
+
     pks = Movie.objects.values_list("pk", flat=True)
     random_pk = choice(pks)  # noqa: S311
     return Movie.objects.get(pk=random_pk)
@@ -464,8 +523,9 @@ def ger_random_movie() -> Movie:
 
 def get_movie_of_month() -> QuerySet:
     """
-    Get best movies and series over the past month.
+    Get the best movies and series over the past month.
     """
+
     return (
         Movie.objects.filter(
             votes__liked_on__range=(
@@ -488,6 +548,7 @@ def add_comment(post_request: dict, obj: Movie | Cast) -> None:
     """
     Validate and add comment.
     """
+
     form = CommentForm(post_request)
     if form.is_valid():
         form = form.save(commit=False)
@@ -510,6 +571,7 @@ def add_vote(
     If user has already liked or disliked - entry is deleted.
     If user wants to change value -  update.
     """
+
     try:  # noqa: WPS229
         like_dislike = Vote.objects.get(
             content_type=ContentType.objects.get_for_model(obj),
@@ -541,6 +603,7 @@ def add_rate(
     obj: Movie, rate_value: int | None, user: AbstractBaseUser | AnonymousUser
 ) -> dict:
     """Add rate to a movie."""
+
     try:  # noqa: WPS229
         rating = Rating.objects.get(
             content_type=ContentType.objects.get_for_model(obj),

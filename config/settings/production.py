@@ -31,3 +31,16 @@ SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 # Postgres settings.
 db_from_env = dj_database_url.config(conn_max_age=500)
 DATABASES["default"].update(db_from_env)
+
+# Production Cache Settings
+CACHES = {
+    "default": {
+        "BACKEND": "django_bmemcached.memcached.BMemcached",
+        "TIMEOUT": None,
+        "LOCATION": os.getenv("MEMCACHIER_SERVERS"),
+        "OPTIONS": {
+            "username": os.getenv("MEMCACHIER_USERNAME"),
+            "password": os.getenv("MEMCACHIER_PASSWORD"),
+        },
+    }
+}

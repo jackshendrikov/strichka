@@ -1,3 +1,4 @@
+import os
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
@@ -32,6 +33,11 @@ urlpatterns = [
         name="swagger-ui",
     ),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+if "development" in os.getenv("DJANGO_SETTINGS_MODULE", ""):
+    import debug_toolbar
+
+    urlpatterns += [path("__debug__/", include(debug_toolbar.urls))]
 
 urlpatterns += staticfiles_urlpatterns()
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

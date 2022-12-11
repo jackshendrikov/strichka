@@ -20,4 +20,4 @@ class MovieManager(models.Manager):
     def get_random_movie(self) -> models.QuerySet:
         count = self.aggregate(count=Count("id"))["count"]
         random_index = randint(0, count - 1)  # noqa: S311
-        return self.all()[random_index]
+        return self.all()[random_index]  # type: ignore

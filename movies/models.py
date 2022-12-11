@@ -90,7 +90,7 @@ class Vote(StrichkaBaseModel):
     content_object = GenericForeignKey("content_type", "object_id")
     object_id = models.PositiveIntegerField(blank=True)
 
-    objects = VoteManager()
+    objects: VoteManager = VoteManager()
 
     class Meta:
         verbose_name_plural = "Votes"
@@ -264,7 +264,7 @@ class Movie(StrichkaBaseModel):
     ratings = GenericRelation(Rating)
     votes = GenericRelation(Vote, related_query_name="movie")
 
-    objects = MovieManager()
+    objects: MovieManager = MovieManager()
 
     class Meta:
         verbose_name_plural = "Movies"
@@ -272,14 +272,11 @@ class Movie(StrichkaBaseModel):
     def __str__(self) -> str:
         return f"{self.title} ({self.year})"
 
-    def genres(self) -> list[str]:
-        movie = Movie.objects.get(pk=self.pk)
-        genres = movie.categories.filter(parent__slug="genres")
-        return [str(genre) for genre in genres]
+    def genres(self) -> models.QuerySet:
+        return self.categories.filter(parent__slug="genres")
 
     def get_absolute_url(self) -> str:
-        movie = Movie.objects.get(pk=self.pk)
-        if movie.is_movie:
+        if self.is_movie:
             return reverse("movie_detail", kwargs={"pk": self.pk})
         return reverse("series_detail", kwargs={"pk": self.pk})
 

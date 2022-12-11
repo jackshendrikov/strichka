@@ -170,3 +170,9 @@ EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 SERVER_EMAIL = os.getenv("EMAIL_HOST")
 DEFAULT_FROM_EMAIL = os.getenv("EMAIL_HOST")
+
+# Cache Settings
+DEFAULT_SESSION_CACHE_TTL = 60 * 15
+SPECIAL_SESSION_CACHE_TTL = 60 * 60 * 24 * 5
+
+CACHES = {"default": {"BACKEND": "django.core.cache.backends.locmem.LocMemCache"}}
