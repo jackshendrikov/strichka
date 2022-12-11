@@ -43,5 +43,4 @@ types:
 		 -p "common" \
 		 -p "movies" \
 		 --disable-error-code=no-redef \
-		 --config-file setup.cfg && \
- 	cd ../
+		 --config-file setup.cfg

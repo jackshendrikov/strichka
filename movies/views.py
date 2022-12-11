@@ -1,18 +1,25 @@
 from typing import Any
 
+from django.core.cache import cache
 from django.db.models import QuerySet
 from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 from django.views.generic.base import View
 from django_filters.views import FilterView
 
 from common.views import BaseView, is_ajax
+from config.settings.base import SESSION_CACHE_TTL, SESSION_SPECIAL_CACHE_TTL
+from movies.const import CoreModels
 from movies.models import Cast, Collection, Movie
 from movies.services import services
 from movies.services.filters import AdvancedMovieFilter, MovieFilter, SearchFilter
 
 
-def error_403(request: HttpRequest, exception: type[Exception] = None) -> HttpResponse:
+def error_403(
+    request: HttpRequest, exception: type[Exception] | None = None
+) -> HttpResponse:
     return render(request, "errors/403.html")
 
 
@@ -20,7 +27,9 @@ def error_404(request: HttpRequest, exception: type[Exception]) -> HttpResponse:
     return render(request, "errors/404.html", {})
 
 
-def error_500(request: HttpRequest, exception: type[Exception] = None) -> HttpResponse:
+def error_500(
+    request: HttpRequest, exception: type[Exception] | None = None
+) -> HttpResponse:
     return render(request, "errors/500.html", {})
 
 
@@ -29,14 +38,19 @@ class MoviesBaseView(BaseView):
     The main page of the "Search Movies" site, only the most important is displayed.
     """
 
+    model_type: CoreModels = CoreModels.movie
+
+    @method_decorator(
+        cache_page(SESSION_SPECIAL_CACHE_TTL, key_prefix=model_type.value)
+    )
     def get(self, request: HttpRequest) -> HttpResponse:
         context = {
-            "index_slider_movies": services.get_movies_slider(limit=12),
-            "best_movies": services.get_top_fantasy(limit=3),
-            "new_releases": services.get_recent_premieres(limit=18),
-            "popular_movies": services.get_popular_movies(limit=18),
-            "popular_series": services.get_popular_series(limit=18),
-            "cinema_movies": services.get_cinema_movies(limit=6),
+            "index_slider_movies": services.get_movies_slider(limit=12, serialize=True),
+            "best_movies": services.get_top_fantasy(limit=3, serialize=True),
+            "new_releases": services.get_recent_premieres(limit=18, serialize=True),
+            "popular_movies": services.get_popular_movies(limit=18, serialize=True),
+            "popular_series": services.get_popular_series(limit=18, serialize=True),
+            "cinema_movies": services.get_cinema_movies(limit=6, serialize=True),
         }
         return render(request, "movies/index.html", context)
 
@@ -51,11 +65,16 @@ class AdvancedSearchView(BaseView):
 class MovieDetailsView(BaseView):
     """Detailed information about the movie."""
 
+    model_type: CoreModels = CoreModels.movie
+
+    @method_decorator(
+        cache_page(SESSION_SPECIAL_CACHE_TTL, key_prefix=model_type.value)
+    )
     def get(self, request: HttpRequest, pk: int) -> HttpResponse:
         movie = get_object_or_404(Movie, pk=pk)
         context = {"movie": movie.pk}
         context.update(
-            {"user": request.user.id if request.user.is_authenticated else -1}
+            {"user": request.user.id if request.user.is_authenticated else -1}  # type: ignore
         )
         context = services.GetMovieDetail.execute(context)
         return render(request, "movies/movie_detail.html", context)
@@ -64,6 +83,11 @@ class MovieDetailsView(BaseView):
 class CastMemberDetailsView(BaseView):
     """Detailed information about cast members."""
 
+    model_type: CoreModels = CoreModels.cast
+
+    @method_decorator(
+        cache_page(SESSION_SPECIAL_CACHE_TTL, key_prefix=model_type.value)
+    )
     def get(self, request: HttpRequest, pk: int) -> HttpResponse:
         cast_member = get_object_or_404(Cast, pk=pk)
         context = services.GetCastDetail.execute({"member": cast_member.pk})
@@ -73,6 +97,11 @@ class CastMemberDetailsView(BaseView):
 class CollectionsView(BaseView):
     """Detailed information about collections."""
 
+    model_type: CoreModels = CoreModels.collection
+
+    @method_decorator(
+        cache_page(SESSION_SPECIAL_CACHE_TTL, key_prefix=model_type.value)
+    )
     def get(self, request: HttpRequest) -> HttpResponse:
         context = {"collections": services.get_collections()}
         return render(request, "movies/collection.html", context)
@@ -82,10 +111,10 @@ class RandomMovieView(BaseView):
     """Detailed information about random movie."""
 
     def get(self, request: HttpRequest) -> HttpResponse:
-        movie = services.ger_random_movie()
+        movie = services.get_random_movie()
         context = {"movie": movie.pk}
         context.update(
-            {"user": request.user.id if request.user.is_authenticated else -1}
+            {"user": request.user.id if request.user.is_authenticated else -1}  # type: ignore
         )
         context = services.GetMovieDetail.execute(context)
         return render(request, "movies/movie_detail.html", context)
@@ -94,7 +123,7 @@ class RandomMovieView(BaseView):
 class AddFavoriteMovieView(View):
     """Add movie in User favorite list."""
 
-    def post(self, request: HttpRequest, pk: int) -> HttpResponse:
+    def post(self, request: HttpRequest, pk: int) -> HttpResponse | None:
         if is_ajax(request=request):
             services.add_favorite_movie(movie_id=pk, user_id=request.user.pk)
             return HttpResponse("success")
@@ -103,7 +132,7 @@ class AddFavoriteMovieView(View):
 class AddWatchlistMovieView(View):
     """Add movie in User watchlist."""
 
-    def post(self, request: HttpRequest, pk: int) -> HttpResponse:
+    def post(self, request: HttpRequest, pk: int) -> HttpResponse | None:
         if is_ajax(request=request):
             services.add_watchlist_movie(movie_id=pk, user_id=request.user.pk)
             return HttpResponse("success")
@@ -162,7 +191,7 @@ class SearchMovieView(FilteredListView):
     filterset_class = SearchFilter
     paginate_by = 30
 
-    def get_queryset(self) -> QuerySet:
+    def get_queryset(self) -> QuerySet | None:
         search_request = self.request.GET
 
         if search_request:
@@ -286,7 +315,7 @@ class MoviesMonthView(FilteredListView):
     queryset = services.get_movie_of_month()
 
 
-def get_filter_countries(request: HttpRequest) -> JsonResponse:
+def get_filter_countries(request: HttpRequest) -> JsonResponse | None:
     """Get all the countries from the DB."""
 
     if request.method == "GET" and is_ajax(request=request):
@@ -295,7 +324,7 @@ def get_filter_countries(request: HttpRequest) -> JsonResponse:
         return JsonResponse(data, status=200)
 
 
-def get_filter_categories(request: HttpRequest) -> JsonResponse:
+def get_filter_categories(request: HttpRequest) -> JsonResponse | None:
     """Get all the categories from the DB."""
 
     if request.method == "GET" and is_ajax(request=request):
@@ -304,7 +333,7 @@ def get_filter_categories(request: HttpRequest) -> JsonResponse:
         return JsonResponse(data, status=200)
 
 
-def get_filter_year(request: HttpRequest) -> JsonResponse:
+def get_filter_year(request: HttpRequest) -> JsonResponse | None:
     """Get all the years from the DB."""
 
     if request.method == "GET" and is_ajax(request=request):
@@ -313,7 +342,7 @@ def get_filter_year(request: HttpRequest) -> JsonResponse:
         return JsonResponse(data, status=200)
 
 
-def get_filter_genres(request: HttpRequest) -> JsonResponse:
+def get_filter_genres(request: HttpRequest) -> JsonResponse | None:
     """Get all the genres from the DB."""
 
     if request.method == "GET" and is_ajax(request=request):
@@ -322,7 +351,7 @@ def get_filter_genres(request: HttpRequest) -> JsonResponse:
         return JsonResponse(data, status=200)
 
 
-def get_filter_imdb_votes(request: HttpRequest) -> JsonResponse:
+def get_filter_imdb_votes(request: HttpRequest) -> JsonResponse | None:
     """Get IMDb votes from the DB."""
 
     if request.method == "GET" and is_ajax(request=request):
@@ -331,7 +360,7 @@ def get_filter_imdb_votes(request: HttpRequest) -> JsonResponse:
         return JsonResponse(data, status=200)
 
 
-def get_filter_age_mark(request: HttpRequest) -> JsonResponse:
+def get_filter_age_mark(request: HttpRequest) -> JsonResponse | None:
     """Get age marks from the DB."""
 
     if request.method == "GET" and is_ajax(request=request):
@@ -340,7 +369,7 @@ def get_filter_age_mark(request: HttpRequest) -> JsonResponse:
         return JsonResponse(data, status=200)
 
 
-def get_filter_platforms(request: HttpRequest) -> JsonResponse:
+def get_filter_platforms(request: HttpRequest) -> JsonResponse | None:
     """Get all the platforms from the DB."""
 
     if request.method == "GET" and is_ajax(request=request):
@@ -353,7 +382,9 @@ class CommentView(View):
     """Adding comments to movies and series."""
 
     model: Movie | Cast | None = None
+    model_type: CoreModels = CoreModels.comment
 
+    @method_decorator(cache_page(SESSION_CACHE_TTL, key_prefix=model_type.value))
     def post(self, request: HttpRequest, pk: int) -> HttpResponse:
         _mutable = request.POST._mutable  # noqa: WPS122
         request.POST._mutable = True  # type: ignore
@@ -370,8 +401,10 @@ class VoteView(View):
 
     model: Movie | Cast | None = None
     vote_type: int | None = None
+    model_type: CoreModels = CoreModels.vote
 
-    def post(self, request: HttpRequest, pk: int) -> HttpResponse:
+    @method_decorator(cache_page(SESSION_CACHE_TTL, key_prefix=model_type.value))
+    def post(self, request: HttpRequest, pk: int) -> HttpResponse | None:
         obj: Movie | Cast = get_object_or_404(self.model, pk=pk)  # type: ignore
         if is_ajax(request=request):
             context = services.add_vote(
@@ -384,13 +417,15 @@ class RatingView(View):
     """Rating system."""
 
     model: Movie | None = None
+    model_type: CoreModels = CoreModels.rating
 
-    def post(self, request: HttpRequest, pk: int) -> HttpResponse:
+    @method_decorator(cache_page(SESSION_CACHE_TTL, key_prefix=model_type.value))
+    def post(self, request: HttpRequest, pk: int) -> HttpResponse | None:
         obj: Movie = get_object_or_404(self.model, pk=pk)  # type: ignore
         if is_ajax(request=request):
             context = services.add_rate(
                 user=request.user,
-                rate_value=self.request.POST.get("rate_value", None),
+                rate_value=self.request.POST.get("rate_value", None),  # type: ignore
                 obj=obj,
             )
             return JsonResponse(context)

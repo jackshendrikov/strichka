@@ -13,6 +13,7 @@
     <div class="container">
         <div class="index-slider-area-slider owl-carousel owl-theme">
             {% for movie in best_movies %}
+            {% get_movie_url movie.is_movie movie.id as movie_url %}
             <div class="row index-slider-area-slide">
                 <div class="col-lg-5 col-md-5">
                     <div class="index-slider-area-content">
@@ -32,14 +33,14 @@
                         <p>{{ movie.plot }}</p>
                         <h3 class="index-slider-area-h3">Cast:</h3>
                         <div class="slide-cast">
-                            {% for actor in movie.actors.all %}
+                            {% for actor in movie.actors %}
                             <div class="single-slide-cast">
                                 <a href="{{ actor.get_absolute_url }}">
                                     <img src="{{ actor.photo }}" alt="{{ actor.full_name }}" />
                                 </a>
                             </div>
                             {% endfor %}
-                            {% for director in movie.directors.all %}
+                            {% for director in movie.directors %}
                             <div class="single-slide-cast">
                                 <a href="{{ director.get_absolute_url }}">
                                     <img src="{{ director.photo }}" alt="{{ director.full_name }}" />
@@ -48,7 +49,7 @@
                             {% endfor %}
                         </div>
                         <div class="slide-trailor">
-                            <a class="read-more-btn read-more-btn2" href="{{ movie.get_absolute_url }}"><i class="icon ion-md-bookmark"></i>  Read More</a>
+                            <a class="read-more-btn read-more-btn2" href="{{ movie_url }}"><i class="icon ion-md-bookmark"></i>  Read More</a>
                         </div>
                     </div>
                 </div>
@@ -76,14 +77,14 @@
                             <p>{{ best_movies.2.plot }}</p>
                             <h3 class="index-slider-area-h3">Cast:</h3>
                             <div class="slide-cast">
-                                {% for actor in best_movies.2.actors.all %}
+                                {% for actor in best_movies.2.actors %}
                                 <div class="single-slide-cast">
                                     <img src="{{ actor.photo }}" alt="{{ actor.full_name }}" />
                                 </div>
                                 {% endfor %}
                             </div>
                             <div class="slide-trailor">
-                                <a class="read-more-btn read-more-btn2" href="{{ best_movies.2.get_absolute_url }}"><i class="icon ion-md-bookmark"></i>  Read More</a>
+                                <a class="read-more-btn read-more-btn2" href=""><i class="icon ion-md-bookmark"></i>  Read More</a>
                             </div>
                         </div>
                     </div>
@@ -109,14 +110,14 @@
                             <p>{{ best_movies.1.plot }}</p>
                             <h3 class="index-slider-area-h3">Cast:</h3>
                             <div class="slide-cast">
-                                {% for actor in best_movies.1.actors.all %}
+                                {% for actor in best_movies.1.actors %}
                                 <div class="single-slide-cast">
                                     <img src="{{ actor.photo }}" alt="{{ actor.full_name }}" />
                                 </div>
                                 {% endfor %}
                             </div>
                             <div class="slide-trailor">
-                                <a class="read-more-btn read-more-btn2" href="{{ best_movies.1.get_absolute_url }}"><i class="icon ion-md-bookmark"></i>  Read More</a>
+                                <a class="read-more-btn read-more-btn2" href=""><i class="icon ion-md-bookmark"></i>  Read More</a>
                             </div>
                         </div>
                     </div>
@@ -150,18 +151,19 @@
             <div class="col-12">
                 <div class="owl-carousel season__carousel">
                     {% for movie in index_slider_movies %}
+                    {% get_movie_url movie.is_movie movie.id as movie_url %}
                     <div class="item">
                         <div class="card card--big">
                             <div class="card__cover">
                                 <img src="{{ movie.poster }}" alt="{{ movie.title }}">
-                                <a href="{{ movie.get_absolute_url }}" class="card__play">
+                                <a href="{{ movie_url }}" class="card__play">
                                     <i class="icon ion-ios-play"></i>
                                 </a>
                             </div>
                             <div class="card__content">
-                                <h3 class="card__title"><a href="{{ movie.get_absolute_url }}">{{ movie.title }}</a></h3>
+                                <h3 class="card__title"><a href="{{ movie_url }}">{{ movie.title }}</a></h3>
                                 <span class="card__category">
-                                    {% for genre in movie.categories|genres %}
+                                    {% for genre in movie.categories %}
                                     <a href="{{ genre.get_absolute_url }}">{{ genre.name }}</a>
                                     {% endfor %}
                                 </span>
@@ -210,8 +212,6 @@
                                 <li class="nav-item"><a class="nav-link" id="2-tab" data-toggle="tab" href="#tab-2" role="tab" aria-controls="tab-2" aria-selected="false">POPULAR MOVIES</a></li>
 
                                 <li class="nav-item"><a class="nav-link" id="3-tab" data-toggle="tab" href="#tab-3" role="tab" aria-controls="tab-3" aria-selected="false">POPULAR SERIES</a></li>
-
-                                <li class="nav-item"><a class="nav-link" id="4-tab" data-toggle="tab" href="#tab-4" role="tab" aria-controls="tab-4" aria-selected="false">LAST MOVIES</a></li>
                             </ul>
                         </div>
                     </div>
@@ -225,13 +225,14 @@
             <div class="tab-pane fade show active" id="tab-1" role="tabpanel" aria-labelledby="1-tab">
                 <div class="row">
                     {% for movie in new_releases %}
+                    {% get_movie_url movie.is_movie movie.id as movie_url %}
                     <div class="col-6 col-sm-12 col-lg-6">
                         <div class="card card--list">
                             <div class="row">
                                 <div class="col-12 col-sm-4">
                                     <div class="card__cover">
                                         <img src="{{ movie.poster }}" alt="{{ movie.title }}">
-                                        <a href="{{ movie.get_absolute_url }}" class="card__play">
+                                        <a href="{{ movie_url }}" class="card__play">
                                             <i class="icon ion-ios-play"></i>
                                         </a>
                                     </div>
@@ -239,9 +240,9 @@
 
                                 <div class="col-12 col-sm-8">
                                     <div class="card__content">
-                                        <h3 class="card__title"><a href="{{ movie.get_absolute_url }}">{{ movie.title }}</a></h3>
+                                        <h3 class="card__title"><a href="{{ movie_url }}">{{ movie.title }}</a></h3>
                                         <span class="card__category">
-                                            {% for genre in movie.categories|genres %}
+                                            {% for genre in movie.categories %}
                                             <a href="{{ genre.get_absolute_url }}">{{ genre.name }}</a>
                                             {% endfor %}
                                         </span>
@@ -270,18 +271,19 @@
             <div class="tab-pane fade" id="tab-2" role="tabpanel" aria-labelledby="2-tab">
                 <div class="row">
                     {% for movie in popular_movies %}
+                    {% get_movie_url movie.is_movie movie.id as movie_url %}
                     <div class="col-6 col-sm-4 col-lg-3 col-xl-2">
                         <div class="card">
                             <div class="card__cover">
                                 <img src="{{ movie.poster }}" alt="{{ movie.title }}">
-                                <a href="{{ movie.get_absolute_url }}" class="card__play">
+                                <a href="{{ movie_url }}" class="card__play">
                                     <i class="icon ion-ios-play"></i>
                                 </a>
                             </div>
                             <div class="card__content">
-                                <h3 class="card__title"><a href="{{ movie.get_absolute_url }}">{{ movie.title }}</a></h3>
+                                <h3 class="card__title"><a href="{{ movie_url }}">{{ movie.title }}</a></h3>
                                 <span class="card__category">
-                                    {% for genre in movie.categories|genres %}
+                                    {% for genre in movie.categories %}
                                     <a href="{{ genre.get_absolute_url }}">{{ genre.name }}</a>
                                     {% endfor %}
                                 </span>
@@ -300,14 +302,14 @@
                         <div class="card">
                             <div class="card__cover">
                                 <img src="{{ movie.poster }}" alt="{{ movie.title }}">
-                                <a href="{{ movie.get_absolute_url }}" class="card__play">
+                                <a href="{{ movie_url }}" class="card__play">
                                     <i class="icon ion-ios-play"></i>
                                 </a>
                             </div>
                             <div class="card__content">
-                                <h3 class="card__title"><a href="{{ movie.get_absolute_url }}">{{ movie.title }}</a></h3>
+                                <h3 class="card__title"><a href="{{ movie_url }}">{{ movie.title }}</a></h3>
                                 <span class="card__category">
-                                    {% for genre in movie.categories|genres %}
+                                    {% for genre in movie.categories %}
                                     <a href="{{ genre.get_absolute_url }}">{{ genre.name }}</a>
                                     {% endfor %}
                                 </span>
@@ -329,18 +331,19 @@
                 <h2 class="section__title">Movies in cinema</h2>
             </div>
             {% for movie in cinema_movies %}
+            {% get_movie_url movie.is_movie movie.id as movie_url %}
             <div class="col-6 col-sm-4 col-lg-3 col-xl-2">
                 <div class="card">
                     <div class="card__cover">
                         <img src="{{ movie.poster }}" alt="{{ movie.title }}">
-                        <a href="{{ movie.get_absolute_url }}" class="card__play">
+                        <a href="{{ movie_url }}" class="card__play">
                             <i class="icon ion-ios-play"></i>
                         </a>
                     </div>
                     <div class="card__content">
-                        <h3 class="card__title"><a href="{{ movie.get_absolute_url }}">{{ movie.title }}</a></h3>
+                        <h3 class="card__title"><a href="{{ movie_url }}">{{ movie.title }}</a></h3>
                         <span class="card__category">
-                            {% for genre in movie.categories|genres %}
+                            {% for genre in movie.categories %}
                             <a href="{{ genre.get_absolute_url }}">{{ genre.name }}</a>
                             {% endfor %}
                         </span>

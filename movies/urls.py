@@ -91,12 +91,12 @@ rate_urlpatterns = [
 ]
 
 filter_urlpatterns = [
-    path("countries/", get_filter_countries, name="get_countries"),
-    path("years/", get_filter_year, name="get_years"),
-    path("imdb_votes/", get_filter_imdb_votes, name="get_imdb_votes"),
-    path("age_mark/", get_filter_age_mark, name="get_age_marks"),
-    path("genres/", get_filter_genres, name="get_genres"),
-    path("platforms/", get_filter_platforms, name="get_platforms"),
+    path("countries/", get_filter_countries, name="get_countries"),  # type: ignore
+    path("years/", get_filter_year, name="get_years"),  # type: ignore
+    path("imdb_votes/", get_filter_imdb_votes, name="get_imdb_votes"),  # type: ignore
+    path("age_mark/", get_filter_age_mark, name="get_age_marks"),  # type: ignore
+    path("genres/", get_filter_genres, name="get_genres"),  # type: ignore
+    path("platforms/", get_filter_platforms, name="get_platforms"),  # type: ignore
 ]
 
 category_urlpatterns = [

@@ -170,3 +170,31 @@ EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 SERVER_EMAIL = os.getenv("EMAIL_HOST")
 DEFAULT_FROM_EMAIL = os.getenv("EMAIL_HOST")
+
+DEPLOY_ENVIRONMENT = os.getenv("DEPLOY_ENVIRONMENT")
+
+# Redis config.
+REDIS_HOST = os.getenv("REDIS_HOST")
+REDIS_PASSWORD = os.getenv("REDIS_PASSWORD")
+REDIS_PORT = os.getenv("REDIS_PORT")
+
+# Cache settings.
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+SESSION_CACHE_ALIAS = "default"
+SESSION_CACHE_TTL = 60 * 15
+SESSION_SPECIAL_CACHE_TTL = 60 * 60 * 24 * 5
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": f"redis://{REDIS_HOST}:{REDIS_PORT}",
+        "KEY_PREFIX": DEPLOY_ENVIRONMENT,
+        "OPTIONS": {
+            "PASSWORD": REDIS_PASSWORD,
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            "COMPRESSOR": "django_redis.compressors.zlib.ZlibCompressor",
+            "SOCKET_CONNECT_TIMEOUT": 10,
+            "SOCKET_TIMEOUT": 10,
+        },
+    }
+}
