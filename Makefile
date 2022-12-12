@@ -83,4 +83,3 @@ lint:
 	make flake
 	make isort
 	make black
-	make types
