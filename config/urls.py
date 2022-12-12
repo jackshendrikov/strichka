@@ -1,5 +1,6 @@
 import os
 from django.conf import settings
+from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.auth.decorators import login_required
@@ -21,10 +22,10 @@ handler500 = "movies.views.error_500"
 
 
 urlpatterns = [
+    path("i18n/", include("django.conf.urls.i18n")),
     path("", include("movies.urls")),
     path("accounts/", include("accounts.urls")),
     path("api/", include(api_router.urls)),
-    path("jet/", include("jet.urls", "jet")),
     path("admin/", admin.site.urls),
     path("schema/", SpectacularAPIView.as_view(), name="schema"),
     path(
