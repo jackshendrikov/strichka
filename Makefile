@@ -80,7 +80,7 @@ types:
 		 --config-file setup.cfg
 
 lint:
-	make flake8
+	make flake
 	make isort
 	make black
 	make types
