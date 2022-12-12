@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  db:
+    container_name: db
+    build:
+      context: .
+      dockerfile: ./docker/db/Dockerfile
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=strichka_local
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POPULATE_LOCAL_DB=true
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+
+  redis:
+    container_name: redis
+    image: redis:7.0.1
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data/redis:rw
+
+  app:
+    container_name: app
+    build:
+      context: .
+      dockerfile: ./docker/app/Dockerfile
+    volumes:
+      - ./:/app
+    ports:
+      - "8080:8080"
+    environment:
+      - POSTGRES_HOST=db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=strichka_local
+      - POSTGRES_PORT=5432
+      - REDIS_HOST=redis
+      - REDIS_PASSWORD=
+      - REDIS_PORT=6379
+    env_file:
+      - .env
+    depends_on:
+      - db
+      - redis
+
+volumes:
+  postgres_data:
+  redis_data:

@@ -1,3 +1,31 @@
+docker_build:
+	docker-compose up -d --build
+
+docker_up:
+	docker-compose up -d
+
+docker_start:
+	docker-compose start
+
+docker_down:
+	docker-compose down
+
+docker_destroy:
+	docker-compose down -v
+
+docker_stop:
+	docker-compose stop
+
+docker_restart:
+	docker-compose stop
+	docker-compose up -d
+
+docker_logs:
+	docker-compose logs --tail=100 -f
+
+docker_remove_dangling_images:
+	docker rmi $(docker images --filter "dangling=true" -q --no-trunc)
+
 user:
 	python manage.py createsuperuser --username admin --email 'admin@email.com'
 
@@ -25,7 +53,7 @@ migrate:
  	python manage.py migrate --run-syncdb
 
 migrate_prod:
-	python manage.py migrate --settings=config.settings.development
+	python manage.py migrate --settings=config.settings.production
 
 install_hooks:
 	pip install -r requirements.txt; \
@@ -34,8 +62,14 @@ install_hooks:
 run_hooks_on_all_files:
 	pre-commit run --all-files
 
-style:
-	flake8 main
+flake:
+	flake8 accounts common movies
+
+isort:
+	isort accounts common movies --diff
+
+black:
+	 black accounts common movies --check
 
 types:
 	mypy --namespace-packages \
@@ -44,3 +78,8 @@ types:
 		 -p "movies" \
 		 --disable-error-code=no-redef \
 		 --config-file setup.cfg
+
+lint:
+	make flake
+	make isort
+	make black
