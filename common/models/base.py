@@ -2,7 +2,6 @@ from typing import Any
 
 from django.db import models
 
-from common.cache import reset_endpoint_cache
 from common.convert import slugify_value
 
 
@@ -24,13 +23,4 @@ class StrichkaBaseModel(models.Model):
         if not self.is_cleaned:
             self.clean()
 
-        # Clear cache
-        reset_endpoint_cache(key_prefix=slugify_value(self._meta.verbose_name))  # type: ignore
-
         super().save(*args, **kwargs)
-
-    def delete(self, *args: Any, **kwargs: Any) -> tuple[int, dict[str, int]]:
-        # Clear cache
-        reset_endpoint_cache(key_prefix=slugify_value(self._meta.verbose_name))  # type: ignore
-
-        return super().delete(*args, **kwargs)

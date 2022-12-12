@@ -5,6 +5,9 @@
 {% block title %}Strichka Home{% endblock %}
 
 {% block extrahead %}
+ <!-- Owl carousel CSS -->
+<link rel="stylesheet" type="text/css" href="{% static 'css/libs/owl.carousel.min.css' %}" media="all">
+
 <link rel="stylesheet" href="{% static 'css/index.css' %}">
 {% endblock %}
 
@@ -358,5 +361,8 @@
 {% endblock %}
 
 {% block extra_js %}
+<!-- owl carousel JS -->
+<script src="{% static 'js/libs/owl.carousel.min.js' %}"></script>
+
 <script src="{% static 'js/index.js' %}"></script>
 {% endblock extra_js %}
