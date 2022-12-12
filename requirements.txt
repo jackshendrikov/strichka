@@ -1,12 +1,13 @@
 dj_database_url==1.0.0
 Django==4.1.4
-django-4-jet==1.0.9
 django-allauth==0.51.0
+django-cacheops==6.1
 django-debug-toolbar==3.8.1
 django-debug-toolbar-template-timings==0.9
 django-extensions==3.2.1
 django-filter==22.1
 django-import-export==3.0.1
+django-jazzmin==2.6.0
 django-mptt==0.14.0
 django-mptt-admin==2.3.0
 django-redis==5.2.0

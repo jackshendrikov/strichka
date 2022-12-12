@@ -25,7 +25,7 @@ migrate:
  	python manage.py migrate --run-syncdb
 
 migrate_prod:
-	python manage.py migrate --settings=config.settings.production
+	python manage.py migrate --settings=config.settings.development
 
 install_hooks:
 	pip install -r requirements.txt; \
