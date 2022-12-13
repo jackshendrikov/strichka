@@ -315,7 +315,7 @@
                                     </div>
                                 </li>
                                 {% if not node.is_leaf_node %}
-                                <div class="{% if node.level == 1 %}comments__item--answer{% elif node.level == 2 %}comments__item--answer-level-2{% endif %}">{{ children }}</div>
+                                <div class="{% if node.level == 0 %}comments__item--answer{% elif node.level >= 1 %}comments__item--answer-level-2{% endif %}">{{ children }}</div>
                                 {% endif %}
                                 {% endrecursetree %}
                             </ul>
