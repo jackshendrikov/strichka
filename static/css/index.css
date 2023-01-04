@@ -767,6 +767,9 @@
   margin-bottom: 30px;
 }
 .card__cover {
+  display: block;
+  color: unset;
+  background: unset;
   position: relative;
   -webkit-box-shadow: none;
   box-shadow: none;
@@ -806,6 +809,7 @@
   border-radius: 10px;
 }
 .card__cover:hover {
+  color: unset;
   -webkit-box-shadow: 0 0 20px 0 rgba(255, 88, 96, 0.5);
   box-shadow: 0 0 20px 0 rgba(255, 88, 96, 0.5);
 }

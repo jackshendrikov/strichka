@@ -16,7 +16,6 @@ from random import choice
 from service_objects.services import Service
 
 from common.const import ALL_PLATFORMS_MAP, COUNTRY_PLATFORMS_MAP
-from config.settings.base import SESSION_CACHE_TTL, SESSION_SPECIAL_CACHE_TTL
 from movies.forms import CommentForm
 from movies.models import (
     Cast,
