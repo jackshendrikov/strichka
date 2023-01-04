@@ -279,7 +279,8 @@ REDIS_PORT = os.getenv("REDIS_PORT")
 
 # Cache settings.
 SESSION_CACHE_TTL = 60 * 15
-SESSION_SPECIAL_CACHE_TTL = 60 * 60
+SESSION_SPECIAL_CACHE_TTL = 60 * 60 * 24
+SESSION_LONG_CACHE_TTL = 60 * 60 * 24 * 7
 
 CACHEOPS_REDIS = {
     "host": REDIS_HOST,
@@ -294,7 +295,7 @@ CACHEOPS_DEFAULTS = {"timeout": SESSION_SPECIAL_CACHE_TTL}
 CACHEOPS = {
     "auth.user": {"ops": "get", "timeout": SESSION_CACHE_TTL},
     "auth.*": {"ops": "all", "timeout": SESSION_SPECIAL_CACHE_TTL},
-    "movies.*": {"ops": "all", "timeout": SESSION_SPECIAL_CACHE_TTL},
+    "movies.*": {"ops": "all", "timeout": SESSION_LONG_CACHE_TTL},
 }
 
 CACHEOPS_PREFIX = lambda _: DEPLOY_ENVIRONMENT

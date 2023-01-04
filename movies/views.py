@@ -8,7 +8,7 @@ from django.views.generic.base import View
 from django_filters.views import FilterView
 
 from common.views import BaseView, is_ajax
-from config.settings.base import SESSION_CACHE_TTL, SESSION_SPECIAL_CACHE_TTL
+from config.settings.base import SESSION_LONG_CACHE_TTL, SESSION_SPECIAL_CACHE_TTL
 from movies.models import Cast, Collection, Movie
 from movies.services import services
 from movies.services.filters import AdvancedMovieFilter, MovieFilter, SearchFilter
@@ -158,6 +158,7 @@ class AllMoviesView(FilteredListView):
 
     page_title = "All Movies"
 
+    @cached(timeout=SESSION_LONG_CACHE_TTL)
     def get_queryset(self) -> QuerySet:
         return services.get_all_movies()
 
@@ -204,7 +205,7 @@ class MoviesByYearView(FilteredListView):
 
     page_title = "Movies by Year"
 
-    @cached(timeout=SESSION_CACHE_TTL)
+    @cached(timeout=SESSION_LONG_CACHE_TTL)
     def get_queryset(self) -> QuerySet:
         self.page_title = f"{self.page_title} ({self.kwargs['year']})"
         try:
@@ -220,7 +221,7 @@ class MoviesByCountryView(FilteredListView):
 
     page_title = "Movies by Country"
 
-    @cached(timeout=SESSION_CACHE_TTL)
+    @cached(timeout=SESSION_LONG_CACHE_TTL)
     def get_queryset(self) -> QuerySet:
         self.page_title = f"{self.page_title} ({self.kwargs['name']})"
         try:
@@ -236,7 +237,7 @@ class MoviesByGenreView(FilteredListView):
 
     page_title = "Movies by Genre"
 
-    @cached(timeout=SESSION_CACHE_TTL)
+    @cached(timeout=SESSION_LONG_CACHE_TTL)
     def get_queryset(self) -> QuerySet:
         self.page_title = f"{self.page_title} ({self.kwargs['slug'].title()})"
         try:
