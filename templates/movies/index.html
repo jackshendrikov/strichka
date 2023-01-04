@@ -157,12 +157,12 @@
                     {% get_movie_url movie.is_movie movie.id as movie_url %}
                     <div class="item">
                         <div class="card card--big">
-                            <div class="card__cover">
+                            <a href="{{ movie_url }}" class="card__cover">
                                 <img src="{{ movie.poster }}" alt="{{ movie.title }}">
-                                <a href="{{ movie_url }}" class="card__play">
+                                <div class="card__play">
                                     <i class="icon ion-ios-play"></i>
-                                </a>
-                            </div>
+                                </div>
+                            </a>
                             <div class="card__content">
                                 <h3 class="card__title"><a href="{{ movie_url }}">{{ movie.title }}</a></h3>
                                 <span class="card__category">
@@ -233,12 +233,12 @@
                         <div class="card card--list">
                             <div class="row">
                                 <div class="col-12 col-sm-4">
-                                    <div class="card__cover">
+                                    <a href="{{ movie_url }}" class="card__cover">
                                         <img src="{{ movie.poster }}" alt="{{ movie.title }}">
-                                        <a href="{{ movie_url }}" class="card__play">
+                                        <div class="card__play">
                                             <i class="icon ion-ios-play"></i>
-                                        </a>
-                                    </div>
+                                        </div>
+                                    </a>
                                 </div>
 
                                 <div class="col-12 col-sm-8">
@@ -277,12 +277,12 @@
                     {% get_movie_url movie.is_movie movie.id as movie_url %}
                     <div class="col-6 col-sm-4 col-lg-3 col-xl-2">
                         <div class="card">
-                            <div class="card__cover">
+                            <a href="{{ movie_url }}" class="card__cover">
                                 <img src="{{ movie.poster }}" alt="{{ movie.title }}">
-                                <a href="{{ movie_url }}" class="card__play">
+                                <div class="card__play">
                                     <i class="icon ion-ios-play"></i>
-                                </a>
-                            </div>
+                                </div>
+                            </a>
                             <div class="card__content">
                                 <h3 class="card__title"><a href="{{ movie_url }}">{{ movie.title }}</a></h3>
                                 <span class="card__category">
@@ -301,14 +301,15 @@
             <div class="tab-pane fade" id="tab-3" role="tabpanel" aria-labelledby="3-tab">
                 <div class="row">
                     {% for movie in popular_series %}
+                     {% get_movie_url movie.is_movie movie.id as movie_url %}
                     <div class="col-6 col-sm-4 col-lg-3 col-xl-2">
                         <div class="card">
-                            <div class="card__cover">
+                            <a href="{{ movie_url }}" class="card__cover">
                                 <img src="{{ movie.poster }}" alt="{{ movie.title }}">
-                                <a href="{{ movie_url }}" class="card__play">
+                                <div class="card__play">
                                     <i class="icon ion-ios-play"></i>
-                                </a>
-                            </div>
+                                </div>
+                            </a>
                             <div class="card__content">
                                 <h3 class="card__title"><a href="{{ movie_url }}">{{ movie.title }}</a></h3>
                                 <span class="card__category">
@@ -337,12 +338,12 @@
             {% get_movie_url movie.is_movie movie.id as movie_url %}
             <div class="col-6 col-sm-4 col-lg-3 col-xl-2">
                 <div class="card">
-                    <div class="card__cover">
+                    <a href="{{ movie_url }}" class="card__cover">
                         <img src="{{ movie.poster }}" alt="{{ movie.title }}">
-                        <a href="{{ movie_url }}" class="card__play">
+                        <div class="card__play">
                             <i class="icon ion-ios-play"></i>
-                        </a>
-                    </div>
+                        </div>
+                    </a>
                     <div class="card__content">
                         <h3 class="card__title"><a href="{{ movie_url }}">{{ movie.title }}</a></h3>
                         <span class="card__category">

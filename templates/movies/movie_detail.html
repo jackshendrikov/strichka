@@ -339,12 +339,12 @@
                     {% for movie in movies_to_discover %}
                     <div class="col-6 col-sm-4 col-lg-6">
                         <div class="card">
-                            <div class="card__cover">
+                            <a href="{{ movie.get_absolute_url }}" class="card__cover">
                                 <img src="{{ movie.poster }}" alt="{{ movie.title }}">
-                                <a href="{{ movie.get_absolute_url }}" class="card__play">
-                                <i class="icon ion-ios-play"></i>
-                                </a>
-                            </div>
+                                <div class="card__play">
+                                    <i class="icon ion-ios-play"></i>
+                                </div>
+                            </a>
                             <div class="card__content">
                                 <h3 class="card__title"><a href="{{ movie.get_absolute_url }}#">{{ movie.title }}</a></h3>
                                 <span class="card__category">
