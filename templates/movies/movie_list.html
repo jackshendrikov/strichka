@@ -134,14 +134,14 @@
                         <div class="card__play">
                             <i class="icon ion-ios-play"></i>
                         </div>
-                        {% if user.is_authenticated %}{% in_watchlist user movie.id as watchlist_movie %}{% endif %}
-                        <button {% if user.is_authenticated %}data-csrf_token="{{ csrf_token }}" data-url="{% url 'movie_watchlist' movie.id %}"{% endif %} class="watchlist-btn{% if user.is_authenticated and watchlist_movie %} added{% endif %}">
-                        <div class="icn-btn">
-                            <span class="line line-1"></span>
-                            <span class="line line-2"></span>
-                        </div>
-                        </button>
                     </a>
+                    {% if user.is_authenticated %}{% in_watchlist user movie.id as watchlist_movie %}{% endif %}
+                    <button {% if user.is_authenticated %}data-csrf_token="{{ csrf_token }}" data-url="{% url 'movie_watchlist' movie.id %}"{% endif %} class="watchlist-btn{% if user.is_authenticated and watchlist_movie %} added{% endif %}">
+                    <div class="icn-btn">
+                        <span class="line line-1"></span>
+                        <span class="line line-2"></span>
+                    </div>
+                    </button>
                     <div class="card__content">
                         <h3 class="card__title"><a href="{{ movie.get_absolute_url }}">{{ movie.title }}</a></h3>
                         <span class="card__category">
