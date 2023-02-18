@@ -1,21 +1,11 @@
-from typing import Any
-
-from django.db.models import QuerySet
 from rest_framework.fields import CharField, TimeField
-from rest_framework.serializers import ListSerializer, ModelSerializer
+from rest_framework.serializers import ModelSerializer
 
 from movies.models import Cast, Category, Collection, Country, Movie, StreamingPlatform
 
 
-class FilterCategoryListSerializer(ListSerializer):
-    def to_representation(self, data: QuerySet) -> Any:
-        data = data.exclude(parent__slug="genres").exclude(slug="genres")
-        return super().to_representation(data)
-
-
 class CategorySerializer(ModelSerializer):
     class Meta:
-        list_serializer_class = FilterCategoryListSerializer
         model = Category
         fields = ("name", "slug")
 
@@ -43,6 +33,11 @@ class MovieSerializer(ModelSerializer):
     runtime = TimeField(
         format="%H:%M", input_formats="%H:%M", required=False, read_only=True
     )
+    directors = CastSerializer(many=True, read_only=True)
+    writers = CastSerializer(many=True, read_only=True)
+    actors = CastSerializer(many=True, read_only=True)
+    country = CountrySerializer(many=True, read_only=True)
+    categories = CategorySerializer(many=True, read_only=True)
 
     class Meta:
         model = Movie
@@ -63,6 +58,11 @@ class MovieSerializer(ModelSerializer):
             "awards",
             "is_movie",
             "total_seasons",
+            "country",
+            "categories",
+            "actors",
+            "directors",
+            "writers",
         )
 
 
