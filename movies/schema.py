@@ -41,12 +41,6 @@ class CastSchema(BaseModel):
             raise ValueError(f"Actor with ID: `{imdb_id}` already exist.")
         return imdb_id
 
-    @validator("full_name")
-    def full_name_exist(cls, name: str) -> str:
-        if Cast.objects.filter(full_name=name).exists():
-            raise ValueError(f"Actor with name: `{name}` already exist.")
-        return name
-
 
 class CountrySchema(BaseModel):
     """

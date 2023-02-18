@@ -138,10 +138,7 @@ class Cast(StrichkaBaseModel):
         help_text="IMDB ID of cast member",
     )
     full_name = models.CharField(
-        verbose_name="Cast member name",
-        unique=True,
-        max_length=150,
-        help_text="Cast member name",
+        verbose_name="Cast member name", max_length=150, help_text="Cast member name"
     )
     description = models.TextField(
         null=True, blank=True, help_text="Info about cast member"

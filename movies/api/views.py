@@ -35,7 +35,9 @@ class CountryViewSet(ModelViewSet):
 
 
 class MovieViewSet(ModelViewSet):
-    queryset = Movie.objects.all()
+    queryset = Movie.objects.all().prefetch_related(
+        "directors", "writers", "actors", "categories", "country"
+    )
     serializer_class = MovieSerializer
     filter_backends = [
         DjangoFilterBackend,
@@ -43,7 +45,7 @@ class MovieViewSet(ModelViewSet):
         filters.OrderingFilter,
     ]
     filterset_fields = ["year", "age_mark", "is_movie"]
-    search_fields = ["=imdb_id", "title", "actors", "directors", "writers", "country"]
+    search_fields = ["=imdb_id", "title"]
     ordering_fields = ["year", "imdb_rate", "imdb_votes"]
 
 
