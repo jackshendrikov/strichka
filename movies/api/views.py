@@ -2,20 +2,20 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from rest_framework.viewsets import ModelViewSet
 
-from movies.models import Cast, Category, Collection, Country, Movie, StreamingPlatform
+from movies.models import Cast, Collection, Country, Genre, Movie, StreamingPlatform
 from movies.serializers import (
     CastSerializer,
-    CategorySerializer,
     CollectionSerializer,
     CountrySerializer,
+    GenreSerializer,
     MovieSerializer,
     StreamingPlatformSerializer,
 )
 
 
-class CategoryViewSet(ModelViewSet):
-    queryset = Category.objects.all()
-    serializer_class = CategorySerializer
+class GenreViewSet(ModelViewSet):
+    queryset = Genre.objects.all()
+    serializer_class = GenreSerializer
 
 
 class CastViewSet(ModelViewSet):
@@ -36,7 +36,7 @@ class CountryViewSet(ModelViewSet):
 
 class MovieViewSet(ModelViewSet):
     queryset = Movie.objects.all().prefetch_related(
-        "directors", "writers", "actors", "categories", "country"
+        "directors", "writers", "actors", "genres", "countries"
     )
     serializer_class = MovieSerializer
     filter_backends = [

@@ -306,15 +306,6 @@ def get_filter_countries(request: HttpRequest) -> JsonResponse | None:
         return JsonResponse(data, status=200)
 
 
-def get_filter_categories(request: HttpRequest) -> JsonResponse | None:
-    """Get all the categories from the DB."""
-
-    if request.method == "GET" and is_ajax(request=request):
-        categories = services.DataFilters.get_categories()
-        data = {"categories": categories}
-        return JsonResponse(data, status=200)
-
-
 def get_filter_year(request: HttpRequest) -> JsonResponse | None:
     """Get all the years from the DB."""
 

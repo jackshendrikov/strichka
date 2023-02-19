@@ -3,34 +3,29 @@ from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelatio
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.urls import reverse
-from mptt.models import MPTTModel, TreeForeignKey
+from mptt.fields import TreeForeignKey
+from mptt.models import MPTTModel
 
 from common.forms import validate_form_with_schema
 from common.models.base import StrichkaBaseModel
 from movies.services.model_manager import MovieManager, VoteManager
 
 
-class Category(StrichkaBaseModel, MPTTModel):
+class Genre(StrichkaBaseModel):
     """
-    Model to store categories.
+    Model to store genres.
     Have a tree structure for convenient use.
     """
 
     name = models.CharField(
-        verbose_name="Category name", max_length=150, help_text="Category name"
+        verbose_name="Genre name", max_length=150, help_text="Genre name"
     )
     slug = models.SlugField(
         verbose_name="Unique ID", max_length=160, unique=True, help_text="Unique ID"
     )
-    parent = TreeForeignKey(
-        "self", on_delete=models.CASCADE, null=True, blank=True, related_name="children"
-    )
-
-    class MPTTMeta:
-        order_insertion_by = ["name"]
 
     class Meta:
-        verbose_name_plural = "Categories"
+        verbose_name_plural = "Genres"
 
     def __str__(self) -> str:
         return self.name
@@ -42,10 +37,10 @@ class Category(StrichkaBaseModel, MPTTModel):
         """
         Validate form inputs.
         """
-        from movies.schema import CategorySchema
-        from movies.serializers import CategorySerializer
+        from movies.schema import GenreSchema
+        from movies.serializers import GenreSerializer
 
-        validate_form_with_schema(CategorySchema, CategorySerializer, self)
+        validate_form_with_schema(GenreSchema, GenreSerializer, self)
 
 
 class Rating(StrichkaBaseModel):
@@ -251,12 +246,12 @@ class Movie(StrichkaBaseModel):
         verbose_name="Total seasons of series", null=True, blank=True
     )
 
-    directors = models.ManyToManyField(Cast, related_name="movie_directors")
-    writers = models.ManyToManyField(Cast, related_name="movie_writers")
-    actors = models.ManyToManyField(Cast, related_name="movie_actors")
+    directors = models.ManyToManyField(Cast, related_name="movie_directors", blank=True)
+    writers = models.ManyToManyField(Cast, related_name="movie_writers", blank=True)
+    actors = models.ManyToManyField(Cast, related_name="movie_actors", blank=True)
 
-    country = models.ManyToManyField(Country)
-    categories = models.ManyToManyField(Category)
+    countries = models.ManyToManyField(Country)
+    genres = models.ManyToManyField(Genre)
     comments = GenericRelation(Comment)
     ratings = GenericRelation(Rating)
     votes = GenericRelation(Vote, related_query_name="movie")
@@ -268,9 +263,6 @@ class Movie(StrichkaBaseModel):
 
     def __str__(self) -> str:
         return f"{self.title} ({self.year})"
-
-    def genres(self) -> models.QuerySet:
-        return self.categories.filter(parent__slug="genres")
 
     def get_absolute_url(self) -> str:
         if self.is_movie:

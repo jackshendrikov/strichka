@@ -2,6 +2,7 @@ from typing import Any
 
 import locale
 import logging
+from cacheops import cached
 from collections import defaultdict
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
@@ -16,12 +17,13 @@ from random import choice
 from service_objects.services import Service
 
 from common.const import ALL_PLATFORMS_MAP, COUNTRY_PLATFORMS_MAP
+from config.settings.base import SESSION_SPECIAL_CACHE_TTL
 from movies.forms import CommentForm
 from movies.models import (
     Cast,
-    Category,
     Collection,
     Comment,
+    Genre,
     Movie,
     Rating,
     StreamingPlatform,
@@ -93,21 +95,23 @@ class GetMovieDetail(Service):
 
     @staticmethod
     def _get_user_rate(movie: Movie, user_id: int) -> int | None:
-        if (
-            user_id
-            and user_id != -1
-            and Rating.objects.filter(object_id=movie.pk, user_id=user_id).exists()
-        ):
-            return Rating.objects.get(object_id=movie.pk, user_id=user_id).value
-        return None
+        if user_id and user_id != -1:
+            try:
+                return (
+                    Rating.objects.filter(object_id=movie.pk, user_id=user_id)
+                    .values_list("value", flat=True)
+                    .get()
+                )
+            except Rating.DoesNotExist:
+                pass
 
     @staticmethod
     def _get_genres(movie: Movie) -> QuerySet:
-        return movie.categories.filter(parent__slug="genres")
+        return movie.genres.all()
 
     @staticmethod
     def _get_countries(movie: Movie) -> QuerySet:
-        return movie.country.all()
+        return movie.countries.all()
 
     @staticmethod
     def _get_actors(movie: Movie) -> QuerySet:
@@ -192,17 +196,7 @@ class DataFilters:
     """
 
     @staticmethod
-    def get_categories() -> list[dict[str, str]]:
-        categories = (
-            Category.objects.exclude(parent__slug="genres", slug="genres")
-            .order_by("name")
-            .values("name", "slug")
-            .distinct()
-        )
-
-        return list(categories)
-
-    @staticmethod
+    @cached(timeout=SESSION_SPECIAL_CACHE_TTL)
     def get_years() -> list[int]:
         years = (
             Movie.objects.exclude(year__exact=None)
@@ -216,22 +210,24 @@ class DataFilters:
         return [years[0], years[-1]]
 
     @staticmethod
+    @cached(timeout=SESSION_SPECIAL_CACHE_TTL)
     def get_countries() -> list[dict[str, str]]:
         countries = (
-            Movie.objects.exclude(country__name__exact=None)
-            .values("country__name", "country__code")
-            .annotate(country_count=Count("country__name"))
-            .order_by("-country_count")
+            Movie.objects.exclude(countries__name__exact=None)
+            .values("countries__name", "countries__code")
+            .annotate(countries_count=Count("countries__name"))
+            .order_by("-countries_count")
             .distinct()
         )
 
         return list(countries)
 
     @staticmethod
+    @cached(timeout=SESSION_SPECIAL_CACHE_TTL)
     def get_genres() -> list[dict[str, str]]:
         genres = (
-            Movie.objects.values("categories__name", "categories__slug")
-            .annotate(genres_count=Count("categories__name"))
+            Movie.objects.values("genres__name", "genres__slug")
+            .annotate(genres_count=Count("genres__name"))
             .order_by("-genres_count")
             .distinct()
         )
@@ -239,6 +235,7 @@ class DataFilters:
         return list(genres)
 
     @staticmethod
+    @cached(timeout=SESSION_SPECIAL_CACHE_TTL)
     def get_imdb_votes() -> int:
         imdb_votes = (
             Movie.objects.values_list("imdb_votes", flat=True)
@@ -249,6 +246,7 @@ class DataFilters:
         return imdb_votes[0]
 
     @staticmethod
+    @cached(timeout=SESSION_SPECIAL_CACHE_TTL)
     def get_age_marks() -> list[dict[str, str]]:
         age_marks = (
             Movie.objects.values("age_mark")
@@ -260,6 +258,7 @@ class DataFilters:
         return list(age_marks)
 
     @staticmethod
+    @cached(timeout=SESSION_SPECIAL_CACHE_TTL)
     def get_platforms() -> list[dict[str, str]]:
         platforms = (
             StreamingPlatform.objects.values("service")
@@ -284,11 +283,9 @@ def get_movies_of_collection(collection: Collection) -> QuerySet:
     Get all movies from collection.
     """
 
-    movies = (
-        collection.movies.all()
-        .prefetch_related("directors", "writers", "actors", "country", "categories")
-        .order_by("-imdb_votes", "-imdb_rate")
-    )
+    movies = collection.movies.prefetch_related(
+        "directors", "writers", "actors", "countries", "genres"
+    ).order_by("-imdb_votes", "-imdb_rate")
     return movies
 
 
@@ -439,7 +436,7 @@ def get_top_fantasy(
 
     query_builder = MovieQueryBuilder(
         additional_prefetch=["actors", "directors"],
-        filter_by={"categories__name": "Fantasy"},
+        filter_by={"genres__name": "Fantasy"},
         order_by=["-imdb_votes", "-imdb_rate"],
         limit=limit,
     )
@@ -493,7 +490,7 @@ def get_movies_list_by_genre(slug: str) -> QuerySet:
     Get all movies and series of a specific genre.
     """
 
-    return Movie.objects.filter(categories__slug=slug).distinct()
+    return Movie.objects.filter(genres__slug=slug).distinct()
 
 
 def get_movies_list_by_years(year: int) -> QuerySet:
@@ -509,7 +506,7 @@ def get_movies_list_by_country(country: str) -> QuerySet:
     Get all movies and series from specific country.
     """
 
-    return Movie.objects.filter(country__name__exact=country).distinct()
+    return Movie.objects.filter(countries__name__exact=country).distinct()
 
 
 def get_random_movie() -> Movie:
