@@ -2,21 +2,21 @@ import re
 from datetime import date, timedelta
 from pydantic import BaseModel, HttpUrl, validator
 
-from movies.models import Cast, Category, Collection, Country, Movie
+from movies.models import Cast, Collection, Country, Genre, Movie
 
 
-class CategorySchema(BaseModel):
+class GenreSchema(BaseModel):
     """
-    Category schema.
+    Genre schema.
     """
 
     name: str
     slug: str
 
     @validator("name")
-    def category_exist(cls, name: str) -> str:
-        if Category.objects.filter(name=name).exists():
-            raise ValueError(f"Category: `{name}` already exist.")
+    def genre_exist(cls, name: str) -> str:
+        if Genre.objects.filter(name=name).exists():
+            raise ValueError(f"Genre: `{name}` already exist.")
         return name
 
 
@@ -40,12 +40,6 @@ class CastSchema(BaseModel):
         if Cast.objects.filter(imdb_id=imdb_id).exists():
             raise ValueError(f"Actor with ID: `{imdb_id}` already exist.")
         return imdb_id
-
-    @validator("full_name")
-    def full_name_exist(cls, name: str) -> str:
-        if Cast.objects.filter(full_name=name).exists():
-            raise ValueError(f"Actor with name: `{name}` already exist.")
-        return name
 
 
 class CountrySchema(BaseModel):
@@ -97,7 +91,7 @@ class MovieSchema(BaseModel):
     trailer_id: str
 
     genres: list[str]
-    country: list[str]
+    countries: list[str]
 
     actors: list[str] | None = None
     directors: list[str] | None = None
@@ -121,7 +115,7 @@ class MovieSchema(BaseModel):
     @validator("genres")
     def genres_not_exist(cls, genres: list[str]) -> list[str]:
         for genre in genres:
-            if not Category.objects.filter(name=genre, parent__name="genres").exists():
+            if not Genre.objects.filter(name=genre, parent__name="genres").exists():
                 raise ValueError(f"Genre with name: `{genre}` not exist.")
         return genres
 
