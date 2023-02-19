@@ -37,12 +37,12 @@ class MoviesBaseView(BaseView):
 
     def get(self, request: HttpRequest) -> HttpResponse:
         context = {
-            "index_slider_movies": services.get_movies_slider(limit=12, serialize=True),
-            "best_movies": services.get_top_fantasy(limit=3, serialize=True),
-            "new_releases": services.get_recent_premieres(limit=18, serialize=True),
-            "popular_movies": services.get_popular_movies(limit=18, serialize=True),
-            "popular_series": services.get_popular_series(limit=18, serialize=True),
-            "cinema_movies": services.get_cinema_movies(limit=6, serialize=True),
+            "index_slider_movies": services.get_movies_slider(limit=12),
+            "best_movies": services.get_top_fantasy(limit=3),
+            "new_releases": services.get_recent_premieres(limit=18),
+            "popular_movies": services.get_popular_movies(limit=18),
+            "popular_series": services.get_popular_series(limit=18),
+            "cinema_movies": services.get_cinema_movies(limit=6),
         }
         return render(request, "movies/index.html", context)
 
