@@ -35,7 +35,7 @@ class CountryViewSet(ModelViewSet):
 
 
 class MovieViewSet(ModelViewSet):
-    queryset = Movie.objects.all().prefetch_related(
+    queryset = Movie.objects.prefetch_related(
         "directors", "writers", "actors", "genres", "countries"
     )
     serializer_class = MovieSerializer

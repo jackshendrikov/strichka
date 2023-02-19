@@ -259,35 +259,35 @@ class ClassicMoviesView(FilteredListView):
     """Top classic movies."""
 
     page_title = "TOP Classic movies"
-    queryset = services.get_top_classics()
+    queryset = services.get_top_classics(limit=300)
 
 
 class PopularMoviesView(FilteredListView):
     """List of popular movies."""
 
     page_title = "Popular movies"
-    queryset = services.get_popular_movies()
+    queryset = services.get_popular_movies(limit=300)
 
 
 class PopularSeriesView(FilteredListView):
     """List of popular series."""
 
     page_title = "Popular series"
-    queryset = services.get_popular_series()
+    queryset = services.get_popular_series(limit=300)
 
 
 class RecentPremieresView(FilteredListView):
     """Recent movie and series premieres."""
 
     page_title = "Recent premieres"
-    queryset = services.get_recent_premieres()
+    queryset = services.get_recent_premieres(limit=100)
 
 
 class NewMoviesSeriesView(FilteredListView):
     """New movies and series."""
 
     page_title = "New movies"
-    queryset = services.get_new_movies_and_series()
+    queryset = services.get_new_movies_and_series(limit=150)
 
 
 class MoviesMonthView(FilteredListView):
