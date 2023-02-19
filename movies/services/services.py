@@ -23,7 +23,6 @@ from movies.models import (
     Cast,
     Collection,
     Comment,
-    Genre,
     Movie,
     Rating,
     StreamingPlatform,
@@ -303,9 +302,7 @@ def get_imdb_top() -> QuerySet:
     return Movie.objects.order_by("-imdb_rate", "-imdb_votes").distinct()
 
 
-def get_movies_slider(
-    limit: int | None = None, serialize: bool = False
-) -> QuerySet | list[dict[str, Any]]:
+def get_movies_slider(limit: int | None = None) -> QuerySet | list[dict[str, Any]]:
     """
     Get the best movies and series for slider on main page (last 6 months).
     """
@@ -322,14 +319,10 @@ def get_movies_slider(
         distinct=False,
     )
 
-    if serialize:
-        return query_builder.serialize_queryset()
     return query_builder.build_queryset()
 
 
-def get_popular_movies(
-    limit: int | None = None, serialize: bool = False
-) -> QuerySet | list[dict[str, Any]]:
+def get_popular_movies(limit: int | None = None) -> QuerySet | list[dict[str, Any]]:
     """
     Get popular movies according to IMDB.
     """
@@ -348,14 +341,10 @@ def get_popular_movies(
         distinct=False,
     )
 
-    if serialize:
-        return query_builder.serialize_queryset()
     return query_builder.build_queryset()
 
 
-def get_popular_series(
-    limit: int | None = None, serialize: bool = False
-) -> QuerySet | list[dict[str, Any]]:
+def get_popular_series(limit: int | None = None) -> QuerySet | list[dict[str, Any]]:
     """
     Get popular series according to IMDB.
     """
@@ -374,14 +363,10 @@ def get_popular_series(
         distinct=False,
     )
 
-    if serialize:
-        return query_builder.serialize_queryset()
     return query_builder.build_queryset()
 
 
-def get_cinema_movies(
-    limit: int | None = None, serialize: bool = False
-) -> QuerySet | list[dict[str, Any]]:
+def get_cinema_movies(limit: int | None = None) -> QuerySet | list[dict[str, Any]]:
     """
     Get movies currently in cinema.
     """
@@ -399,14 +384,10 @@ def get_cinema_movies(
         distinct=False,
     )
 
-    if serialize:
-        return query_builder.serialize_queryset()
     return query_builder.build_queryset()
 
 
-def get_recent_premieres(
-    limit: int | None = None, serialize: bool = False
-) -> QuerySet | list[dict[str, Any]]:
+def get_recent_premieres(limit: int | None = None) -> QuerySet | list[dict[str, Any]]:
     """
     Get recent movies and series premieres.
     """
@@ -422,14 +403,10 @@ def get_recent_premieres(
         limit=limit,
     )
 
-    if serialize:
-        return query_builder.serialize_queryset()
     return query_builder.build_queryset()
 
 
-def get_top_fantasy(
-    limit: int | None = None, serialize: bool = False
-) -> QuerySet | list[dict[str, Any]]:
+def get_top_fantasy(limit: int | None = None) -> QuerySet | list[dict[str, Any]]:
     """
     Get top fantasy movies and series list according to IMDB.
     """
@@ -441,8 +418,6 @@ def get_top_fantasy(
         limit=limit,
     )
 
-    if serialize:
-        return query_builder.serialize_queryset()
     return query_builder.build_queryset()
 
 

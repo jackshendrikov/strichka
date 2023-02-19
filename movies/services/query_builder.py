@@ -1,8 +1,5 @@
-from typing import Any, Dict, List
-
 from dataclasses import dataclass
 from django.db.models import QuerySet
-from django.forms import model_to_dict
 
 from movies.models import Movie
 
@@ -31,14 +28,6 @@ class MovieQueryBuilder:
         "age_mark",
         "is_movie",
     ]
-
-    def serialize_queryset(self) -> list[dict[str, Any]]:
-        """Serialize each object of queryset."""
-
-        fields, _ = self._get_fields_to_obtain()
-        query = self.build_queryset()
-
-        return [model_to_dict(item, fields=fields) for item in query]
 
     def build_queryset(self) -> QuerySet:
         """Build movie queryset."""

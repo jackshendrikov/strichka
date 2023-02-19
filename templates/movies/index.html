@@ -36,14 +36,14 @@
                         <p>{{ movie.plot }}</p>
                         <h3 class="index-slider-area-h3">Cast:</h3>
                         <div class="slide-cast">
-                            {% for actor in movie.actors %}
+                            {% for actor in movie.actors.all %}
                             <div class="single-slide-cast">
                                 <a href="{{ actor.get_absolute_url }}">
                                     <img src="{{ actor.photo }}" alt="{{ actor.full_name }}" />
                                 </a>
                             </div>
                             {% endfor %}
-                            {% for director in movie.directors %}
+                            {% for director in movie.directors.all %}
                             <div class="single-slide-cast">
                                 <a href="{{ director.get_absolute_url }}">
                                     <img src="{{ director.photo }}" alt="{{ director.full_name }}" />
@@ -80,7 +80,7 @@
                             <p>{{ best_movies.2.plot }}</p>
                             <h3 class="index-slider-area-h3">Cast:</h3>
                             <div class="slide-cast">
-                                {% for actor in best_movies.2.actors %}
+                                {% for actor in best_movies.2.actors.all %}
                                 <div class="single-slide-cast">
                                     <img src="{{ actor.photo }}" alt="{{ actor.full_name }}" />
                                 </div>
@@ -113,7 +113,7 @@
                             <p>{{ best_movies.1.plot }}</p>
                             <h3 class="index-slider-area-h3">Cast:</h3>
                             <div class="slide-cast">
-                                {% for actor in best_movies.1.actors %}
+                                {% for actor in best_movies.1.actors.all %}
                                 <div class="single-slide-cast">
                                     <img src="{{ actor.photo }}" alt="{{ actor.full_name }}" />
                                 </div>
