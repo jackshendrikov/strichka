@@ -9,7 +9,7 @@ from dateutil.relativedelta import relativedelta
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import AnonymousUser, User
 from django.contrib.contenttypes.models import ContentType
-from django.db.models import Count, QuerySet, Sum
+from django.db.models import Count, Max, Min, QuerySet, Sum
 from django.db.transaction import atomic
 from django.forms import IntegerField, ModelChoiceField
 from django.shortcuts import get_object_or_404
@@ -17,7 +17,7 @@ from random import choice
 from service_objects.services import Service
 
 from common.const import ALL_PLATFORMS_MAP, COUNTRY_PLATFORMS_MAP
-from config.settings.base import SESSION_SPECIAL_CACHE_TTL
+from config.settings.base import SESSION_LONG_CACHE_TTL, SESSION_SPECIAL_CACHE_TTL
 from movies.forms import CommentForm
 from movies.models import (
     Cast,
@@ -197,16 +197,8 @@ class DataFilters:
     @staticmethod
     @cached(timeout=SESSION_SPECIAL_CACHE_TTL)
     def get_years() -> list[int]:
-        years = (
-            Movie.objects.exclude(year__exact=None)
-            .values_list("year", flat=True)
-            .order_by("-year")
-            .distinct()
-        )
-
-        years = sorted(years)
-
-        return [years[0], years[-1]]
+        year_stats = Movie.objects.aggregate(Min("year"), Max("year"))
+        return [year_stats["year__min"], year_stats["year__max"]]
 
     @staticmethod
     @cached(timeout=SESSION_SPECIAL_CACHE_TTL)
@@ -216,9 +208,7 @@ class DataFilters:
             .values("countries__name", "countries__code")
             .annotate(countries_count=Count("countries__name"))
             .order_by("-countries_count")
-            .distinct()
         )
-
         return list(countries)
 
     @staticmethod
@@ -228,21 +218,13 @@ class DataFilters:
             Movie.objects.values("genres__name", "genres__slug")
             .annotate(genres_count=Count("genres__name"))
             .order_by("-genres_count")
-            .distinct()
         )
-
         return list(genres)
 
     @staticmethod
     @cached(timeout=SESSION_SPECIAL_CACHE_TTL)
     def get_imdb_votes() -> int:
-        imdb_votes = (
-            Movie.objects.values_list("imdb_votes", flat=True)
-            .order_by("-imdb_votes")
-            .distinct()
-        )
-
-        return imdb_votes[0]
+        return Movie.objects.order_by("-imdb_votes").first().imdb_votes  # type: ignore
 
     @staticmethod
     @cached(timeout=SESSION_SPECIAL_CACHE_TTL)
@@ -251,9 +233,7 @@ class DataFilters:
             Movie.objects.values("age_mark")
             .annotate(age_marks_count=Count("age_mark"))
             .order_by("-age_marks_count")
-            .distinct()
         )
-
         return list(age_marks)
 
     @staticmethod
@@ -263,12 +243,12 @@ class DataFilters:
             StreamingPlatform.objects.values("service")
             .annotate(service_count=Count("service"))
             .order_by("-service_count")
-            .distinct()
         )
 
         return list(platforms)
 
 
+@cached(timeout=SESSION_LONG_CACHE_TTL)
 def get_collections() -> QuerySet:
     """
     Get collections of movies+serials for main page.
@@ -291,7 +271,8 @@ def get_movies_of_collection(collection: Collection) -> QuerySet:
 def get_all_movies() -> QuerySet:
     """Get all movies in DB."""
 
-    return Movie.objects.distinct()
+    query_builder = MovieQueryBuilder()
+    return query_builder.build_queryset()
 
 
 def get_imdb_top() -> QuerySet:
@@ -299,7 +280,8 @@ def get_imdb_top() -> QuerySet:
     Get top movies and series list according to IMDB.
     """
 
-    return Movie.objects.order_by("-imdb_rate", "-imdb_votes").distinct()
+    query_builder = MovieQueryBuilder(order_by=["-imdb_rate", "-imdb_votes"])
+    return query_builder.build_queryset()
 
 
 def get_movies_slider(limit: int | None = None) -> QuerySet | list[dict[str, Any]]:
@@ -465,7 +447,8 @@ def get_movies_list_by_genre(slug: str) -> QuerySet:
     Get all movies and series of a specific genre.
     """
 
-    return Movie.objects.filter(genres__slug=slug).distinct()
+    query_builder = MovieQueryBuilder(filter_by={"genres__slug": slug})
+    return query_builder.build_queryset()
 
 
 def get_movies_list_by_years(year: int) -> QuerySet:
@@ -473,7 +456,8 @@ def get_movies_list_by_years(year: int) -> QuerySet:
     Get all movies and series from specific year range.
     """
 
-    return Movie.objects.filter(year=year).distinct()
+    query_builder = MovieQueryBuilder(filter_by={"year": year})
+    return query_builder.build_queryset()
 
 
 def get_movies_list_by_country(country: str) -> QuerySet:
@@ -481,7 +465,8 @@ def get_movies_list_by_country(country: str) -> QuerySet:
     Get all movies and series from specific country.
     """
 
-    return Movie.objects.filter(countries__name__exact=country).distinct()
+    query_builder = MovieQueryBuilder(filter_by={"countries__name__exact": country})
+    return query_builder.build_queryset()
 
 
 def get_random_movie() -> Movie:
@@ -500,7 +485,18 @@ def get_movie_of_month() -> QuerySet:
     """
 
     return (
-        Movie.objects.filter(
+        Movie.objects.prefetch_related("genres")
+        .only(
+            "id",
+            "title",
+            "imdb_rate",
+            "imdb_votes",
+            "poster",
+            "plot",
+            "age_mark",
+            "is_movie",
+        )
+        .filter(
             votes__liked_on__range=(
                 datetime.today() + relativedelta(months=-1),
                 datetime.today(),
@@ -624,8 +620,8 @@ def search_movie(title: str) -> QuerySet:
     Get all movies and series by specific query.
     """
 
-    return (
-        Movie.objects.filter(title__icontains=title)
-        .order_by("-imdb_votes", "-imdb_rate")
-        .distinct()
+    query_builder = MovieQueryBuilder(
+        filter_by={"title__icontains": title}, order_by=["-imdb_votes", "-imdb_rate"]
     )
+
+    return query_builder.build_queryset()
