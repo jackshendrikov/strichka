@@ -166,7 +166,7 @@
                             <div class="card__content">
                                 <h3 class="card__title"><a href="{{ movie_url }}">{{ movie.title }}</a></h3>
                                 <span class="card__category">
-                                    {% for genre in movie.categories %}
+                                    {% for genre in movie.genres.all %}
                                     <a href="{{ genre.get_absolute_url }}">{{ genre.name }}</a>
                                     {% endfor %}
                                 </span>
@@ -245,7 +245,7 @@
                                     <div class="card__content">
                                         <h3 class="card__title"><a href="{{ movie_url }}">{{ movie.title }}</a></h3>
                                         <span class="card__category">
-                                            {% for genre in movie.categories %}
+                                            {% for genre in movie.genres.all %}
                                             <a href="{{ genre.get_absolute_url }}">{{ genre.name }}</a>
                                             {% endfor %}
                                         </span>
@@ -286,7 +286,7 @@
                             <div class="card__content">
                                 <h3 class="card__title"><a href="{{ movie_url }}">{{ movie.title }}</a></h3>
                                 <span class="card__category">
-                                    {% for genre in movie.categories %}
+                                    {% for genre in movie.genres.all %}
                                     <a href="{{ genre.get_absolute_url }}">{{ genre.name }}</a>
                                     {% endfor %}
                                 </span>
@@ -313,7 +313,7 @@
                             <div class="card__content">
                                 <h3 class="card__title"><a href="{{ movie_url }}">{{ movie.title }}</a></h3>
                                 <span class="card__category">
-                                    {% for genre in movie.categories %}
+                                    {% for genre in movie.genres.all %}
                                     <a href="{{ genre.get_absolute_url }}">{{ genre.name }}</a>
                                     {% endfor %}
                                 </span>
@@ -347,7 +347,7 @@
                     <div class="card__content">
                         <h3 class="card__title"><a href="{{ movie_url }}">{{ movie.title }}</a></h3>
                         <span class="card__category">
-                            {% for genre in movie.categories %}
+                            {% for genre in movie.genres.all %}
                             <a href="{{ genre.get_absolute_url }}">{{ genre.name }}</a>
                             {% endfor %}
                         </span>

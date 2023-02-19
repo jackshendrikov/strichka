@@ -17,7 +17,7 @@ function getGenres() {
     success: function (result) {
       let genres_option = "<li data-value=''>Any Genre</li>";
       $.each(result.genres, function (a, b) {
-        genres_option += `<li data-value='${b.categories__slug}'>${b.categories__name}</li>`;
+        genres_option += `<li data-value='${b.genres__slug}'>${b.genres__name}</li>`;
       });
       $("#genres").html(genres_option);
     },
@@ -38,7 +38,7 @@ function getCountries() {
     success: function (result) {
       let countries_option = "<li data-value=''>Any Country</li>";
       $.each(result.countries, function (a, b) {
-        countries_option += `<li data-value='${b.country__name}'>${b.country__name} (${b.country__code})</li>`;
+        countries_option += `<li data-value='${b.countries__name}'>${b.countries__name} (${b.countries__code})</li>`;
       });
       $("#countries").html(countries_option);
     },

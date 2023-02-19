@@ -1,6 +1,5 @@
 from typing import Any, Dict, List
 
-from collections.abc import Generator
 from dataclasses import dataclass
 from django.db.models import QuerySet
 from django.forms import model_to_dict
@@ -21,7 +20,7 @@ class MovieQueryBuilder:
     limit: int | None = None
 
     # Default values
-    movie_default_prefetch = ["categories"]
+    movie_default_prefetch = ["genres"]
     movie_default_fields = [
         "id",
         "title",

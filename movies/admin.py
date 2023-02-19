@@ -2,7 +2,6 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 from django.http import HttpRequest
-from django_mptt_admin.admin import DjangoMpttAdmin
 
 from accounts.models import Profile
 from common.admin.base import StrichkaBaseModelAdmin
@@ -11,10 +10,10 @@ from common.mixins.export_import import CustomImportExportMixin
 from common.mixins.forms import PreservePreviousFormInputsMixin
 from movies.models import (
     Cast,
-    Category,
     Collection,
     Comment,
     Country,
+    Genre,
     Movie,
     Rating,
     StreamingPlatform,
@@ -22,9 +21,9 @@ from movies.models import (
 )
 from movies.resources import (
     CastResource,
-    CategoryResource,
     CollectionResource,
     CountryResource,
+    GenreResource,
     MovieResource,
     StreamingPlatformResource,
 )
@@ -54,11 +53,11 @@ admin.site.unregister(User)
 admin.site.register(User, CustomUserAdmin)
 
 
-@admin.register(Category)
-class CategoryAdmin(CustomExportMixin, StrichkaBaseModelAdmin, DjangoMpttAdmin):
-    resource_class = CategoryResource
+@admin.register(Genre)
+class GenreAdmin(CustomExportMixin, StrichkaBaseModelAdmin):
+    resource_class = GenreResource
 
-    list_display = ("name", "slug", "parent") + StrichkaBaseModelAdmin.list_display  # type: ignore
+    list_display = ("name", "slug") + StrichkaBaseModelAdmin.list_display  # type: ignore
     search_fields = ("name",)
     ordering = ("-created_at",)
 
@@ -97,9 +96,9 @@ class MovieAdmin(
     resource_class = MovieResource
     list_per_page = 50
 
-    preserve_inputs_fields = {"country", "age_mark", "is_movie"}
+    preserve_inputs_fields = {"countries", "age_mark", "is_movie"}
 
-    raw_id_fields = ("country", "actors", "directors", "writers", "categories")
+    raw_id_fields = ("countries", "actors", "directors", "writers", "genres")
 
     list_display = (
         "imdb_id",
@@ -109,12 +108,12 @@ class MovieAdmin(
         "imdb_votes",
         "release",
         "plot",
+        "get_genres",
         "get_countries",
         "get_actors",
         "get_directors",
         "get_writers",
         "poster",
-        "genres",
         "imdb_link",
         "runtime",
         "keywords",
@@ -124,14 +123,18 @@ class MovieAdmin(
         "is_movie",
         "total_seasons",
     ) + StrichkaBaseModelAdmin.list_display  # type: ignore
-    list_filter = ("year", "country", "age_mark", "is_movie")
+    list_filter = ("year", "age_mark", "is_movie")
     list_editable = ("title", "runtime", "keywords", "age_mark", "is_movie")
-    search_fields = ("imdb_id", "title", "year", "country__name")
+    search_fields = ("imdb_id", "title", "year")
     ordering = ["-release", "-imdb_votes", "-imdb_rate"]
+
+    @admin.display(description="Genres")
+    def get_genres(self, obj: Movie) -> str:
+        return ",".join([m.name for m in obj.genres.all()])
 
     @admin.display(description="Countries")
     def get_countries(self, obj: Movie) -> str:
-        return ",".join([m.name for m in obj.country.all()])
+        return ",".join([m.name for m in obj.countries.all()])
 
     @admin.display(description="Actors")
     def get_actors(self, obj: Movie) -> str:

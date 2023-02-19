@@ -30,6 +30,7 @@ services:
     build:
       context: .
       dockerfile: ./docker/app/Dockerfile
+    restart: always
     volumes:
       - ./:/app
     ports:

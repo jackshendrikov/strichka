@@ -1,12 +1,12 @@
 from rest_framework.fields import CharField, TimeField
 from rest_framework.serializers import ModelSerializer
 
-from movies.models import Cast, Category, Collection, Country, Movie, StreamingPlatform
+from movies.models import Cast, Collection, Country, Genre, Movie, StreamingPlatform
 
 
-class CategorySerializer(ModelSerializer):
+class GenreSerializer(ModelSerializer):
     class Meta:
-        model = Category
+        model = Genre
         fields = ("name", "slug")
 
 
@@ -33,11 +33,11 @@ class MovieSerializer(ModelSerializer):
     runtime = TimeField(
         format="%H:%M", input_formats="%H:%M", required=False, read_only=True
     )
-    directors = CastSerializer(many=True, read_only=True)
-    writers = CastSerializer(many=True, read_only=True)
-    actors = CastSerializer(many=True, read_only=True)
-    country = CountrySerializer(many=True, read_only=True)
-    categories = CategorySerializer(many=True, read_only=True)
+    directors = CastSerializer(many=True, read_only=True, required=False)
+    writers = CastSerializer(many=True, read_only=True, required=False)
+    actors = CastSerializer(many=True, read_only=True, required=False)
+    countries = CountrySerializer(many=True, read_only=True)
+    genres = GenreSerializer(many=True, read_only=True)
 
     class Meta:
         model = Movie
@@ -58,8 +58,8 @@ class MovieSerializer(ModelSerializer):
             "awards",
             "is_movie",
             "total_seasons",
-            "country",
-            "categories",
+            "countries",
+            "genres",
             "actors",
             "directors",
             "writers",

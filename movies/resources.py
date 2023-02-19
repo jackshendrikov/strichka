@@ -1,12 +1,12 @@
 from import_export import fields, resources
 from import_export.widgets import ForeignKeyWidget, ManyToManyWidget
 
-from movies.models import Cast, Category, Collection, Country, Movie, StreamingPlatform
+from movies.models import Cast, Collection, Country, Genre, Movie, StreamingPlatform
 
 
-class CategoryResource(resources.ModelResource):
+class GenreResource(resources.ModelResource):
     class Meta:
-        model = Category
+        model = Genre
         fields = ("name", "slug", "created_at", "updated_at")
         import_id_fields = fields
         export_order = fields

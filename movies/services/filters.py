@@ -10,12 +10,12 @@ from django_filters import (
 
 from movies.models import Movie, StreamingPlatform
 
-BASE_FILTER_FIELDS = ["genres", "country", "year", "imdb_rate", "sort_by"]
+BASE_FILTER_FIELDS = ["genres", "countries", "year", "imdb_rate", "sort_by"]
 
 
 class MovieFilter(FilterSet):
-    genres = CharFilter(field_name="categories__slug", lookup_expr="iexact")
-    country = CharFilter(field_name="country__name", lookup_expr="iexact")
+    genres = CharFilter(field_name="genres__slug", lookup_expr="iexact")
+    countries = CharFilter(field_name="countries__name", lookup_expr="iexact")
 
     year__gt = NumberFilter(field_name="year", lookup_expr="gte")
     year__lt = NumberFilter(field_name="year", lookup_expr="lte")
