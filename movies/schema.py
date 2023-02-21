@@ -90,12 +90,12 @@ class MovieSchema(BaseModel):
     is_movie: bool
     trailer_id: str
 
-    genres: list[str]
-    countries: list[str]
+    genres: list[GenreSchema]
+    countries: list[CountrySchema]
 
-    actors: list[str] | None = None
-    directors: list[str] | None = None
-    writers: list[str] | None = None
+    actors: list[CastSchema] | None = None
+    directors: list[CastSchema] | None = None
+    writers: list[CastSchema] | None = None
 
     @validator("imdb_id")
     def imdb_id_validation(cls, imdb_id: str) -> str:
@@ -112,20 +112,6 @@ class MovieSchema(BaseModel):
             return imdb_rate
         raise ValueError(f"IMDB rate has an invalid value: `{imdb_rate}`.")
 
-    @validator("genres")
-    def genres_not_exist(cls, genres: list[str]) -> list[str]:
-        for genre in genres:
-            if not Genre.objects.filter(name=genre, parent__name="genres").exists():
-                raise ValueError(f"Genre with name: `{genre}` not exist.")
-        return genres
-
-    @validator("actors", "directors", "writers")
-    def actors_not_exist(cls, members: list[str]) -> list[str]:
-        for full_name in members:
-            if not Cast.objects.filter(full_name=full_name).exists():
-                raise ValueError(f"Cast member with name: `{full_name}` not exist.")
-        return members
-
 
 class StreamingPlatformSchema(BaseModel):
     """
@@ -136,13 +122,7 @@ class StreamingPlatformSchema(BaseModel):
     url: HttpUrl
     video_format: str
     purchase_type: str
-    movie: str
-
-    @validator("movie")
-    def movie_not_exist(cls, movie: str) -> str:
-        if Movie.objects.filter(imdb_id=movie).exists():
-            raise ValueError(f"Movie ID: `{movie}` not exist.")
-        return movie
+    movie: MovieSchema
 
 
 class CollectionSchema(BaseModel):
@@ -151,7 +131,7 @@ class CollectionSchema(BaseModel):
     """
 
     name: str
-    movies: list[str]
+    movies: list[MovieSchema]
     is_active: bool
 
     @validator("name")
@@ -159,10 +139,3 @@ class CollectionSchema(BaseModel):
         if Collection.objects.filter(name=name).exists():
             raise ValueError(f"Collection with name: `{name}` already exist.")
         return name
-
-    @validator("movies")
-    def movie_not_exist(cls, movies: str) -> str:
-        for movie in movies:
-            if Movie.objects.filter(imdb_id=movie).exists():
-                raise ValueError(f"Movie ID:`{movie}` not exist.")
-        return movies
