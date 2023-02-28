@@ -29,15 +29,10 @@ class CountrySerializer(ModelSerializer):
         fields = ("name", "code")
 
 
-class MovieSerializer(ModelSerializer):
+class MovieBaseSerializer(ModelSerializer):
     runtime = TimeField(
         format="%H:%M", input_formats="%H:%M", required=False, read_only=True
     )
-    directors = CastSerializer(many=True, read_only=True, required=False)
-    writers = CastSerializer(many=True, read_only=True, required=False)
-    actors = CastSerializer(many=True, read_only=True, required=False)
-    countries = CountrySerializer(many=True, read_only=True)
-    genres = GenreSerializer(many=True, read_only=True)
 
     class Meta:
         model = Movie
@@ -58,6 +53,19 @@ class MovieSerializer(ModelSerializer):
             "awards",
             "is_movie",
             "total_seasons",
+        )
+
+
+class MovieSerializer(MovieBaseSerializer):
+    directors = CastSerializer(many=True, read_only=True, required=False)
+    writers = CastSerializer(many=True, read_only=True, required=False)
+    actors = CastSerializer(many=True, read_only=True, required=False)
+    countries = CountrySerializer(many=True, read_only=True)
+    genres = GenreSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Movie
+        fields = MovieBaseSerializer.Meta.fields + (
             "countries",
             "genres",
             "actors",
