@@ -280,9 +280,9 @@ class Movie(StrichkaBaseModel):
         Validate form inputs.
         """
         from movies.schema import MovieSchema
-        from movies.serializers import MovieSerializer
+        from movies.serializers import MovieBaseSerializer
 
-        validate_form_with_schema(MovieSchema, MovieSerializer, self)
+        validate_form_with_schema(MovieSchema, MovieBaseSerializer, self)
 
 
 class StreamingPlatform(StrichkaBaseModel):

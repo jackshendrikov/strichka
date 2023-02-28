@@ -122,7 +122,7 @@ class StreamingPlatformSchema(BaseModel):
     url: HttpUrl
     video_format: str
     purchase_type: str
-    movie: MovieSchema
+    movie: str
 
 
 class CollectionSchema(BaseModel):
@@ -131,7 +131,7 @@ class CollectionSchema(BaseModel):
     """
 
     name: str
-    movies: list[MovieSchema]
+    movies: list[str]
     is_active: bool
 
     @validator("name")
